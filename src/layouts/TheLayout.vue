@@ -7,7 +7,7 @@ import TheSidebar from './sidebar/TheSidebar.vue'
     <div class="flex-1 flex">
       <!-- side bar -->
       <the-sidebar />
-      <div class="">
+      <div class="flex flex-col flex-1">
         <!-- Header -->
         <the-header />
         <!-- content -->

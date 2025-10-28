@@ -9,10 +9,14 @@
         <li
           v-for="item in sidebar_data"
           :key="item.id"
-          class="flex gap-12 items-center px-4 py-2 cursor-pointer hover:bg-gray-700 rounded-sm transition"
+          class="flex items-center justify-between px-4 py-2 cursor-pointer hover:bg-gray-700 rounded-sm transition sidebar-item"
         >
+        <div class="flex gap-12 items-center">
           <span :class="`icon ${item.icon}`"></span>
+          <span :class="`icon active-icon ${item.active_icon}`"></span>
           <span class="label text-white">{{ item.title }}</span>
+        </div>
+          <span v-if="item.hasDropdown" class="arrow-icon arrow-down-icon"></span>
         </li>
       </ul>
     </div>
@@ -79,6 +83,9 @@ const handleToggle = () => {
 .side-bar ul li:hover .icon{
   background: var(--sidebar-text-hover);
 }
+.side-bar ul li:hover .arrow-icon{
+  background: var(--sidebar-text-hover);
+}
 
 .side-bar.collapsed {
   width: 56px;
@@ -93,7 +100,7 @@ const handleToggle = () => {
   width: 100%;
   
 }
-.side-bar.collapsed .label, .side-bar.collapsed .logo-text {
+.side-bar.collapsed .label, .side-bar.collapsed .logo-text, .side-bar.collapsed .arrow-icon {
   display: none;
   transition: all 0.3s ease;
 }
@@ -104,5 +111,16 @@ const handleToggle = () => {
 
 .side-bar.collapsed ul li {
   align-items: center;
+}
+
+.active-icon {
+  display: none;
+}
+.sidebar-item:hover .icon {
+  display: none;
+}
+
+.sidebar-item:hover .active-icon {
+  display: block;
 }
 </style>
