@@ -1,7 +1,7 @@
 :root {
   --text-color: #001031;
   --white-color: #fff;
-  --btn-primary: #4083ef;
+  --btn-primary: #1aa4c8;
   --search-width: 179px ;
   --border-secondary: #d1d5db;
   --icon-color: #666666;
@@ -26,7 +26,7 @@
   --sidebar-text-hover: #fff;
   --sidebar-width-collapsed: 66px;
   /* height */
-  --header-height: 56px;
+  --header-height: 44px;
   --input-form-height: 40px;
   --large: 36px;
   --medium: 35px;
@@ -115,6 +115,9 @@
 }
 .gap-9 {
   gap: 9px;
+}
+.gap-10 {
+  gap: 10px;
 }
 .gap-11 {
   gap: 11px;

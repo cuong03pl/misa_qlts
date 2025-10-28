@@ -7,24 +7,21 @@
         <ms-select  placeholder="Loại tài sản" />
         <ms-select  placeholder="Bộ phận sử dụng" />
       </div>
-      <div class="flex items-center gap-12">
-        <ms-button
-          v-if="selectedRows.length > 0"
-          type="delete"
-          size="large"
-          @click="hanleToggleModalConfirm"
-        >
-          <i class="fa-solid fa-trash-can"></i>
-        </ms-button>
-        <ms-button type="combo" size="large" @click="hanleToggleModal">
+      <div class="flex items-center gap-10">
+        <ms-button type="one-icon" size="large">
           <template #left-icon>
-            <i class="fa-solid fa-plus text-white"></i>
+            <span class="icon plus-icon"></span>
           </template>
-          <span class="text-white text-btn">{{ t('common.button.add', { msg: 'ứng viên' }) }}</span>
-          <template #right-icon>
-            <div class="flex items-center justify-between">
-              <i class="fa-solid fa-chevron-down"></i>
-            </div>
+          <span>Thêm tài sản</span>
+        </ms-button>
+        <ms-button type="only-icon" size="large">
+          <template #left-icon>
+            <span class="icon excel-icon"></span>
+          </template>
+        </ms-button>
+        <ms-button type="only-icon" size="large">
+          <template #left-icon>
+            <span class="icon delete-icon-red"></span>
           </template>
         </ms-button>
       </div>

@@ -36,13 +36,14 @@ const emit = defineEmits(['click'])
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 4px;
+  border-radius: 3px;
   cursor: pointer;
   font-weight: 500;
   transition: background 0.2s ease;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 18px;
   letter-spacing: 0.014em;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, .16);
 }
 
 /* --- Color  --- */
@@ -80,14 +81,13 @@ const emit = defineEmits(['click'])
 
 /* --- Special styles --- */
 .ms-button-only-icon {
-  border: 1px solid #cccccc87;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 8px;
-  height: 36px;
-  width: 36px;
+  background-color: #ffffff;
 }
+
 
 /* combo button */
 .ms-button-combo {
@@ -112,9 +112,13 @@ const emit = defineEmits(['click'])
   color: #fff;
 }
 .ms-button-one-icon {
+  background: var(--btn-primary);
+  color: var(--white-color);
   gap: 4px;
+  min-width: 110px;
   padding: 0 16px 0 12px;
-  min-width: 80px;
+
+
 }
 
 .disabled {

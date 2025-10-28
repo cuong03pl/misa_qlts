@@ -18,7 +18,7 @@
 
           </div>
         </div>
-        <div class=" flex items-center gap-20">
+        <div class="flex items-center gap-20">
           <span class="icon notification-icon"> </span>
           <span class="icon menu-icon"> </span>
           <span class="icon question-icon"> </span>
@@ -71,15 +71,20 @@
   .year-selector {
     display: flex;
     align-items: center;
-    gap: 12px;
     background: var(--year-selector-bg);
     padding: 8px 8px 8px 12px;
     border-radius: 4px;
     margin-right: 27px;
     margin-left: 22px;
+    height: 30px;
+  }
+  .year-selector-number {
+    padding-left: 16px;
+    padding-right: 13px;
+    font-weight: 700 !important;
   }
   .year-selector-text, .year-selector-number {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 400;
     color: var(--text-color);
     line-height: 18px;

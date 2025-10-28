@@ -77,7 +77,7 @@ const cities = ref([
     outline: none;
     border: 1px solid #ccc;
     border-radius: 8px;
-    font-size: 14px;
+    font-size: 13px;
     color: var(--text-color);
   }
   
