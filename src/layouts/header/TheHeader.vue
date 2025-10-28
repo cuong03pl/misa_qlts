@@ -7,8 +7,8 @@
         </div>
       </div>
       <!-- Header right -->
-      <div class="flex gap-12 header-right items-center">
-        <span class="text">{{ t('header.link') }}</span>
+      <div class="flex header-right items-center">
+        <span class="text-primary">{{ t('header.link') }}</span>
         <div class="year-selector">
           <span class="year-selector-text">Năm</span>
           <span class="year-selector-number">2021</span>
@@ -18,13 +18,15 @@
 
           </div>
         </div>
-        <span class="icon notification-icon"> </span>
-        <span class="icon menu-icon"> </span>
-        <span class="icon question-icon"> </span>
-        <div class="flex gap-4 items-center">
-            <span class="icon avatar-icon"> </span>
-            <span class="icon dropdown-icon"> </span>
-
+        <div class=" flex items-center gap-20">
+          <span class="icon notification-icon"> </span>
+          <span class="icon menu-icon"> </span>
+          <span class="icon question-icon"> </span>
+          <div class="flex gap-8 items-center">
+              <span class="icon avatar-icon"> </span>
+              <span class="icon dropdown-icon"> </span>
+  
+          </div>
         </div>
       </div>
     </div>
@@ -53,7 +55,7 @@
   }
   
   .logo .text {
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 700;
   }
   
@@ -61,7 +63,7 @@
   /* right */
   .header-right .text {
     font-weight: 400;
-    font-size: 14px;
+    font-size: 13px;
     color: var(--text-color);
     line-height: 18px;
   }
@@ -73,6 +75,8 @@
     background: var(--year-selector-bg);
     padding: 8px 8px 8px 12px;
     border-radius: 4px;
+    margin-right: 27px;
+    margin-left: 22px;
   }
   .year-selector-text, .year-selector-number {
     font-size: 14px;

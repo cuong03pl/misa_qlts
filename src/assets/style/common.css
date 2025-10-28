@@ -24,6 +24,7 @@
   --sidebar-bg-hover: #45A3C7;
   --sidebar-text-primary: #7b8798;
   --sidebar-text-hover: #fff;
+  --sidebar-width-collapsed: 66px;
   /* height */
   --header-height: 56px;
   --input-form-height: 40px;
@@ -125,7 +126,9 @@
 .gap-16 {
   gap: 16px;
 }
-
+.gap-20 {
+  gap: 20px;
+}
 .gap-24 {
   gap: 24px;
 }

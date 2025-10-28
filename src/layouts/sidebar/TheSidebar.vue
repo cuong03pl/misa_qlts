@@ -5,7 +5,7 @@
         <span class="icon logo-icon"></span>
         <span class="logo-text">{{ t('sidebar.title') }}</span>
       </div>
-      <ul class="side-bar-list flex flex-col gap-4">
+      <ul class="side-bar-list flex flex-col">
         <li
           v-for="item in sidebar_data"
           :key="item.id"
@@ -48,13 +48,16 @@ const handleToggle = () => {
 //#endregion Methods
 </script>
 
-<style>
+<style scoped>
 .side-bar {
   background: var(--sidebar-bg);
   width: 250px;
   transition: all 0.3s ease;
 }
-
+.logo {
+  height: 50px;
+  padding: 11px 20px 4px 20px !important;
+}
 .logo-text {
   font-size: 20px;
   font-weight: 600;
@@ -64,7 +67,7 @@ const handleToggle = () => {
 
 .side-bar ul {
   border-radius: 4px;
-  padding: 16px 12px;
+  padding: 15px 12px;
 }
 .side-bar ul li .label {
   min-width: 100px;
@@ -88,7 +91,7 @@ const handleToggle = () => {
 }
 
 .side-bar.collapsed {
-  width: 56px;
+  width: var(--sidebar-width-collapsed);
   transition: all 0.3s ease;
 }
 
@@ -96,7 +99,7 @@ const handleToggle = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 16px 0;
+  padding: 11px 0 4px 0 !important;
   width: 100%;
   
 }
@@ -111,6 +114,10 @@ const handleToggle = () => {
 
 .side-bar.collapsed ul li {
   align-items: center;
+  padding: 8px 10px !important;
+}
+.collapsed .ms-button-toggle { 
+  display: none;
 }
 
 .active-icon {
