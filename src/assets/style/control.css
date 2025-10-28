@@ -1,0 +1,49 @@
+.text-white {
+  color: white;
+  font-size: 14px;
+}
+
+.text-primary {
+  color: var(--text-color);
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.text-secondary {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.text-heading-1 {
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--text-color);
+  line-height: 26px;
+}
+
+.input-error {
+  border: 1px solid red !important;
+}
+/* btn close */
+.btn-close {
+  cursor: pointer;
+}
+
+.btn-close i {
+  font-size: 20px;
+}
+
+.collapsed .btn-toggle-text {
+  display: none;
+}
+
+/* size */
+.large {
+  height: var(--large);
+}
+.medium {
+  height: var(--medium);
+}
+.small {
+  height: var(--small);
+}
