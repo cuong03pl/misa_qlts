@@ -1,0 +1,13 @@
+@font-face {
+  font-family: 'Roboto';
+  src: url('@/assets/fonts/86035194a2ecaec2e33d6deae8ecf2ab.eot');
+  src:
+    url('../assets/fonts/54fbc883d110b217f19a4cfe3898979d.woff2') format('woff2'),
+    url('../assets/fonts/54fbc883d110b217f19a4cfe3898979d.woff') format('woff'),
+    url('../assets/fonts/05a65153efe56028d343c10b53faa583.ttf') format('truetype');
+  font-style: normal;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+}
