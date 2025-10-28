@@ -69,9 +69,9 @@
   .year-selector {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
     background: var(--year-selector-bg);
-    padding: 8px 4px 8px 12px;
+    padding: 8px 8px 8px 12px;
     border-radius: 4px;
   }
   .year-selector-text, .year-selector-number {

@@ -9,7 +9,7 @@
         <li
           v-for="item in sidebar_data"
           :key="item.id"
-          class="flex items-center justify-between px-4 py-2 cursor-pointer hover:bg-gray-700 rounded-sm transition sidebar-item"
+          class="flex items-center justify-between px-4 py-2 cursor-pointer rounded-sm transition sidebar-item"
         >
         <div class="flex gap-12 items-center">
           <span :class="`icon ${item.icon}`"></span>

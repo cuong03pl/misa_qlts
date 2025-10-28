@@ -1,8 +1,8 @@
 :root {
-  --text-color: #212121;
+  --text-color: #001031;
   --white-color: #fff;
   --btn-primary: #4083ef;
-  --search-width: 300px;
+  --search-width: 179px ;
   --border-secondary: #d1d5db;
   --icon-color: #666666;
   --table-item-hover: #ffece5;
@@ -27,12 +27,15 @@
   /* height */
   --header-height: 56px;
   --input-form-height: 40px;
-  --large: 40px;
-  --medium: 36px;
+  --large: 36px;
+  --medium: 35px;
   --small: 32px;
 
   /* row */
   --row-height: 48px;
+
+  /* input */
+  --input-border-color: #afafaf;
 }
 
 .icon i {
@@ -108,6 +111,12 @@
 }
 .gap-8 {
   gap: 8px;
+}
+.gap-9 {
+  gap: 9px;
+}
+.gap-11 {
+  gap: 11px;
 }
 .gap-12 {
   gap: 12px;
