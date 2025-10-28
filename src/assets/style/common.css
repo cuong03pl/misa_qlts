@@ -4,14 +4,22 @@
   --btn-primary: #4083ef;
   --search-width: 300px;
   --border-secondary: #d1d5db;
-  --side-bar-from: #333943;
-  --side-bar-to: #ac7f78;
   --icon-color: #666666;
   --table-item-hover: #ffece5;
   --toast-success: #61b636;
   --toast-error: #b93315;
   --toast-warning: #eb9340;
   --toast-info: #3e9fec;
+
+  /* logo */
+  --logo-height: 36px;
+  --logo-width: 36px;
+
+  /* side bar */
+  --sidebar-bg: #25344a;
+  --sidebar-bg-hover: #45A3C7;
+  --sidebar-text-primary: #7b8798;
+  --sidebar-text-hover: #fff;
   /* height */
   --header-height: 56px;
   --input-form-height: 40px;
@@ -21,9 +29,6 @@
 
   /* row */
   --row-height: 48px;
-}
-.icon {
-  padding: 2px;
 }
 
 .icon i {
