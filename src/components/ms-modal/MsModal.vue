@@ -37,7 +37,7 @@ defineProps({
 }
 .modal-content {
   position: absolute;
-  width: 35%;
+  width: 800px;
   max-height: 90vh;
   background: white;
   z-index: 1000;
@@ -45,14 +45,16 @@ defineProps({
   flex-direction: column;
 }
 .modal-head {
-  padding: 24px;
+  padding: 20px 16px;
 }
 
 .modal-body {
- padding: 0 24px 24px 24px;
+ padding: 0 16px 36px 16px;
 }
 .modal-footer {
-  padding: 12px 24px;
-  gap: 8px;
+  height: 52px;
+  padding: 0 16px;
+  gap: 10px;
+  background-color: #f5f5f5;
 }
 </style>

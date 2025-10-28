@@ -1,14 +1,16 @@
 <template>
      <div class="select-list flex flex-col justify-center ">
-        <div v-if="label" class="text-primary">{{ label }}</div>
-        <Select v-model="selectedCity" :options="cities" optionLabel="name"  class="w-full md:w-56" >
+        <div v-if="label" class="text-primary">{{ label }} 
+          <span v-if="isRequired" class="required-icon">*</span>
+        </div>
+        <Select v-model="selectedCity" :options="cities" optionLabel="name"  :class="[isFilter && 'filter', !!size && size]" >
             <template #value="slotProps">
                 <div v-if="slotProps.value" class="flex items-center gap-9">
-                    <span class="icon filter-icon"></span>
+                    <span v-if="hasLeftIcon" class="icon filter-icon"></span>
                     <span class="text-primary">{{ slotProps.value.name }}</span>
                 </div>
                 <div v-else class="flex items-center  gap-9">
-                    <span class="icon filter-icon"></span>
+                    <span v-if="hasLeftIcon" class="icon filter-icon"></span>
                     <span class="text-primary">{{ placeholder }}</span>
                 </div>
             </template>
@@ -34,11 +36,16 @@ const cities = ref([
 ]);
   //#region Props
   defineProps({
+    isFilter: Boolean,
     label: String,
-    size: String,
+    size: {
+      type: String,
+      default: 'medium',
+    },
     isRequired: Boolean,
     error_message: String,
     placeholder: String,
+    hasLeftIcon: Boolean,
     modelValue: [String, Number],
   })
   //#endregion Props
@@ -49,9 +56,8 @@ const cities = ref([
   
   <style>
   .p-select {
-    width: 219px;
+    width: 100%;
     border: 1px solid var(--input-border-color) !important;
-    height: 35px !important;
     border-radius: 2.5px !important;
     font-size: 13px !important;
   }
@@ -71,7 +77,6 @@ const cities = ref([
   .select-list select {
     height: var(--input-form-height);
     padding: 0 8px 0 12px;
-  
     display: block;
     width: 100%;
     outline: none;
@@ -80,11 +85,16 @@ const cities = ref([
     font-size: 13px;
     color: var(--text-color);
   }
-  
-  select:focus {
-    /* border: 1px solid var(--toast-success); */
+  .filter {
+    width: 219px;
   }
-
+  .p-select:not(.filter) {
+    font-style: italic;
+    padding-left: 14px;
+  }
+  .p-select:not(.filter) .p-select-label {
+    padding: 0 !important;
+  }
 .error-text {
   color: red;
   font-size: 13px;
@@ -94,4 +104,7 @@ const cities = ref([
 .error-text.show {
   display: block;
 }
+.required-icon {
+    color: red;
+  }
   </style>

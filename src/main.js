@@ -11,6 +11,8 @@ import Aura from '@primeuix/themes/aura';
 import MsButton from './components/ms-button/MsButton.vue'
 import MsSearch from './components/ms-search/MsSearch.vue'
 import MsSelect from './components/ms-form-field/MsSelect.vue'
+import MsModal from './components/ms-modal/MsModal.vue'
+import MsInput from './components/ms-form-field/MsInput.vue'
 import { i18n } from './plugin/i18n'
 const app = createApp(App)
 app.use(PrimeVue, {
@@ -25,4 +27,6 @@ app.use(i18n)
 app.component('MsButton', MsButton)
 app.component('MsSearch', MsSearch)
 app.component('MsSelect', MsSelect)
+app.component('MsModal', MsModal)
+app.component('MsInput', MsInput)
 app.mount('#app')

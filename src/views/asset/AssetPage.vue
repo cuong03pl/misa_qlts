@@ -4,11 +4,11 @@
     <div class="flex justify-between create-button items-center">
       <div class="flex items-center gap-11">
        <ms-search placeholder="Tìm kiếm tài sản" />
-        <ms-select  placeholder="Loại tài sản" />
-        <ms-select  placeholder="Bộ phận sử dụng" />
+        <ms-select isFilter hasLeftIcon placeholder="Loại tài sản" />
+        <ms-select isFilter hasLeftIcon placeholder="Bộ phận sử dụng" />
       </div>
       <div class="flex items-center gap-10">
-        <ms-button type="one-icon" size="large">
+        <ms-button  type="one-icon" size="large">
           <template #left-icon>
             <span class="icon plus-icon"></span>
           </template>
@@ -41,13 +41,13 @@
     </div>
   </div>
  
-  
+  <asset-modal />
 </template>
 
 <script setup>
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-
+import AssetModal from './AssetModal.vue'
 const { t } = useI18n()
 
 //#endregion Methods

@@ -61,6 +61,12 @@ const emit = defineEmits(['update:modelValue'])
   width: 100%;
   font-size: 13px;
   font-style: italic;
+}
 
+/* Hover, Focus, Active states */
+.filter-search:hover,
+.filter-search:focus-within,
+.filter-search:active {
+  border-color: #007acc;
 }
 </style>

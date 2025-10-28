@@ -50,16 +50,19 @@ const emit = defineEmits(['click'])
 .ms-button-primary {
   background: var(--btn-primary);
   color: #fff;
-  min-width: 80px;
+  min-width: 110px;
   padding: 0 16px;
+}
+.ms-button-primary:hover:not(.disabled) {
+  background: var(--btn-primary-hover);
 }
 
 .ms-button-secondary {
-  background: #f5f5f5;
   color: #333;
-  border: 1px solid #d9d9d9;
-  min-width: 80px;
+ background-color: var(--white-color);
+  min-width: 110px;
   padding: 0 16px;
+  box-shadow: none;
 }
 
 .ms-button-delete,
@@ -103,9 +106,6 @@ const emit = defineEmits(['click'])
 .ms-button-combo span {
   padding: 0 16px 0 4px;
 }
-.ms-button-combo i {
-  /* font-size: 20px; */
-}
 
 /* new */
 .ms-button-link {
@@ -117,8 +117,10 @@ const emit = defineEmits(['click'])
   gap: 4px;
   min-width: 110px;
   padding: 0 16px 0 12px;
+}
 
-
+.ms-button-one-icon:hover:not(.disabled) {
+  background: var(--btn-primary-hover);
 }
 
 .disabled {
