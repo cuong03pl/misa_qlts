@@ -6,7 +6,7 @@
         <slot name="head">
           <span class="text-2xl font-bold">Thêm tài sản</span>
           <span class="btn-close">
-            <span @click="emit('update:isOpen', false)" class="icon close-icon"></span>
+            <span @click="handleCloseModal" class="icon close-icon"></span>
           </span>
         </slot>
       </div>
@@ -51,6 +51,7 @@
               placeholder="Chọn mã bộ phận sử dụng"
               :dataOptions="departments"
               optionLabel="departmentCode"
+              :isClear="isOpen"
             />
           </div>
           <div class="col-span-2">
@@ -76,6 +77,7 @@
               placeholder="Chọn mã loại tài sản"
               :dataOptions="assetTypes"
               optionLabel="assetTypeCode"
+              :isClear="isOpen"
             />
           </div>
           <div class="col-span-2">
@@ -128,7 +130,7 @@
         </div>
         <div class="grid grid-cols-3 gap-16">
           <div class="col-span-1">
-            <ms-datepicker
+            <ms-date-picker
               size="large"
               tabindex="10"
               isRequired
@@ -139,7 +141,7 @@
             />
           </div>
           <div class="col-span-1">
-            <ms-datepicker
+            <ms-date-picker
               size="large"
               tabindex="10"
               isRequired
@@ -205,10 +207,12 @@ import AssetAPI from '@/apis/components/AssetAPI'
 import AssetTypeAPI from '@/apis/components/AssetTypeAPI'
 import DepartmentAPI from '@/apis/components/DepartmentAPI'
 import MsModal from '@/components/ms-modal/MsModal.vue'
+import MsToast from '@/components/ms-toast/MsToast.vue'
 import { assetSchema } from '@/schemas/asset.schema'
 import { useForm } from 'vee-validate'
 import { onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useToast } from 'vue-toastification'
 const { t } = useI18n()
 //#region Props
 defineProps({
@@ -221,7 +225,7 @@ const emit = defineEmits(['update:isOpen'])
 //#endregion Emits
 
 //#region handle Form
-const { errors, handleSubmit, defineField } = useForm({
+const { errors, handleSubmit, defineField, resetForm } = useForm({
   validationSchema: assetSchema(t),
   initialValues: {
     quantity: 0,
@@ -247,6 +251,7 @@ const [useYears, useYearsAttrs] = defineField('useYears')
  * Hàm xử lý submit form
  * createdby: hkc
  */
+
 const onSubmit = handleSubmit((values) => {
   AssetAPI.create({
     assetCode: values.assetCode,
@@ -262,18 +267,33 @@ const onSubmit = handleSubmit((values) => {
     startDate: values.startDate,
   })
     .then((response) => {
-      console.log(response)
+      // Hiển thị toast
+      toast.success({
+        component: MsToast,
+        props: { type: 'success', message: 'Lưu dữ liệu thành công' },
+      })
+      // Đóng modal
+      emit('update:isOpen', false)
+      // clear form
+      handleCloseModal()
     })
     .catch((error) => {
       console.error('Lỗi tạo tài sản:', error)
     })
 })
-//#endregion handle Form
 
+//#endregion handle Form
+//#region methods
+const handleCloseModal = () => {
+  emit('update:isOpen', false)
+  resetForm()
+}
+//#endregion methods
 //#region State
 const departments = ref([])
 const assetTypes = ref([])
 const currentYear = ref(new Date().getFullYear())
+const toast = useToast()
 //#endregion State
 
 //#region API

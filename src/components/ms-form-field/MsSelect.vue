@@ -12,7 +12,7 @@
       @update:modelValue="emit('update:modelValue', $event)"
     >
       <template #value="slotProps">
-        <div v-if="slotProps.value" class="flex items-center gap-9">
+        <div v-if="slotProps.value && isClear" class="flex items-center gap-9">
           <span v-if="hasLeftIcon" class="icon filter-icon"></span>
           <span class="text-primary">{{ slotProps.value[optionLabel] }}</span>
         </div>
@@ -51,6 +51,7 @@ defineProps({
   dataOptions: Array,
   optionLabel: String,
   optionValue: String,
+  isClear: Boolean,
 })
 //#endregion Props
 
