@@ -7,9 +7,14 @@
           scrollable
           scrollHeight="flex"
           showGridlines
+          resizableColumns="true"
+          size="small"
           tableStyle="min-width: 50rem">
-            <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
-            <Column v-for="item in assetHeader" :key="item.field" :field="item.field" :header="item.title">
+            <Column selectionMode="multiple" class="checkbox-cell" ></Column>
+            <Column v-for="item in assetHeader" :key="item.field" :field="item.field" :header="item.title" :pt="{
+          bodyCell: { 'data-type': item.type },
+          headerCell: { 'data-type': item.type }
+        }">
                 <!-- Xử lý format theo type -->
                 <template #body="{ data }">
                     <slot  :value="formatter[item.type](data[item.field])" :rowData="data" :name="`cell-${item.field}`">
@@ -17,6 +22,7 @@
                     </slot>
                 </template>
             </Column>
+            <Column field="func" header="Chức năng"></Column>
         </DataTable>
     </div>
 </template>
@@ -47,7 +53,7 @@ const products = ref([
     assetName: 'Máy in HP LaserJet Pro M404n',
     assetTypeName: 'Thiết bị văn phòng',
     departmentName: 'Phòng hành chính',
-    quantity: 2,
+    quantity: 2000,
     purchaseDate: '2023-02-20',
     price: 8500000,
     annualDepreciation: 1700000
@@ -92,9 +98,93 @@ const products = ref([
   border: none;
 }
 .p-datatable-tbody > tr > td {
-  border: none !important;
+  font-size: 13px;
+  color: var(--text-color);
+  vertical-align: middle;
 }
 .p-datatable-table-container {
   overflow: auto !important;
+}
+
+th.p-datatable-header-cell {
+  height: 38px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-color);
+  vertical-align: middle;
+  
+}
+
+.p-datatable-column-header-content {
+  height: 100%;
+  display: flex !important;
+  align-items: center;
+  justify-content: inherit; 
+  line-height: 1;
+}
+
+
+.checkbox-cell {
+  padding: 0 !important;
+  padding-left: 16px !important;
+ 
+}
+
+.checkbox-cell .p-datatable-column-header-content {
+  display: flex !important;
+}
+
+.p-checkbox-box {
+  border: 1px solid #090f39 !important;
+}
+
+.p-checkbox-box, .p-checkbox.p-component {
+  width: 14px !important;
+  height: 14px !important;
+}
+
+.p-datatable.p-datatable-gridlines:has(.p-datatable-thead):has(.p-datatable-tbody) .p-datatable-tbody > tr > td {
+  border-width:  1px 0 0px 0px !important;
+}
+
+.p-datatable-tbody > tr {
+  height: 39px !important;
+  vertical-align: middle;
+}
+
+.p-datatable .p-datatable-tbody > tr:hover {
+  background-color: rgba(26, 164, 200, .2) !important;
+}
+
+.p-datatable .p-datatable-tbody > tr.p-highlight {
+  background-color: rgba(26, 164, 200, .2) !important;
+}
+
+/* text - Căn trái, number - Căn phải, currency - Căn phải, date - Căn giữa */
+
+.p-datatable-tbody td[data-type="text"],
+.p-datatable-thead th[data-type="text"] {
+  text-align: left !important;
+}
+
+.p-datatable-tbody td[data-type="number"], 
+.p-datatable-tbody td[data-type="currency"],
+.p-datatable-thead th[data-type="number"], 
+.p-datatable-thead th[data-type="currency"] {
+  text-align: right !important;
+}
+
+.p-datatable-tbody td[data-type="date"],
+.p-datatable-thead th[data-type="date"] {
+  text-align: center !important;
+}
+.p-datatable-column-header-content {
+  display: block !important;
+}
+
+span.p-datatable-column-title {
+  display: inline-flex;
+  align-items: center;
+  height: 100%;
 }
 </style>

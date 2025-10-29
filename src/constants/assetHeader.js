@@ -45,6 +45,11 @@ export const assetHeader = [
       title: 'Khấu hao năm',
       type: 'currency',
     },
+    {
+      field: 'residualValue',
+      title: 'Giá trị còn lại',
+      type: 'currency',
+    }
     
    
   ]
