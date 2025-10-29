@@ -9,6 +9,7 @@
         :type="type"
         :placeholder="placeholder"
         :value="modelValue"
+        :disabled="disabled"
         @input="emit('update:modelValue', $event.target.value)"
       />
       <small v-if="isRequired" :class="['error-text', error_message && 'show']">{{
@@ -32,6 +33,7 @@
     modelValue: String,
     error_message: String,
     flexRow: Boolean,
+    disabled: Boolean,
   })
   //#endregion Props
   
@@ -76,5 +78,11 @@
   .required-icon {
     color: red;
   }
+  
+  .form-input input:disabled {
+    background-color: #00000014;
+    cursor: not-allowed;
+  }
+  
   </style>
   

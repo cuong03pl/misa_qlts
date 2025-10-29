@@ -1,18 +1,18 @@
 <template>
-    <ms-modal to="body" :isOpen="true">
+    <ms-modal to="body" :isOpen="isOpen">
       <form @submit="onSubmit" class="modal-content rounded-md">
         <!-- head -->
         <div class="modal-head flex justify-between items-center">
             <slot name="head">
             <span class="text-2xl font-bold">Thêm tài sản</span>
             <span class="btn-close">
-                <span class="icon close-icon"></span>
+                <span @click="emit('update:isOpen', false)" class="icon close-icon"></span>
             </span>
             </slot>
         </div>
 
         <!-- content -->
-         <div class="scroll modal-body flex flex-col gap-20">
+        <div class="scroll modal-body flex flex-col gap-20">
             <div class="grid grid-cols-3 gap-16">
                 <div class="col-span-1">
                     <ms-input size="large" isRequired label="Mã tài sản"/>
@@ -26,7 +26,7 @@
                     <ms-select size="large" isRequired label="Mã bộ phận sử dụng" placeholder="Chọn mã bộ phận sử dụng"/>
                 </div>
                 <div class="col-span-2">
-                    <ms-input size="large" label="Tên bộ phận sử dụng" placeholder="" />
+                    <ms-input size="large" disabled label="Tên bộ phận sử dụng" placeholder="" />
                 </div>
             </div>
             <div class="grid grid-cols-3 gap-16">
@@ -34,7 +34,7 @@
                     <ms-select size="large" isRequired label="Mã loại tài sản" placeholder="Chọn mã loại tài sản"/>
                 </div>
                 <div class="col-span-2">
-                    <ms-input size="large" label="Tên loại tài sản" placeholder="" />
+                    <ms-input size="large" disabled label="Tên loại tài sản" placeholder="" />
                 </div>
             </div>
             <div class="grid grid-cols-3 gap-16">
@@ -56,7 +56,7 @@
                     <ms-input size="large" isRequired label="Ngày bắt đầu sử dụng" placeholder="" />
                 </div>
                 <div class="col-span-1">
-                    <ms-input size="large" label="Năm theo dõi" placeholder="" />
+                    <ms-input size="large" disabled label="Năm theo dõi" placeholder="" />
                 </div>
             </div>
             <div class="grid grid-cols-3 gap-16">
@@ -72,10 +72,10 @@
 
          <!-- footer -->
          <div class="modal-footer flex justify-end items-center">
-        <slot name="footer">
-          <ms-button type="secondary" size="large" @click="emit('update:isOpen', false)">hủy</ms-button>
-          <ms-button type="primary" size="large">Lưu</ms-button>
-        </slot>
+            <slot name="footer">
+            <ms-button type="secondary" size="large" @click="emit('update:isOpen', false)">Hủy</ms-button>
+            <ms-button type="primary" size="large">Lưu</ms-button>
+            </slot>
       </div>
       </form>
     </ms-modal>
@@ -86,10 +86,12 @@
   //#region Props
    defineProps({
     isOpen: Boolean,
-    candidate: Object,
     mode: String,
   })
-
+  //#endregion Props
+//#region Emits
+    const emit = defineEmits(['update:isOpen'])
+  //#endregion Emits
   </script>
   
   <style>

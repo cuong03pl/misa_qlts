@@ -1,18 +1,17 @@
 <template>
-  <div class="content p-6">
-    <!-- head -->
-    <div class="flex justify-between create-button items-center">
-      <div class="flex items-center gap-11">
+    <!-- filter -->
+    <div class=" filter-controls flex justify-between items-center">
+      <div class=" flex items-center gap-11">
        <ms-search placeholder="Tìm kiếm tài sản" />
         <ms-select isFilter hasLeftIcon placeholder="Loại tài sản" />
         <ms-select isFilter hasLeftIcon placeholder="Bộ phận sử dụng" />
       </div>
-      <div class="flex items-center gap-10">
-        <ms-button  type="one-icon" size="large">
+      <div class=" flex items-center gap-10">
+        <ms-button @click="handleOpenModal" type="one-icon" size="large">
           <template #left-icon>
             <span class="icon plus-icon"></span>
           </template>
-          <span>Thêm tài sản</span>
+          <span class="text-white">Thêm tài sản</span>
         </ms-button>
         <ms-button type="only-icon" size="large">
           <template #left-icon>
@@ -26,33 +25,22 @@
         </ms-button>
       </div>
     </div>
-    <!-- body -->
-    <div class="data-section py-5 mt-5 rounded-md">
-      <!-- filter -->
-      <div class="filter flex justify-end px-5">
-        <div class="flex gap-12">
-          
-        </div>
-      </div>
-
-      <!-- table -->
-      <div class="table mt-5 flex flex-col">
-      </div>
-    </div>
-  </div>
- 
-  <asset-modal />
+    <!-- table -->
+       <MsTableV2 scrollHeight="400px" />
+  <asset-modal v-model:isOpen="isOpen"/>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-import { useI18n } from 'vue-i18n'
 import AssetModal from './AssetModal.vue'
-const { t } = useI18n()
+import MsTableV2 from '@/components/ms-table/MsTableV2.vue'
 
+const handleOpenModal = () => {
+  isOpen.value = true
+}
 //#endregion Methods
 //#region State
-const selectedRows = ref([])
+const isOpen = ref(false)
 
 //#endregion State
 
@@ -62,27 +50,10 @@ const selectedRows = ref([])
 </script>
 
 <style scoped>
-.content {
-  flex: 1;
-  background: #ecebf0;
-  transition: all 0.3s ease;
+.filter-controls {
+  padding: 14px 20px;
 }
-
-.content.collapsed {
-  /* width: 100%; */
-  background: #ecebf0;
-  transition: all 0.3s ease;
-}
-
-.data-section {
-  background: #fff;
-}
-
-/* table */
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: white;
+.table-controls {
+  padding: 0 20px 17px 20px;
 }
 </style>

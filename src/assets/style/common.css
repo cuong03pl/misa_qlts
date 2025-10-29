@@ -18,7 +18,7 @@
 
   /* header right */
   --header-right-color: #000;
-  --year-selector-bg: #D4ECF4;
+  --year-selector-bg: rgba(26, 164, 200, .2);
 
   /* side bar */
   --sidebar-bg: #25344a;
@@ -915,4 +915,8 @@
 
 .col-span-12 {
   grid-column: span 12 / span 12;
+}
+
+.overflow-hidden {
+  overflow: hidden;
 }

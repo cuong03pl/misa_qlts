@@ -41,7 +41,7 @@
   /* Header */
   .header {
     height: var(--header-height);
-    padding: 4px 12px;
+    padding: 0 20px;
 
   }
   
@@ -73,10 +73,11 @@
     align-items: center;
     background: var(--year-selector-bg);
     padding: 8px 8px 8px 12px;
-    border-radius: 4px;
+    border-radius: 3px;
     margin-right: 27px;
     margin-left: 22px;
     height: 30px;
+    max-width: 112px  ;
   }
   .year-selector-number {
     padding-left: 16px;

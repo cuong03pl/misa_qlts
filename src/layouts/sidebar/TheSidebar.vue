@@ -28,7 +28,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { getSidebarData } from '@/constants/sidebar_data'
+import { getSidebarData } from '@/constants/sidebarData'
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
 
@@ -53,6 +53,7 @@ const handleToggle = () => {
   background: var(--sidebar-bg);
   width: 250px;
   transition: all 0.3s ease;
+  
 }
 .logo {
   height: 50px;

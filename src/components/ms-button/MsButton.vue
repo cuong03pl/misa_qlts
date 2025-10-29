@@ -87,8 +87,9 @@ const emit = defineEmits(['click'])
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 8px;
+  /* padding: 8px; */
   background-color: #ffffff;
+  width: 36px;
 }
 
 
@@ -114,9 +115,9 @@ const emit = defineEmits(['click'])
 .ms-button-one-icon {
   background: var(--btn-primary);
   color: var(--white-color);
+  width: 110px;
   gap: 4px;
-  min-width: 110px;
-  padding: 0 16px 0 12px;
+  /* padding: 0 14px 0 12px; */
 }
 
 .ms-button-one-icon:hover:not(.disabled) {
