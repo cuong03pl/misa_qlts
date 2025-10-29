@@ -49,7 +49,7 @@ defineProps({
 }
 
 .modal-body {
- padding: 0 16px 36px 16px;
+  padding: 0 16px 36px 16px;
 }
 .modal-footer {
   height: 52px;

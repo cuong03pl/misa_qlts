@@ -1,49 +1,56 @@
 <template>
-    <ms-modal :isOpen="isOpenConfirmModal" to="body">
-      <div class="modal-content rounded-md">
-              <div class="modal-head  flex justify-between items-center">
-                
-                <h3 class="text-2xl font-bold"></h3>
-                <span @click="emit('update:isOpenConfirmModal', false)" class="btn-close"
-                  ><i class="fa-solid fa-xmark"></i
-                ></span>
-              </div>
-              <div class="modal-body">
-                <slot name="content"> </slot>
-              </div>
-              <div class="modal-footer flex justify-end ">
-                <slot name="footer">
-                  <ms-button type="secondary" size="medium">{{
-                    
-                  }}</ms-button>
-                  <ms-button type="delete" size="medium">{{
-                  
-                  }}</ms-button>
-                </slot>
-              </div>
+  <ms-modal :isOpen="isOpenConfirmModal" to="body">
+    <div class="modal-confirm-content rounded-md">
+      <div class="modal-confirm-body">
+        <span class="icon warning-icon"></span>
+        <span class="text-sm text-gray-500">
+          <slot name="content"> </slot>
+        </span>
       </div>
-    </ms-modal>
-  </template>
+      <div class="modal-confirm-footer flex justify-end">
+        <slot name="footer">
+          <ms-button type="outline" size="medium">Không</ms-button>
+          <ms-button type="primary" size="medium">Hủy bỏ</ms-button>
+        </slot>
+      </div>
+    </div>
+  </ms-modal>
+</template>
   
   <script setup>
-  import MsModal from './MsModal.vue'
-  
-  
-  //#region Props
-  defineProps({
-    isOpenConfirmModal: Boolean,
-  })
-  //#endregion Props
-  
-  //#region Emits
-  const emit = defineEmits(['update:isOpenConfirmModal'])
-  //#endregion Emits
-  </script>
+import MsModal from './MsModal.vue'
+
+//#region Props
+defineProps({
+  isOpenConfirmModal: Boolean,
+})
+//#endregion Props
+
+//#region Emits
+const emit = defineEmits(['update:isOpenConfirmModal'])
+//#endregion Emits
+</script>
   
   <style >
-  /* Modal xác nhận xóa */
-  
-  
-  
-  </style>
+.modal-confirm-content {
+  width: 400px;
+  background: white;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.modal-confirm-body {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 36px 20px;
+}
+.modal-confirm-footer {
+  height: 52px;
+  padding: 0 20px 16px 20px;
+  gap: 10px;
+  background-color: #f5f5f5;
+}
+</style>
   

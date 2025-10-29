@@ -43,7 +43,7 @@ const emit = defineEmits(['click'])
   font-size: 13px;
   line-height: 18px;
   letter-spacing: 0.014em;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, .16);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.16);
 }
 
 /* --- Color  --- */
@@ -57,19 +57,28 @@ const emit = defineEmits(['click'])
   background: var(--btn-primary-hover);
 }
 
-.ms-button-secondary {
-  color: #333;
- background-color: var(--white-color);
+.ms-button-sub {
+  color: var(--btn-primary);
   min-width: 110px;
   padding: 0 16px;
   box-shadow: none;
+  border: 1px solid var(--btn-primary);
 }
 
-.ms-button-delete,
-.btn-confirm-delete {
-  background: #d32f2f;
-  color: #fff;
-  min-width: 80px;
+.ms-button-outline {
+  color: var(--text-color);
+  min-width: 110px;
+  padding: 0 16px;
+  box-shadow: none;
+  border: 1px solid var(--text-color);
+}
+
+.ms-button-secondary {
+  color: #333;
+  background-color: var(--white-color);
+  min-width: 110px;
+  padding: 0 16px;
+  box-shadow: none;
 }
 
 .ms-button-toggle {
@@ -92,26 +101,6 @@ const emit = defineEmits(['click'])
   width: 36px;
 }
 
-
-/* combo button */
-.ms-button-combo {
-  background: var(--btn-primary);
-  color: #fff;
-  padding-left: 12px;
-}
-.ms-button-combo div {
-  border-left: 1px solid #ccc;
-  padding: 0 12px;
-  height: 100%;
-}
-.ms-button-combo span {
-  padding: 0 16px 0 4px;
-}
-
-/* new */
-.ms-button-link {
-  color: #fff;
-}
 .ms-button-one-icon {
   background: var(--btn-primary);
   color: var(--white-color);

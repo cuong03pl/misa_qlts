@@ -51,7 +51,6 @@
               placeholder="Chọn mã bộ phận sử dụng"
               :dataOptions="departments"
               optionLabel="departmentCode"
-              :isClear="isOpen"
             />
           </div>
           <div class="col-span-2">
@@ -77,7 +76,6 @@
               placeholder="Chọn mã loại tài sản"
               :dataOptions="assetTypes"
               optionLabel="assetTypeCode"
-              :isClear="isOpen"
             />
           </div>
           <div class="col-span-2">
@@ -192,14 +190,20 @@
       <!-- footer -->
       <div class="modal-footer flex justify-end items-center">
         <slot name="footer">
-          <ms-button type="secondary" size="large" @click="emit('update:isOpen', false)"
-            >Hủy</ms-button
-          >
+          <ms-button type="secondary" size="large" @click="handleConfirmModal">Hủy</ms-button>
           <ms-button type="primary" size="large">Lưu</ms-button>
         </slot>
       </div>
     </form>
   </ms-modal>
+  <ms-confirm-modal v-model:isOpenConfirmModal="isOpenConfirmModal">
+    <template #content> Bạn có muốn hủy bỏ khai báo tài sản này? </template>
+
+    <template #footer>
+      <ms-button type="outline" size="medium" @click="handleCloseConfirmModal">Không</ms-button>
+      <ms-button type="primary" size="medium" @click="handleConfirmConfirmModal">Hủy bỏ</ms-button>
+    </template>
+  </ms-confirm-modal>
 </template>
   
 <script setup>
@@ -208,6 +212,7 @@ import AssetTypeAPI from '@/apis/components/AssetTypeAPI'
 import DepartmentAPI from '@/apis/components/DepartmentAPI'
 import MsModal from '@/components/ms-modal/MsModal.vue'
 import MsToast from '@/components/ms-toast/MsToast.vue'
+import MsConfirmModal from '@/components/ms-modal/MsConfirmModal.vue'
 import { assetSchema } from '@/schemas/asset.schema'
 import { useForm } from 'vee-validate'
 import { onMounted, ref, watch } from 'vue'
@@ -247,6 +252,23 @@ const [depreciationRate, depreciationRateAttrs] = defineField('depreciationRate'
 const [startDate, startDateAttrs] = defineField('startDate')
 const [useYears, useYearsAttrs] = defineField('useYears')
 
+// nut huy
+const handleConfirmModal = () => {
+  emit('update:isOpen', false)
+  isOpenConfirmModal.value = !isOpenConfirmModal.value
+}
+
+// nut khong
+const handleCloseConfirmModal = () => {
+  emit('update:isOpen', true)
+  isOpenConfirmModal.value = !isOpenConfirmModal.value
+}
+
+// nut huy bo
+const handleConfirmConfirmModal = () => {
+  handleCloseModal()
+  isOpenConfirmModal.value = !isOpenConfirmModal.value
+}
 /**
  * Hàm xử lý submit form
  * createdby: hkc
@@ -272,8 +294,6 @@ const onSubmit = handleSubmit((values) => {
         component: MsToast,
         props: { type: 'success', message: 'Lưu dữ liệu thành công' },
       })
-      // Đóng modal
-      emit('update:isOpen', false)
       // clear form
       handleCloseModal()
     })
@@ -290,6 +310,7 @@ const handleCloseModal = () => {
 }
 //#endregion methods
 //#region State
+const isOpenConfirmModal = ref(false)
 const departments = ref([])
 const assetTypes = ref([])
 const currentYear = ref(new Date().getFullYear())

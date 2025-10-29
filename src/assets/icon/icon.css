@@ -306,3 +306,14 @@
   width: 18px;
   height: 18px;
 }
+
+
+/* warning icon  */
+.warning-icon {
+  mask-image: url('./qlts-icon.svg');
+  mask-position: -416px -66px;
+  mask-repeat: no-repeat;
+  background-color: #ff3131;
+  width: 24px;
+  height: 20px;
+}
