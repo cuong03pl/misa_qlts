@@ -21,7 +21,8 @@
       </ul>
     </div>
     <ms-button size="large" type="toggle" @click="handleToggle">
-        <span class="icon toggle-icon"></span>
+        <span v-if="isShow" class="icon toggle-icon-close"></span>
+        <span v-else class="icon toggle-icon-open"></span>
     </ms-button>
   </div>
 </template>
@@ -117,10 +118,6 @@ const handleToggle = () => {
   align-items: center;
   padding: 8px 10px !important;
 }
-.collapsed .ms-button-toggle { 
-  display: none;
-}
-
 .active-icon {
   display: none;
 }
@@ -130,5 +127,10 @@ const handleToggle = () => {
 
 .sidebar-item:hover .active-icon {
   display: block;
+}
+.collapsed .ms-button-toggle {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  justify-content: center;
 }
 </style>
