@@ -1,13 +1,19 @@
 <template>
-     <div class="select-list flex flex-col justify-center ">
+     <div class="select-list flex flex-col justify-center">
         <div v-if="label" class="text-primary">{{ label }} 
           <span v-if="isRequired" class="required-icon">*</span>
         </div>
-        <Select v-model="selectedCity" :options="cities" optionLabel="name"  :class="[isFilter && 'filter', !!size && size]" >
+          <Select 
+          :options="cities" 
+          optionLabel="name" 
+          optionValue="name" 
+          :class="[isFilter && 'filter', !!size && size]"
+          @update:modelValue="emit('update:modelValue', $event)"
+        >
             <template #value="slotProps">
                 <div v-if="slotProps.value" class="flex items-center gap-9">
                     <span v-if="hasLeftIcon" class="icon filter-icon"></span>
-                    <span class="text-primary">{{ slotProps.value.name }}</span>
+                    <span class="text-primary">{{ slotProps.value }}</span>
                 </div>
                 <div v-else class="flex items-center  gap-9">
                     <span v-if="hasLeftIcon" class="icon filter-icon"></span>
@@ -18,6 +24,9 @@
                 <span class="icon dropdown-icon"></span>
             </template>
         </Select>
+        <small v-if="isRequired" :class="['error-text', error_message && 'show']">
+          {{ error_message }}
+        </small>
     </div>
   </template>
   
@@ -25,8 +34,6 @@
   
 import Select from 'primevue/select';
 import { ref } from "vue";
-
-const selectedCity = ref();
 const cities = ref([
     { name: 'New York', code: 'NY' },
     { name: 'Rome', code: 'RM' },
@@ -51,6 +58,7 @@ const cities = ref([
   //#endregion Props
   
   //#region Emits
+  const emit = defineEmits(['update:modelValue'])
   //#endregion Emits
   </script>
   

@@ -1,1 +1,15 @@
-{}
+{
+    "errors": {
+        "assetCode_required": "Mã tài sản là bắt buộc",
+        "assetName_required": "Tên tài sản là bắt buộc",
+        "assetTypeName_required": "Loại tài sản là bắt buộc",
+        "departmentName_required": "Bộ phận sử dụng là bắt buộc",
+        "quantity_required": "Số lượng là bắt buộc",
+        "purchaseDate_required": "Ngày mua là bắt buộc",
+        "price_required": "Nguyên giá là bắt buộc",
+        "annualDepreciation_required": "Khấu hao năm là bắt buộc",
+        "residualValue_required": "Giá trị hao mòn năm là bắt buộc",
+        "startUseDate_required": "Ngày bắt đầu sử dụng là bắt buộc",
+        "useYears_required": "Số năm sử dụng là bắt buộc"
+    }
+}

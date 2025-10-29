@@ -59,7 +59,6 @@ const selectedRowIndex = ref(null);
 
 const onRowClick = (event) => {
     selectedRowIndex.value = event.index;
-    console.log(selectedRowIndex.value);
 };
 
 // Dữ liệu mẫu
