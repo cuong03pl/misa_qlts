@@ -1,20 +1,15 @@
 import api from '@/apis/config/APIConfig.js'
 import BaseAPI from '@/apis/base/BaseAPI.js'
 
-class AssetAPI extends BaseAPI {
+class AssetTypeAPI extends BaseAPI {
   constructor() {
     super()
-    this.controller = 'assets'
+    this.controller = 'asset-types'
   }
 
-  /**
-   * Hàm kiểm tra trùng lặp theo nghiệp vụ riêng
-   * @param {*} payload
-   * @returns
-   */
   checkDuplicate(payload) {
     return api.post(`${this.controller}/check-duplicate`, payload)
   }
 }
 
-export default new AssetAPI()
+export default new AssetTypeAPI()

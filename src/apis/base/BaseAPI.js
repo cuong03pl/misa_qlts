@@ -25,6 +25,15 @@ export default class BaseAPI {
   update(id, body) {
     return api.update(`${this.controller}/update/${id}`, body)
   }
+
+  /**
+   * Hàm tạo dữ liệu
+  * @param {*} body
+   */
+  create(body) {
+    return api.post(`${this.controller}`, body)
+  }
+
   /**
    * Hàm xóa bản ghi
    * @param {*} id
