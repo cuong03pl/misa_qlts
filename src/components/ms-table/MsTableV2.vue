@@ -1,8 +1,8 @@
 <template>
     <div class="table-container">
         <DataTable
-        :value="products"
-        paginator 
+          :value="rows"
+          paginator 
           :rows="20"
           scrollable
           scrollHeight="flex"
@@ -53,6 +53,13 @@ import { assetHeader } from '@/constants/assetHeader';
 import { formatter } from '@/utils/formatter';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';             
+
+const props = defineProps({
+  rows: {
+    type: Array,
+    required: true,
+  },
+})
 
 // Hàm xử lý khi click vào dòng
 const selectedRowIndex = ref(null);

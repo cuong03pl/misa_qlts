@@ -26,27 +26,43 @@
       </div>
     </div>
     <!-- table -->
-       <MsTableV2 scrollHeight="400px" />
+    <MsTableV2 scrollHeight="400px" :rows="assets" />
   <asset-modal v-model:isOpen="isOpen"/>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import AssetModal from './AssetModal.vue'
 import MsTableV2 from '@/components/ms-table/MsTableV2.vue'
+import AssetAPI from '@/apis/components/AssetAPI'
 
+//#region Methods
 const handleOpenModal = () => {
   isOpen.value = true
 }
 //#endregion Methods
+
 //#region State
 const isOpen = ref(false)
-
+const assets = ref([])
 //#endregion State
 
-//#region Watchers
+//#region API
+/**
+ * Lấy tất cả dữ liệu tài sản khi mount 
+ * createdby: hkc
+ */
+onMounted(async () => {
+  try {
+    const response = await AssetAPI.getAll()
+    assets.value = response.data
+  } catch (error) {
+    console.log(error)
+  }
+})
+//#endregion API
 
-//#endregion Watchers
+
 </script>
 
 <style scoped>

@@ -1,6 +1,6 @@
 export const assetHeader = [
     {
-      field: 'STT',
+      field: 'rowIndex',
       title: 'STT',
       type: 'number',
     },
