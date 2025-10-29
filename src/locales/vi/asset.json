@@ -7,9 +7,13 @@
         "quantity_required": "Số lượng là bắt buộc",
         "purchaseDate_required": "Ngày mua là bắt buộc",
         "price_required": "Nguyên giá là bắt buộc",
-        "annualDepreciation_required": "Khấu hao năm là bắt buộc",
+        "annualDepreciation_required": "Tỷ lệ hao mòn là bắt buộc",
         "residualValue_required": "Giá trị hao mòn năm là bắt buộc",
         "startUseDate_required": "Ngày bắt đầu sử dụng là bắt buộc",
-        "useYears_required": "Số năm sử dụng là bắt buộc"
+        "useYears_required": "Số năm sử dụng là bắt buộc",
+        "number_invalid": "Giá trị phải là số",
+        "date_invalid": "Giá trị phải là ngày tháng năm"
+
+
     }
 }

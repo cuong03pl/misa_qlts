@@ -4,6 +4,7 @@
         <span v-if="isRequired" class="required-icon">*</span>
       </span>
       <input
+      :tabindex="tabindex"
         :class="[!!size && size]"
         :name="name"
         :type="type"
@@ -34,6 +35,7 @@
     error_message: String,
     flexRow: Boolean,
     disabled: Boolean,
+    tabindex: Number,
   })
   //#endregion Props
   
@@ -49,7 +51,7 @@
     gap: 8px;
   }
   .form-input input {
-    padding: 0 8px 0 14px;
+    padding: 0 14px 0 14px;
     width: 100%;
     outline: none;
     border: 1px solid var(--input-border-color) !important;

@@ -4,6 +4,7 @@
           <span v-if="isRequired" class="required-icon">*</span>
         </div>
           <Select 
+          :tabindex="tabindex"
           :options="cities" 
           optionLabel="name" 
           optionValue="name" 
@@ -54,6 +55,7 @@ const cities = ref([
     placeholder: String,
     hasLeftIcon: Boolean,
     modelValue: [String, Number],
+    tabindex: Number,
   })
   //#endregion Props
   

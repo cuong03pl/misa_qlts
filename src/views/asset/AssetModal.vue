@@ -15,15 +15,16 @@
         <div class="scroll modal-body flex flex-col gap-20">
             <div class="grid grid-cols-3 gap-16">
                 <div class="col-span-1">
-                    <ms-input size="large" isRequired v-model="assetCode" v-bind="assetCodeAttrs" :error_message="errors.assetCode" label="Mã tài sản"/>
+                    <ms-input tabindex="1" size="large" isRequired v-model="assetCode" v-bind="assetCodeAttrs" :error_message="errors.assetCode" label="Mã tài sản"/>
                 </div>
                 <div class="col-span-2">
-                    <ms-input size="large" isRequired v-model="assetName" v-bind="assetNameAttrs" :error_message="errors.assetName" label="Tên tài sản" placeholder="Nhập tên tài sản" />
+                    <ms-input tabindex="2" size="large" isRequired v-model="assetName" v-bind="assetNameAttrs" :error_message="errors.assetName" label="Tên tài sản" placeholder="Nhập tên tài sản" />
                 </div>
             </div>
             <div class="grid grid-cols-3 gap-16">
                 <div class="col-span-1">
                     <ms-select 
+                      tabindex="3"
                       size="large"
                       isRequired 
                       v-model="departmentName" 
@@ -34,34 +35,34 @@
                     />
                 </div>
                 <div class="col-span-2">
-                    <ms-input size="large" disabled label="Tên bộ phận sử dụng" placeholder="" />
+                    <ms-input  size="large" disabled label="Tên bộ phận sử dụng" placeholder="" />
                 </div>
             </div>
             <div class="grid grid-cols-3 gap-16">
                 <div class="col-span-1">
-                    <ms-select size="large" isRequired v-model="assetTypeName" v-bind="assetTypeNameAttrs" :error_message="errors.assetTypeName" label="Mã loại tài sản" placeholder="Chọn mã loại tài sản"/>
+                    <ms-select tabindex="5" size="large" isRequired v-model="assetTypeName" v-bind="assetTypeNameAttrs" :error_message="errors.assetTypeName" label="Mã loại tài sản" placeholder="Chọn mã loại tài sản"/>
                 </div>
                 <div class="col-span-2">
-                    <ms-input size="large" disabled label="Tên loại tài sản" placeholder="" />
+                    <ms-input  size="large" disabled label="Tên loại tài sản" placeholder="" />
                 </div>
             </div>
             <div class="grid grid-cols-3 gap-16">
                 <div class="col-span-1">
-                    <ms-input type="number" isRequired size="large" v-model="quantity" v-bind="quantityAttrs" :error_message="errors.quantity" label="Số lượng" placeholder=""/>
+                    <ms-input tabindex="7" type="number" isRequired size="large" v-model="quantity" v-bind="quantityAttrs" :error_message="errors.quantity" label="Số lượng" placeholder=""/>
                 </div>
                 <div class="col-span-1">
-                    <ms-input size="large" isRequired v-model="price" v-bind="priceAttrs" :error_message="errors.price" label="Nguyên giá" placeholder="" />
+                    <ms-input tabindex="8" size="large" isRequired v-model="price" v-bind="priceAttrs" :error_message="errors.price" label="Nguyên giá" placeholder="" />
                 </div>
                 <div class="col-span-1">
-                    <ms-input size="large" isRequired v-model="annualDepreciation" v-bind="annualDepreciationAttrs" :error_message="errors.annualDepreciation" label="Tỷ lệ hao mòn (%)" placeholder="" />
+                    <ms-input tabindex="9" size="large" isRequired v-model="annualDepreciation" v-bind="annualDepreciationAttrs" :error_message="errors.annualDepreciation" label="Tỷ lệ hao mòn (%)" placeholder="" />
                 </div>
             </div>
             <div class="grid grid-cols-3 gap-16">
                 <div class="col-span-1">
-                    <ms-input size="large" type="date" isRequired v-model="purchaseDate" v-bind="purchaseDateAttrs" :error_message="errors.purchaseDate" label="Ngày mua" placeholder=""/>
+                    <ms-datepicker size="large" tabindex="10" isRequired v-model="purchaseDate" v-bind="purchaseDateAttrs" :error_message="errors.purchaseDate" label="Ngày mua" />
                 </div>
                 <div class="col-span-1">
-                    <ms-input size="large" type="date" isRequired v-model="startUseDate" v-bind="startUseDateAttrs" :error_message="errors.startUseDate" label="Ngày bắt đầu sử dụng" placeholder="" />
+                    <ms-datepicker size="large" tabindex="10" isRequired v-model="startUseDate" v-bind="startUseDateAttrs" :error_message="errors.startUseDate" label="Ngày bắt đầu sử dụng" />
                 </div>
                 <div class="col-span-1">
                     <ms-input size="large" disabled label="Năm theo dõi" placeholder="" />
@@ -69,10 +70,10 @@
             </div>
             <div class="grid grid-cols-3 gap-16">
                 <div class="col-span-1">
-                    <ms-input size="large" isRequired v-model="useYears" v-bind="useYearsAttrs" :error_message="errors.useYears" label="Số năm sử dụng" placeholder=""/>
+                    <ms-input size="large" tabindex="12" isRequired v-model="useYears" v-bind="useYearsAttrs" :error_message="errors.useYears" label="Số năm sử dụng" placeholder=""/>
                 </div>
                 <div class="col-span-1">
-                    <ms-input size="large" isRequired v-model="residualValue" v-bind="residualValueAttrs" :error_message="errors.residualValue"     label="Giá trị hao mòn năm" placeholder="" />
+                    <ms-input size="large" tabindex="13" isRequired v-model="residualValue" v-bind="residualValueAttrs" :error_message="errors.residualValue"     label="Giá trị hao mòn năm" placeholder="" />
                 </div>
                
             </div>

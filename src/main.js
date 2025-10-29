@@ -13,6 +13,7 @@ import MsSearch from './components/ms-search/MsSearch.vue'
 import MsSelect from './components/ms-form-field/MsSelect.vue'
 import MsModal from './components/ms-modal/MsModal.vue'
 import MsInput from './components/ms-form-field/MsInput.vue'
+import MsDatepicker from './components/ms-form-field/MsDatepicker.vue'
 import { i18n } from './plugin/i18n'
 const app = createApp(App)
 app.use(PrimeVue, {
@@ -29,4 +30,5 @@ app.component('MsSearch', MsSearch)
 app.component('MsSelect', MsSelect)
 app.component('MsModal', MsModal)
 app.component('MsInput', MsInput)
+app.component('MsDatepicker', MsDatepicker)
 app.mount('#app')
