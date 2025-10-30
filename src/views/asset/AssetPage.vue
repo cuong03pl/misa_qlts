@@ -51,7 +51,45 @@
     scrollHeight="400px"
     :rows="assets"
     @edit="handleEditAsset"
-  />
+  >
+    <template v-if="assets.length > 0" #footer>
+      <ColumnGroup type="footer">
+        <Row>
+          <!-- pagination -->
+          <Column :colspan="6">
+            <template #footer>
+              <table-footer
+                :totalRecords="totalRecords"
+                :pageSize="pageSize"
+                v-model:pageSize="pageSize"
+                :currentPage="pageNumber"
+                v-model:currentPage="pageNumber"
+                @pageChange="handlePageChange"
+                :first="(pageNumber - 1) * pageSize"
+              />
+            </template>
+          </Column>
+          <Column
+            footer="18"
+            footerStyle="text-align:end; vertical-align: middle; font-size: 13px; font-weight: 700;"
+          ></Column>
+          <Column
+            footer="249.000"
+            footerStyle="text-align:end; vertical-align: middle; font-size: 13px; font-weight: 700;"
+          />
+          <Column
+            footer="19.888"
+            footerStyle="text-align:end; vertical-align: middle; font-size: 13px; font-weight: 700;"
+          />
+          <Column
+            footer="22.000"
+            footerStyle="text-align:end; vertical-align: middle; font-size: 13px; font-weight: 700;"
+          />
+          <Column colspan="1" />
+        </Row>
+      </ColumnGroup>
+    </template>
+  </MsTableV2>
   <asset-modal
     @submit="handleSubmit"
     v-model:isOpen="isOpen"
@@ -83,6 +121,8 @@ import { useRoute, useRouter } from 'vue-router'
 import _ from 'lodash'
 import DepartmentAPI from '@/apis/components/DepartmentAPI'
 import AssetTypeAPI from '@/apis/components/AssetTypeAPI'
+import { Column, ColumnGroup, Row } from 'primevue'
+import TableFooter from '@/components/ms-table/TableFooter.vue'
 
 const debouncedFetch = _.debounce(async () => {
   const params = {
@@ -111,6 +151,7 @@ const debouncedFetch = _.debounce(async () => {
 const fetchData = async (params = { pageNumber: 1, pageSize: 10, q: '' }) => {
   try {
     const response = await AssetAPI.paging(params)
+    totalRecords.value = response.data?.totalRecords
     assets.value = response.data?.data
     return response
   } catch (error) {
@@ -169,6 +210,15 @@ const handleDelete = async () => {
     console.log(error)
   }
   isOpenConfirmModal.value = !isOpenConfirmModal.value
+}
+
+/**
+ * Xử lý khi thay đổi trang
+ * @param {Object} pageInfo - Thông tin trang mới
+ */
+const handlePageChange = (pageInfo) => {
+  pageNumber.value = pageInfo.pageNumber
+  pageSize.value = pageInfo.pageSize
 }
 
 /**
@@ -233,6 +283,7 @@ const departments = ref([])
 const assetTypes = ref([])
 const pageNumber = ref(1)
 const pageSize = ref(10)
+const totalRecords = ref(0)
 //#endregion State
 
 //#region API
@@ -255,7 +306,7 @@ onMounted(async () => {
       // Gán giá trị tìm kiếm từ URL
       q.value = route.query.q || ''
       pageNumber.value = Number(route.query.pageNumber) || 1
-      pageSize.value = Number(route.query.pageSize) || 10
+      pageSize.value = Number(route.query.ps) || 10
 
       // Lấy department từ departmentCode trong URL để binding vào select department
       if (route.query.departmentCode) {
@@ -270,6 +321,13 @@ onMounted(async () => {
       }
 
       // Fetch dữ liệu với các tham số từ URL
+      console.log(
+        pageNumber.value,
+        pageSize.value,
+        q.value,
+        assetType.value?.assetTypeCode,
+        department.value?.departmentCode
+      )
       await fetchData({
         pageNumber: pageNumber.value,
         pageSize: pageSize.value,
@@ -277,8 +335,6 @@ onMounted(async () => {
         assetTypeCode: assetType.value?.assetTypeCode,
         departmentCode: department.value?.departmentCode,
       })
-    } else {
-      await fetchData()
     }
   } catch (error) {
     console.error('Lỗi khi tải dữ liệu:', error)

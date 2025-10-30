@@ -1,6 +1,7 @@
 <template>
   <div class="table-container">
     <DataTable
+      columnResizeMode="expand"
       :value="rows"
       :rows="20"
       scrollable
@@ -46,34 +47,7 @@
           </div>
         </template>
       </Column>
-      <slot name="footer">
-        <ColumnGroup type="footer">
-          <Row>
-            <!-- pagination -->
-            <Column :colspan="6">
-              <template #footer>
-                <table-footer :count="rows.length" />
-              </template>
-            </Column>
-            <Column
-              footer="18"
-              footerStyle="text-align:end; vertical-align: middle; font-size: 13px; font-weight: 700;"
-            ></Column>
-            <Column
-              footer="249.000"
-              footerStyle="text-align:end; vertical-align: middle; font-size: 13px; font-weight: 700;"
-            />
-            <Column
-              footer="19.888"
-              footerStyle="text-align:end; vertical-align: middle; font-size: 13px; font-weight: 700;"
-            />
-            <Column
-              footer="22.000"
-              footerStyle="text-align:end; vertical-align: middle; font-size: 13px; font-weight: 700;"
-            />
-          </Row>
-        </ColumnGroup>
-      </slot>
+      <slot name="footer"> </slot>
     </DataTable>
   </div>
 </template>
@@ -84,8 +58,6 @@ import { assetHeader } from '@/constants/assetHeader'
 import { formatter } from '@/utils/formatter'
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
-import { ColumnGroup, Row } from 'primevue'
-import TableFooter from './TableFooter.vue'
 
 //#region Props
 const props = defineProps({
@@ -192,12 +164,12 @@ th.p-datatable-header-cell {
 .checkbox-cell {
   padding: 0 !important;
   padding-left: 16px !important;
+  padding-right: 8px !important;
 }
 
 .checkbox-cell .p-datatable-column-header-content {
   display: flex !important;
 }
-
 .p-checkbox-box {
   border: 1px solid #090f39 !important;
 }

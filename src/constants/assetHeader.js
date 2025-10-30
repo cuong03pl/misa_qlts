@@ -29,11 +29,11 @@ export const assetHeader = [
         title: 'Số lượng',
         type: 'number',
       },
-    {
-      field: 'purchaseDate',
-      title: 'Ngày mua',
-      type: 'date',
-    },
+    // {
+    //   field: 'purchaseDate',
+    //   title: 'Ngày mua',
+    //   type: 'date',
+    // },
     
     {
       field: 'price',

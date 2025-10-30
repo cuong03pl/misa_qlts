@@ -2,14 +2,17 @@
   <div class="footer">
     <div class="total-records">
       <span
-        >Tổng số: <span class="total-records-count">{{ count }}</span> bản ghi</span
+        >Tổng số: <span class="total-records-count">{{ totalRecords }}</span> bản ghi</span
       >
     </div>
     <Paginator
       template=" RowsPerPageDropdown PrevPageLink PageLinks NextPageLink "
-      :rows="10"
-      :totalRecords="120"
+      :rows="pageSize"
+      :totalRecords="totalRecords"
+      :first="first"
       :rowsPerPageOptions="[10, 20, 30]"
+      :currentPage="currentPage"
+      @page="onPageChange"
     >
       <template #previcon>
         <span class="icon prev-icon"></span>
@@ -29,11 +32,40 @@
 import Paginator from 'primevue/paginator'
 //#region Props
 defineProps({
+  pageSize: {
+    type: Number,
+    default: 10,
+  },
+  currentPage: {
+    type: Number,
+    default: 1,
+  },
+  totalRecords: {
+    type: Number,
+    default: 0,
+  },
   count: {
     type: Number,
     default: 0,
   },
+  first: {
+    type: Number,
+    default: 0,
+  },
 })
+
+const emit = defineEmits(['update:pageSize', 'update:currentPage', 'pageChange'])
+
+/**
+ * Xử lý sự kiện khi thay đổi trang
+ * @param {Object} event - Sự kiện pagination
+ */
+const onPageChange = (event) => {
+  emit('pageChange', {
+    pageSize: event.rows,
+    pageNumber: event.page + 1,
+  })
+}
 //#endregion Props
 </script>
 
