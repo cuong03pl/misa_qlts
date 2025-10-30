@@ -5,11 +5,13 @@
       <span v-if="isRequired" class="required-icon">*</span>
     </div>
     <Select
+      filter
+      checkmark
       :tabindex="tabindex"
       :options="dataOptions"
       :optionLabel="optionLabel"
       :modelValue="modelValue"
-      :class="[isFilter && 'filter', !!size && size]"
+      :class="[isFilter && 'filter', error_message && 'select-error', !!size && size]"
       @update:modelValue="emit('update:modelValue', $event)"
     >
       <template #value="slotProps">
@@ -92,6 +94,12 @@ const emit = defineEmits(['update:modelValue'])
   font-size: 13px;
   color: var(--text-color);
 }
+.p-select-option {
+  gap: 8px !important;
+}
+.p-select-option.p-select-option-selected {
+  background-color: #c7e0f5 !important;
+}
 .filter {
   width: 219px;
 }
@@ -113,5 +121,8 @@ const emit = defineEmits(['update:modelValue'])
 }
 .required-icon {
   color: red;
+}
+.select-error {
+  border: 1px solid red !important;
 }
 </style>

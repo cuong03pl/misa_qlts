@@ -6,7 +6,7 @@
     </span>
     <input
       :tabindex="tabindex"
-      :class="[!!size && size]"
+      :class="[!!size && size, error_message && 'input-error']"
       :name="name"
       :type="type"
       :placeholder="placeholder"
@@ -47,7 +47,9 @@ const emit = defineEmits(['update:modelValue'])
   
   <style scoped>
 /* --- Size  --- */
-
+.input-error {
+  border: 1px solid red !important;
+}
 .form-input {
   gap: 8px;
 }
@@ -55,17 +57,19 @@ const emit = defineEmits(['update:modelValue'])
   padding: 0 14px 0 14px;
   width: 100%;
   outline: none;
-  border: 1px solid var(--input-border-color) !important;
+  border: 1px solid var(--input-border-color);
   border-radius: 2.5px;
   font-size: 13px;
   color: var(--text-color);
 }
 
 /* focus */
-input:focus {
-  border: 1px solid var(--btn-primary);
+input:focus:not(:disabled),
+input:hover:not(:disabled) {
+  border: 1px solid var(--btn-primary) !important;
   outline: none;
 }
+
 input.readonly {
 }
 

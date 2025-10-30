@@ -49,11 +49,11 @@
     dataKey="assetCode"
     v-model="selectedAssets"
     scrollHeight="400px"
-    :rows="assets"
+    :rows="assets?.data"
     @edit="handleEditAsset"
     @duplicate="handleDuplicateAsset"
   >
-    <template v-if="assets.length > 0" #footer>
+    <template v-if="assets?.data?.length > 0" #footer>
       <ColumnGroup type="footer">
         <Row>
           <!-- pagination -->
@@ -70,20 +70,25 @@
               />
             </template>
           </Column>
+          <!-- tổng số lượng-->
           <Column
-            footer="18"
+            :footer="formatter.currency(assets.quantityTotal)"
             footerStyle="text-align:end; vertical-align: middle; font-size: 13px; font-weight: 700;"
           ></Column>
+
+          <!-- tổng nguyên giá -->
           <Column
-            footer="249.000"
+            :footer="formatter.currency(assets.priceTotal)"
             footerStyle="text-align:end; vertical-align: middle; font-size: 13px; font-weight: 700;"
           />
+          <!-- tổng khấu hao năm -->
           <Column
-            footer="19.888"
+            :footer="formatter.currency(assets.annualDepreciationTotal)"
             footerStyle="text-align:end; vertical-align: middle; font-size: 13px; font-weight: 700;"
           />
+          <!-- tổng giá trị còn lại -->
           <Column
-            footer="22.000"
+            :footer="formatter.currency(assets.remainingValueTotal)"
             footerStyle="text-align:end; vertical-align: middle; font-size: 13px; font-weight: 700;"
           />
           <Column colspan="1" />
@@ -124,6 +129,7 @@ import DepartmentAPI from '@/apis/components/DepartmentAPI'
 import AssetTypeAPI from '@/apis/components/AssetTypeAPI'
 import { Column, ColumnGroup, Row } from 'primevue'
 import TableFooter from '@/components/ms-table/TableFooter.vue'
+import { formatter } from '@/utils/formatter'
 
 const debouncedFetch = _.debounce(async () => {
   const params = {
@@ -152,8 +158,9 @@ const debouncedFetch = _.debounce(async () => {
 const fetchData = async (params = { pageNumber: 1, pageSize: 10, q: '' }) => {
   try {
     const response = await AssetAPI.paging(params)
+    console.log(response.data)
     totalRecords.value = response.data?.totalRecords
-    assets.value = response.data?.data
+    assets.value = response.data
     return response
   } catch (error) {
     console.log(error)

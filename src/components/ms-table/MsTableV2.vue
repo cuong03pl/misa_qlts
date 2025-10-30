@@ -255,7 +255,7 @@ span.p-datatable-column-title {
 }
 
 .p-datatable-tfoot {
-  height: 40px !important;
+  height: 39px !important;
   padding: 0 16px !important;
 }
 </style>

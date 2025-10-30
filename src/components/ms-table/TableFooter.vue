@@ -78,6 +78,7 @@ const onPageChange = (event) => {
 .total-records {
   font-size: 11px;
   color: var(--text-color);
+  width: 133px;
 }
 .total-records-count {
   font-weight: 700;
@@ -92,7 +93,6 @@ const onPageChange = (event) => {
   gap: 0px !important;
 }
 .p-paginator-current {
-  min-width: 150px !important;
   display: block !important;
   font-size: 11px !important;
   color: var(--text-color) !important;
@@ -103,7 +103,6 @@ const onPageChange = (event) => {
   height: 25px !important;
   width: 59px !important;
   margin-right: 20px !important;
-  margin-left: 30px !important;
   border: 1px solid #afafaf !important;
   border-radius: 2.625px !important;
 }

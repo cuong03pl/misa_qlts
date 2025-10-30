@@ -15,7 +15,7 @@
       fluid
       iconDisplay="input"
       @update:modelValue="emit('update:modelValue', $event)"
-      :class="[!!size && size]"
+      :class="[!!size && size, error_message && 'date-error']"
     >
       <template #inputicon>
         <span class="icon calendar-icon"></span>
@@ -83,6 +83,9 @@ onMounted(() => {
   border-radius: 2.5px;
   font-size: 13px;
   color: var(--text-color);
+}
+.date-error {
+  border: 1px solid red !important;
 }
 </style>
   

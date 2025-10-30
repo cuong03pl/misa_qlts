@@ -8,7 +8,7 @@
     <InputNumber
       :showButtons="hasButton"
       :tabindex="tabindex"
-      :class="[!!size && size]"
+      :class="[!!size && size, error_message && 'input-number-error']"
       :name="name"
       :type="type"
       :placeholder="placeholder"
@@ -72,9 +72,13 @@ const emit = defineEmits(['update:modelValue'])
 .p-inputtext {
   border: 1px solid var(--input-border-color) !important;
 }
+.input-number-error .p-inputtext {
+  border: 1px solid red !important;
+}
 /* focus */
-input:focus {
-  border: 1px solid var(--btn-primary);
+input:focus:not(:disabled),
+input:hover:not(:disabled) {
+  border: 1px solid var(--btn-primary) !important;
   outline: none;
 }
 input.readonly {
@@ -112,5 +116,11 @@ button.p-inputnumber-button.p-inputnumber-increment-button {
 .p-inputnumber-button:not(:disabled):hover,
 .p-inputnumber-button:not(:disabled):hover {
   background: none !important;
+}
+
+.p-inputtext:enabled:hover,
+.p-inputtext:enabled:focus {
+  border: 1px solid var(--btn-primary) !important;
+  outline: none;
 }
 </style>

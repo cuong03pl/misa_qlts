@@ -68,7 +68,7 @@
         <div class="grid grid-cols-3 gap-16">
           <div class="col-span-1">
             <ms-select
-              tabindex="5"
+              tabindex="4"
               size="large"
               isRequired
               v-model="assetTypeName"
@@ -93,7 +93,7 @@
         <div class="grid grid-cols-3 gap-16">
           <div class="col-span-1">
             <ms-input-number
-              tabindex="7"
+              tabindex="5"
               hasButton
               isRequired
               size="large"
@@ -106,19 +106,18 @@
           </div>
           <div class="col-span-1">
             <ms-input-number
-              tabindex="8"
+              tabindex="6"
               size="large"
               isRequired
               v-model="price"
               v-bind="priceAttrs"
               :error_message="errors.price"
               label="Nguyên giá"
-              placeholder=""
             />
           </div>
           <div class="col-span-1">
             <ms-input
-              tabindex="9"
+              tabindex="7"
               size="large"
               isRequired
               v-model="depreciationRate"
@@ -132,7 +131,7 @@
           <div class="col-span-1">
             <ms-date-picker
               size="large"
-              tabindex="10"
+              tabindex="8"
               isRequired
               v-model="purchaseDate"
               v-bind="purchaseDateAttrs"
@@ -143,7 +142,7 @@
           <div class="col-span-1">
             <ms-date-picker
               size="large"
-              tabindex="10"
+              tabindex="9"
               isRequired
               v-model="startDate"
               v-bind="startDateAttrs"
@@ -166,7 +165,7 @@
             <ms-input-number
               hasButton
               size="large"
-              tabindex="12"
+              tabindex="10"
               isRequired
               v-model="useYears"
               v-bind="useYearsAttrs"
@@ -178,7 +177,7 @@
           <div class="col-span-1">
             <ms-input-number
               size="large"
-              tabindex="13"
+              tabindex="11"
               isRequired
               v-model="annualDepreciation"
               v-bind="annualDepreciationAttrs"
@@ -193,8 +192,10 @@
       <!-- footer -->
       <div class="modal-footer flex justify-end items-center">
         <slot name="footer">
-          <ms-button type="secondary" size="large" @click="handleConfirmModal">Hủy</ms-button>
-          <ms-button type="primary" size="large">Lưu</ms-button>
+          <ms-button tabindex="12" type="secondary" size="large" @click="handleConfirmModal"
+            >Hủy</ms-button
+          >
+          <ms-button tabindex="13" type="primary" size="large">Lưu</ms-button>
         </slot>
       </div>
     </form>
