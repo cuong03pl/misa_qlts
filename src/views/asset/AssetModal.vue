@@ -333,7 +333,7 @@ watch(
   () => {
     if (!props.isOpen) {
       resetForm()
-    } else if (props.mode === 'edit' && props.assetData) {
+    } else if (props.mode === 'edit' || (props.mode === 'duplicate' && props.assetData)) {
       setFormData(props.assetData)
     }
   }

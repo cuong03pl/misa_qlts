@@ -15,7 +15,6 @@ export default class BaseAPI {
    * @param {*} payload
    */
   paging(payload) {
-    console.log(payload)
     return api.get(`${this.controller}/paging`, { params: payload })
   }
   /**

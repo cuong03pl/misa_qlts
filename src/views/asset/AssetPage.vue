@@ -51,6 +51,7 @@
     scrollHeight="400px"
     :rows="assets"
     @edit="handleEditAsset"
+    @duplicate="handleDuplicateAsset"
   >
     <template v-if="assets.length > 0" #footer>
       <ColumnGroup type="footer">
@@ -161,7 +162,7 @@ const fetchData = async (params = { pageNumber: 1, pageSize: 10, q: '' }) => {
 }
 
 /**
- * Xử lý bật tắt modal
+ * Xử lý bật tắt modal add
  */
 const handleOpenModal = () => {
   modalMode.value = 'add'
@@ -185,7 +186,23 @@ const handleEditAsset = async (asset) => {
     console.error('Lỗi khi lấy thông tin tài sản:', error)
   }
 }
+/**
+ * Xử lý khi click vào icon duplicate
+ * @param {Object} asset - Dữ liệu tài sản được chọn
+ */
+const handleDuplicateAsset = async (asset) => {
+  try {
+    modalMode.value = 'duplicate'
+    // Lấy thông tin chi tiết của tài sản từ API
+    const response = await AssetAPI.getById(asset.assetId)
+    console.log(response.data)
 
+    currentAsset.value = response.data
+    isOpen.value = true
+  } catch (error) {
+    console.error('Lỗi khi duplicate tài sản:', error)
+  }
+}
 /**
  * Xử lý bật tắt modal xóa tài sản
  */
@@ -248,13 +265,16 @@ const handleSubmit = async (values) => {
         props: { type: 'success', message: 'Cập nhật tài sản thành công' },
       })
     } else {
-      // Nếu đang ở chế độ add, thực hiện tạo mới
+      // Nếu đang ở chế độ add hoặc duplicate, thực hiện tạo mới
       await AssetAPI.create(assetData)
       toast.success({
         component: MsToast,
-        props: { type: 'success', message: 'Thêm tài sản thành công' },
+        props: {
+          type: 'success',
+          message:
+            modalMode.value === 'add' ? 'Thêm tài sản thành công' : 'Nhân bản tài sản thành công',
+        },
       })
-      // Nếu API trả về ID của tài sản mới, thêm vào danh sách
     }
 
     await fetchData()
@@ -321,13 +341,6 @@ onMounted(async () => {
       }
 
       // Fetch dữ liệu với các tham số từ URL
-      console.log(
-        pageNumber.value,
-        pageSize.value,
-        q.value,
-        assetType.value?.assetTypeCode,
-        department.value?.departmentCode
-      )
       await fetchData({
         pageNumber: pageNumber.value,
         pageSize: pageSize.value,

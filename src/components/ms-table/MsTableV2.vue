@@ -10,7 +10,7 @@
       resizableColumns="true"
       size="small"
       tableStyle="min-width: 50rem"
-      dataKey="assetCode"
+      :dataKey="dataKey"
       totalRecords="23"
       :rowsPerPageOptions="[20, 50, 100]"
       v-model:selection="selectedData"
@@ -43,7 +43,7 @@
         <template #body="{ index }">
           <div v-if="selectedRowIndex === index" class="flex justify-center gap-12">
             <span class="icon edit-icon" @click="onEditClick(rows[index])"></span>
-            <span class="icon duplicate-icon"></span>
+            <span class="icon duplicate-icon" @click="onDuplicateClick(rows[index])"></span>
           </div>
         </template>
       </Column>
@@ -104,6 +104,10 @@ const onRowClick = (event) => {
  */
 const onEditClick = (rowData) => {
   emit('edit', rowData)
+}
+
+const onDuplicateClick = (rowData) => {
+  emit('duplicate', rowData)
 }
 
 // Truyền select data ra ngoài
