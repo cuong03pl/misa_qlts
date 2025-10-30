@@ -23,7 +23,7 @@ export default class BaseAPI {
    * @param {*} body
    */
   update(id, body) {
-    return api.update(`${this.controller}/update/${id}`, body)
+    return api.put(`${this.controller}/${id}`, body)
   }
 
   /**

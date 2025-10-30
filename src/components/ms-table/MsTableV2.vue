@@ -41,7 +41,7 @@
       <Column field="func" header="Chức năng">
         <template #body="{ index }">
           <div v-if="selectedRowIndex === index" class="flex justify-center gap-12">
-            <span class="icon edit-icon"></span>
+            <span class="icon edit-icon" @click="onEditClick(rows[index])"></span>
             <span class="icon duplicate-icon"></span>
           </div>
         </template>
@@ -97,13 +97,18 @@ defineProps({
     required: true,
   },
 })
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue', 'editAsset'])
 // Hàm xử lý khi click vào dòng
 const selectedRowIndex = ref(null)
 const selectedAssets = ref([])
 
 const onRowClick = (event) => {
   selectedRowIndex.value = event.index
+}
+
+// Hàm xử lý khi click vào icon edit truyền data về page chính
+const onEditClick = (rowData) => {
+  emit('editAsset', rowData)
 }
 
 watch(selectedAssets, (newVal) => {

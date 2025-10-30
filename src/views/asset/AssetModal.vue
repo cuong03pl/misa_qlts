@@ -4,7 +4,9 @@
       <!-- head -->
       <div class="modal-head flex justify-between items-center">
         <slot name="head">
-          <span class="text-2xl font-bold">Thêm tài sản</span>
+          <span class="text-2xl font-bold">{{
+            props.mode === 'edit' ? 'Sửa tài sản' : 'Thêm tài sản'
+          }}</span>
           <span class="btn-close">
             <span @click="handleCloseModal" class="icon close-icon"></span>
           </span>
@@ -119,7 +121,7 @@
               tabindex="9"
               size="large"
               isRequired
-              :modelValue="depreciationRate"
+              v-model="depreciationRate"
               v-bind="depreciationRateAttrs"
               :error_message="errors.depreciationRate"
               label="Tỷ lệ hao mòn (%)"
@@ -165,7 +167,7 @@
               size="large"
               tabindex="12"
               isRequired
-              :modelValue="useYears"
+              v-model="useYears"
               v-bind="useYearsAttrs"
               :error_message="errors.useYears"
               label="Số năm sử dụng"
@@ -219,8 +221,16 @@ const { t } = useI18n()
 //#region Props
 const props = defineProps({
   isOpen: Boolean,
-  mode: String,
+  mode: {
+    type: String,
+    default: 'add',
+  },
+  assetData: {
+    type: Object,
+    default: () => ({}),
+  },
 })
+
 //#endregion Props
 //#region Emits
 const emit = defineEmits(['update:isOpen'])
@@ -317,11 +327,57 @@ watch(assetTypeName, () => {
   depreciationRate.value = assetTypeName.value?.depreciationRate ?? 0
   useYears.value = assetTypeName.value?.lifeTime ?? 0
 })
-watch(props.isOpen, () => {
-  if (!props.isOpen) {
-    resetForm()
+watch(
+  () => props.isOpen,
+  () => {
+    if (!props.isOpen) {
+      resetForm()
+    } else if (props.mode === 'edit' && props.assetData) {
+      setFormData(props.assetData)
+    }
   }
-})
+)
+
+/**
+ * Hàm fill dữ liệu vào form khi ở chế độ sửa
+ * @param {Object} data - Dữ liệu tài sản của dòng được click
+ */
+const setFormData = async (data) => {
+  if (!data) return
+
+  // Set các giá trị cơ bản
+  assetCode.value = data.assetCode
+  assetName.value = data.assetName
+  quantity.value = data.quantity
+  price.value = data.price
+  useYears.value = data.useYear
+  annualDepreciation.value = data.annualDepreciation
+  depreciationRate.value = data.depreciationRate
+
+  // Xử lý ngày tháng
+  if (data.startDate) {
+    startDate.value = new Date(data.startDate)
+  }
+
+  if (data.purchaseDate) {
+    purchaseDate.value = new Date(data.purchaseDate)
+  }
+
+  // Tìm và set department và assetType từ danh sách
+  if (departments.value.length > 0) {
+    const dept = departments.value.find((d) => d.departmentId === data.departmentId)
+    if (dept) {
+      departmentName.value = dept
+    }
+  }
+
+  if (assetTypes.value.length > 0) {
+    const assetType = assetTypes.value.find((t) => t.assetTypeId === data.assetTypeId)
+    if (assetType) {
+      assetTypeName.value = assetType
+    }
+  }
+}
 //#endregion Watch
 </script>
   

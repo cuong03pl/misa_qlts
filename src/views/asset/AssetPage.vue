@@ -26,12 +26,22 @@
     </div>
   </div>
   <!-- table -->
-  <MsTableV2 dataKey="assetCode" v-model="selectedAssets" scrollHeight="400px" :rows="assets" />
-  <asset-modal @submit="handleAdd" v-model:isOpen="isOpen" />
+  <MsTableV2
+    dataKey="assetCode"
+    v-model="selectedAssets"
+    scrollHeight="400px"
+    :rows="assets"
+    @editAsset="handleEditAsset"
+  />
+  <asset-modal
+    @submit="handleSubmit"
+    v-model:isOpen="isOpen"
+    :mode="modalMode"
+    :assetData="currentAsset"
+  />
 
   <ms-confirm-modal v-model:isOpenConfirmModal="isOpenConfirmModal">
     <template #content> Bạn có muốn xóa tài sản này? </template>
-
     <template #footer>
       <ms-button type="outline" size="medium" @click="handleDeleteModal">Không</ms-button>
       <ms-button type="primary" size="medium" @click="handleDelete">Xóa</ms-button>
@@ -50,7 +60,26 @@ import { useToast } from 'vue-toastification'
 
 //#region Methods
 const handleOpenModal = () => {
+  modalMode.value = 'add'
+  currentAsset.value = null
   isOpen.value = true
+}
+
+/**
+ * Xử lý khi click vào icon edit
+ * @param {Object} asset - Dữ liệu tài sản được chọn
+ */
+const handleEditAsset = async (asset) => {
+  try {
+    modalMode.value = 'edit'
+    // Lấy thông tin chi tiết của tài sản từ API
+    const response = await AssetAPI.getById(asset.assetId)
+
+    currentAsset.value = response.data
+    isOpen.value = true
+  } catch (error) {
+    console.error('Lỗi khi lấy thông tin tài sản:', error)
+  }
 }
 
 const handleDeleteModal = () => {
@@ -73,9 +102,9 @@ const handleDelete = async () => {
   isOpenConfirmModal.value = !isOpenConfirmModal.value
 }
 
-const handleAdd = async (values) => {
+const handleSubmit = async (values) => {
   try {
-    await AssetAPI.create({
+    const assetData = {
       assetCode: values.assetCode,
       assetName: values.assetName,
       departmentId: values.departmentName.departmentId,
@@ -86,17 +115,31 @@ const handleAdd = async (values) => {
       annualDepreciation: values.annualDepreciation,
       useYear: values.useYears,
       startDate: values.startDate,
-    })
-    toast.success({
-      component: MsToast,
-      props: { type: 'success', message: 'Lưu dữ liệu thành công' },
-    })
-    // clear form
+    }
+
+    if (modalMode.value === 'edit' && currentAsset.value) {
+      // Nếu đang ở chế độ edit, thực hiện cập nhật
+      await AssetAPI.update(currentAsset.value.assetId, assetData)
+      toast.success({
+        component: MsToast,
+        props: { type: 'success', message: 'Cập nhật tài sản thành công' },
+      })
+    } else {
+      // Nếu đang ở chế độ add, thực hiện tạo mới
+      await AssetAPI.create(assetData)
+      toast.success({
+        component: MsToast,
+        props: { type: 'success', message: 'Thêm tài sản thành công' },
+      })
+      // Nếu API trả về ID của tài sản mới, thêm vào danh sách
+    }
+
+    const getAllResponse = await AssetAPI.getAll()
+    assets.value = getAllResponse.data
+    // Đóng modal
     isOpen.value = false
-    const response = await AssetAPI.getAll()
-    assets.value = response.data
   } catch (error) {
-    console.error('Lỗi tạo tài sản:', error)
+    console.error('Lỗi xử lý tài sản:', error)
   }
 }
 //#endregion Methods
@@ -106,6 +149,8 @@ const isOpen = ref(false)
 const assets = ref([])
 const isOpenConfirmModal = ref(false)
 const selectedAssets = ref([])
+const modalMode = ref('add')
+const currentAsset = ref(null) // Tài sản đang được chỉnh sửa
 const toast = useToast()
 //#endregion State
 

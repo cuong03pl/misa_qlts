@@ -15,6 +15,25 @@ class AssetAPI extends BaseAPI {
   checkDuplicate(payload) {
     return api.post(`${this.controller}/check-duplicate`, payload)
   }
+  
+  /**
+   * Hàm lấy thông tin tài sản theo ID
+   * @param {string} id - ID của tài sản
+   * @returns {Promise} - Promise trả về thông tin tài sản
+   */
+  getById(id) {
+    return api.get(`${this.controller}/${id}`)
+  }
+  
+  /**
+   * Hàm cập nhật thông tin tài sản
+   * @param {string} id - ID của tài sản
+   * @param {Object} payload - Dữ liệu cập nhật
+   * @returns {Promise} - Promise trả về kết quả cập nhật
+   */
+  update(id, payload) {
+    return api.put(`${this.controller}/${id}`, payload)
+  }
 }
 
 export default new AssetAPI()
