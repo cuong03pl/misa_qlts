@@ -75,7 +75,7 @@ const emit = defineEmits(['update:modelValue'])
   padding: 6px !important;
 }
 
-.p-select-dropdown {
+.p-select .p-select-dropdown {
   width: 32px !important;
 }
 .select-list {

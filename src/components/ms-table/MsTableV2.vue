@@ -2,7 +2,6 @@
   <div class="table-container">
     <DataTable
       :value="rows"
-      paginator
       :rows="20"
       scrollable
       scrollHeight="flex"
@@ -14,13 +13,11 @@
       totalRecords="23"
       :rowsPerPageOptions="[20, 50, 100]"
       v-model:selection="selectedAssets"
-      paginatorTemplate="CurrentPageReport RowsPerPageDropdown FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
-      RowsPerPageDropdown=""
-      currentPageReportTemplate="Tổng: {totalRecords} bản ghi"
       @rowClick="onRowClick"
     >
-      <Column selectionMode="multiple" class="checkbox-cell"></Column>
+      <Column colspan="1" selectionMode="multiple" class="checkbox-cell"></Column>
       <Column
+        colspan="1"
         v-for="item in assetHeader"
         :key="item.field"
         :field="item.field"
@@ -49,8 +46,34 @@
           </div>
         </template>
       </Column>
-
-      <template #paginatorend> </template>
+      <slot name="footer">
+        <ColumnGroup type="footer">
+          <Row>
+            <!-- pagination -->
+            <Column :colspan="6">
+              <template #footer>
+                <table-footer :count="rows.length" />
+              </template>
+            </Column>
+            <Column
+              footer="18"
+              footerStyle="text-align:end; vertical-align: middle; font-size: 13px; font-weight: 700;"
+            ></Column>
+            <Column
+              footer="249.000"
+              footerStyle="text-align:end; vertical-align: middle; font-size: 13px; font-weight: 700;"
+            />
+            <Column
+              footer="19.888"
+              footerStyle="text-align:end; vertical-align: middle; font-size: 13px; font-weight: 700;"
+            />
+            <Column
+              footer="22.000"
+              footerStyle="text-align:end; vertical-align: middle; font-size: 13px; font-weight: 700;"
+            />
+          </Row>
+        </ColumnGroup>
+      </slot>
     </DataTable>
   </div>
 </template>
@@ -61,6 +84,8 @@ import { assetHeader } from '@/constants/assetHeader'
 import { formatter } from '@/utils/formatter'
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
+import { ColumnGroup, Row } from 'primevue'
+import TableFooter from './TableFooter.vue'
 
 defineProps({
   rows: {
@@ -153,7 +178,9 @@ th.p-datatable-header-cell {
   width: 14px !important;
   height: 14px !important;
 }
-
+.p-datatable-thead {
+  background-color: #f5f5f5 !important;
+}
 .p-datatable.p-datatable-gridlines:has(.p-datatable-thead):has(.p-datatable-tbody)
   .p-datatable-tbody
   > tr
@@ -218,40 +245,12 @@ span.p-datatable-column-title {
   width: 10px !important;
 }
 
-/* Force scroll chỉ ở body */
-:deep(.p-datatable-wrapper) {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+.p-datatable-gridlines .p-datatable-tfoot > tr > td {
+  border-width: 1px 0 0px 0px !important;
 }
 
-:deep(.p-datatable-thead-wrapper) {
-  flex-shrink: 0;
-  overflow: hidden !important;
-}
-
-:deep(.p-datatable-tbody-wrapper) {
-  flex: 1;
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
-}
-
-:deep(.p-datatable-tfoot-wrapper) {
-  flex-shrink: 0;
-  overflow: hidden !important;
-}
-
-/* Hoặc với scrollable */
-:deep(.p-datatable.p-datatable-scrollable > .p-datatable-wrapper) {
-  overflow: hidden;
-}
-
-:deep(.p-datatable-scrollable-body) {
-  overflow-y: auto !important;
-}
-
-:deep(.p-datatable-scrollable-header),
-:deep(.p-datatable-scrollable-footer) {
-  overflow: visible !important;
+.p-datatable-tfoot {
+  height: 40px !important;
+  padding: 0 16px !important;
 }
 </style>

@@ -1,31 +1,32 @@
 <template>
-  <div class="footer px-5 pt-5">
-    <div class="footer-left">
-      Tổng: <span>{{ count }}</span> bản ghi
+  <div class="footer">
+    <div class="total-records">
+      <span
+        >Tổng số: <span class="total-records-count">{{ count }}</span> bản ghi</span
+      >
     </div>
-    <div class="footer-right">
-      <div class="page-size">
-        <span>Số bản ghi/trang</span>
-        <select>
-          <option>25</option>
-          <option>50</option>
-          <option>100</option>
-        </select>
-      </div>
-      <div class="page-size">
-        <span>1 - 25 bản ghi</span>
-      </div>
-      <div class="pagination">
-        <ms-button disabled>
-          <i class="fa-solid fa-chevron-left"></i>
-        </ms-button>
-        <ms-button><i class="fa-solid fa-chevron-right"></i></ms-button>
-      </div>
-    </div>
+    <Paginator
+      template=" RowsPerPageDropdown PrevPageLink PageLinks NextPageLink "
+      :rows="10"
+      :totalRecords="120"
+      :rowsPerPageOptions="[10, 20, 30]"
+    >
+      <template #previcon>
+        <span class="icon prev-icon"></span>
+      </template>
+      <template #nexticon>
+        <span class="icon next-icon"></span>
+      </template>
+
+      <template #rowsperpagedropdownicon>
+        <span class="icon dropdown-icon"></span>
+      </template>
+    </Paginator>
   </div>
 </template>
 
 <script setup>
+import Paginator from 'primevue/paginator'
 defineProps({
   count: {
     type: Number,
@@ -35,66 +36,74 @@ defineProps({
 </script>
 
 <style>
-/* footer table*/
-.table .footer {
-  background: white;
-  border-top: 1px solid #e5e7eb;
+.footer {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  padding-left: 8px !important;
 }
-
-.footer-left {
-  font-size: 14px;
+.total-records {
+  font-size: 11px;
   color: var(--text-color);
 }
-
-.footer-left span {
-  font-weight: 600;
-  color: var(--text-color);
+.total-records-count {
+  font-weight: 700;
+  font-size: 11px;
+}
+.p-paginator {
+  justify-content: flex-start !important;
+  padding: 0 !important;
+}
+.p-paginator-content {
+  flex-wrap: nowrap !important;
+  gap: 0px !important;
+}
+.p-paginator-current {
+  min-width: 150px !important;
+  display: block !important;
+  font-size: 11px !important;
+  color: var(--text-color) !important;
 }
 
-.footer-right {
-  display: flex;
-  align-items: center;
-  gap: 16px;
+.p-select.p-component.p-inputwrapper.p-inputwrapper-filled.p-paginator-rpp-dropdown {
+  padding: 6px 0 6px 14px !important;
+  height: 25px !important;
+  width: 59px !important;
+  margin-right: 20px !important;
+  margin-left: 30px !important;
+  border: 1px solid #afafaf !important;
+  border-radius: 2.625px !important;
+}
+.p-paginator .p-component .p-select-label {
+  font-size: 11px !important;
+  font-style: normal !important;
+}
+.p-paginator-next,
+.p-paginator-prev,
+.p-paginator-page {
+  height: 20px !important;
+  width: 20px !important;
+  min-width: 20px !important;
 }
 
-.page-size {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  color: var(--text-color);
+.p-paginator-pages {
+  gap: 7px !important;
+  margin: 0px 10px !important;
+}
+.p-paginator-page {
+  font-size: 11px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: var(--text-color) !important;
+}
+.p-paginator-page-selected {
+  background-color: #f5f5f5 !important;
+  border-radius: 3px !important;
+  font-weight: 700 !important;
+  color: var(--text-color) !important;
 }
 
-.page-size select {
-  padding: 4px 8px;
-  border: 1px solid var(--border-secondary);
-  border-radius: 4px;
-  font-size: 14px;
-}
-
-.pagination {
-  display: flex;
-  gap: 8px;
-}
-
-.pagination button {
-  padding: 4px 12px;
-  border: 1px solid var(--border-secondary);
-  background: white;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.pagination button:hover {
-  background: #f9fafb;
-}
-
-.pagination button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+.p-paginator .p-select .p-select-dropdown {
+  width: 20px !important;
 }
 </style>
