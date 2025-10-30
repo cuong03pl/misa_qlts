@@ -12,7 +12,7 @@
       dataKey="assetCode"
       totalRecords="23"
       :rowsPerPageOptions="[20, 50, 100]"
-      v-model:selection="selectedAssets"
+      v-model:selection="selectedData"
       @rowClick="onRowClick"
     >
       <Column colspan="1" selectionMode="multiple" class="checkbox-cell"></Column>
@@ -87,7 +87,8 @@ import Column from 'primevue/column'
 import { ColumnGroup, Row } from 'primevue'
 import TableFooter from './TableFooter.vue'
 
-defineProps({
+//#region Props
+const props = defineProps({
   rows: {
     type: Array,
     required: true,
@@ -96,22 +97,45 @@ defineProps({
     type: String,
     required: true,
   },
+  modelValue: {
+    type: Array,
+    default: () => [],
+  },
 })
-const emit = defineEmits(['update:modelValue', 'editAsset'])
+//#endregion Props
+
+//#region Emits
+const emit = defineEmits(['update:modelValue', 'edit'])
+//#endregion Emits
+
+//#region State
 // Hàm xử lý khi click vào dòng
 const selectedRowIndex = ref(null)
-const selectedAssets = ref([])
+const selectedData = ref([])
+
+// Xử lý đồng bộ selected
+watch(
+  () => props.modelValue,
+  (newVal) => {
+    selectedData.value = newVal
+  },
+  { immediate: true }
+)
 
 const onRowClick = (event) => {
   selectedRowIndex.value = event.index
 }
 
-// Hàm xử lý khi click vào icon edit truyền data về page chính
+/**
+ * Hàm xử lý khi click vào icon edit truyền data về page chính
+ * @param {Object} rowData - Dữ liệu của dòng được click
+ */
 const onEditClick = (rowData) => {
-  emit('editAsset', rowData)
+  emit('edit', rowData)
 }
 
-watch(selectedAssets, (newVal) => {
+// Truyền select data ra ngoài
+watch(selectedData, (newVal) => {
   emit('update:modelValue', newVal)
 })
 </script>

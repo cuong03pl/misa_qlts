@@ -2,10 +2,12 @@
   <ms-modal :isOpen="isOpenConfirmModal" to="body">
     <div class="modal-confirm-content rounded-md">
       <div class="modal-confirm-body">
-        <span class="icon warning-icon"></span>
-        <span class="text-sm text-gray-500">
+        <div class="">
+          <span class="icon warning-icon"></span>
+        </div>
+        <div style="line-height: 1.8" class="text-sm text-gray-500">
           <slot name="content"> </slot>
-        </span>
+        </div>
       </div>
       <div class="modal-confirm-footer flex justify-end">
         <slot name="footer">
@@ -44,13 +46,12 @@ const emit = defineEmits(['update:isOpenConfirmModal'])
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 36px 20px;
+  padding: 36px 30px;
 }
 .modal-confirm-footer {
   height: 52px;
   padding: 0 20px 16px 20px;
   gap: 10px;
-  background-color: #f5f5f5;
 }
 </style>
   

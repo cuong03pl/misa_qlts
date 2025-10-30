@@ -18,7 +18,12 @@
           <span class="icon excel-icon"></span>
         </template>
       </ms-button>
-      <ms-button @click="handleDeleteModal" type="only-icon" size="large">
+      <ms-button
+        :disabled="selectedAssets.length === 0"
+        @click="handleDeleteModal"
+        type="only-icon"
+        size="large"
+      >
         <template #left-icon>
           <span class="icon delete-icon-red"></span>
         </template>
@@ -31,7 +36,7 @@
     v-model="selectedAssets"
     scrollHeight="400px"
     :rows="assets"
-    @editAsset="handleEditAsset"
+    @edit="handleEditAsset"
   />
   <asset-modal
     @submit="handleSubmit"
@@ -41,7 +46,10 @@
   />
 
   <ms-confirm-modal v-model:isOpenConfirmModal="isOpenConfirmModal">
-    <template #content> Bạn có muốn xóa tài sản này? </template>
+    <template #content>
+      {{ selectedAssets.length }} tài sản đã được chọn. Bạn có muốn xóa các tài sản này khỏi danh
+      sách?
+    </template>
     <template #footer>
       <ms-button type="outline" size="medium" @click="handleDeleteModal">Không</ms-button>
       <ms-button type="primary" size="medium" @click="handleDelete">Xóa</ms-button>
@@ -59,6 +67,9 @@ import MsToast from '@/components/ms-toast/MsToast.vue'
 import { useToast } from 'vue-toastification'
 
 //#region Methods
+/**
+ * Xử lý bật tắt modal
+ */
 const handleOpenModal = () => {
   modalMode.value = 'add'
   currentAsset.value = null
@@ -82,10 +93,16 @@ const handleEditAsset = async (asset) => {
   }
 }
 
+/**
+ * Xử lý bật tắt modal xóa tài sản
+ */
 const handleDeleteModal = () => {
   isOpenConfirmModal.value = !isOpenConfirmModal.value
 }
 
+/**
+ * Xử lý xóa tài sản
+ */
 const handleDelete = async () => {
   const assetIds = selectedAssets.value.map((asset) => asset.assetId)
   try {
@@ -94,14 +111,22 @@ const handleDelete = async () => {
       component: MsToast,
       props: { type: 'success', message: `${assetIds.length} tài sản đã được xóa thành công` },
     })
-    const response = await AssetAPI.getAll()
-    assets.value = response.data
+    selectedAssets.value = []
+    const response = await AssetAPI.paging({
+      page: 1,
+      pageSize: 10,
+    })
+    assets.value = response.data.data
   } catch (error) {
     console.log(error)
   }
   isOpenConfirmModal.value = !isOpenConfirmModal.value
 }
 
+/**
+ * Xử lý submit form
+ * @param {Object} values - Dữ liệu form
+ */
 const handleSubmit = async (values) => {
   try {
     const assetData = {
@@ -134,8 +159,11 @@ const handleSubmit = async (values) => {
       // Nếu API trả về ID của tài sản mới, thêm vào danh sách
     }
 
-    const getAllResponse = await AssetAPI.getAll()
-    assets.value = getAllResponse.data
+    const getAllResponse = await AssetAPI.paging({
+      page: 1,
+      pageSize: 10,
+    })
+    assets.value = getAllResponse.data.data
     // Đóng modal
     isOpen.value = false
   } catch (error) {
@@ -161,8 +189,12 @@ const toast = useToast()
  */
 onMounted(async () => {
   try {
-    const response = await AssetAPI.getAll()
-    assets.value = response.data
+    const response = await AssetAPI.paging({
+      pageNumber: 1,
+      pageSize: 10,
+    })
+    console.log(response)
+    assets.value = response.data?.data
   } catch (error) {
     console.log(error)
   }

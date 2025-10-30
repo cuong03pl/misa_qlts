@@ -11,13 +11,15 @@
   
   <script setup>
 import { computed } from 'vue'
-
+//#region Props
 const props = defineProps({
   type: { type: String },
   title: { type: String, required: true },
   message: { type: String, required: true },
 })
+//#endregion Props
 
+//#region Computed
 const toastClass = computed(() => {
   switch (props.type) {
     case 'success':
@@ -33,20 +35,7 @@ const toastClass = computed(() => {
   }
 })
 
-const iconClass = computed(() => {
-  switch (props.type) {
-    case 'success':
-      return 'fa-regular fa-circle-check'
-    case 'error':
-      return 'fa-regular fa-circle-xmark'
-    case 'warning':
-      return 'fa-solid fa-triangle-exclamation'
-    case 'info':
-      return 'fa-regular fa-circle-info'
-    default:
-      return 'fa-regular fa-bell'
-  }
-})
+//#endregion Computed
 </script>
   
   <style scoped>

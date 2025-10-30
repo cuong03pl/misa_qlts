@@ -27,12 +27,14 @@
 
 <script setup>
 import Paginator from 'primevue/paginator'
+//#region Props
 defineProps({
   count: {
     type: Number,
     default: 0,
   },
 })
+//#endregion Props
 </script>
 
 <style>

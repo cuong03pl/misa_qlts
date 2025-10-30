@@ -1,6 +1,6 @@
 <template>
   <button
-    @click="emit('click')"
+    @click="!disabled && emit('click')"
     :class="[
       'ms-btn',
       `ms-button-${type}`,

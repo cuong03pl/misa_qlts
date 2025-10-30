@@ -1,39 +1,37 @@
 <template>
-    <div class="custom-datepicker" :class="flexRow ? 'flex-row items-center' : 'flex-col'">
-        <span class="text-primary">{{ label }}
-        <span v-if="isRequired" class="required-icon">*</span>
-      </span>
-        <DatePicker
-        ref="dp"
-        v-model="date"
-        showIcon
-        placeholder="Chọn ngày"
-        locale="vi"
-        dateFormat="dd/mm/yy"
-        :tabindex="tabindex"
-         fluid 
-         iconDisplay="input"
-        @update:modelValue="emit('update:modelValue', $event)"
-         :class="[!!size && size]"
-      >
-        <template #inputicon>
-            <span class="icon calendar-icon"></span>
-        </template>
-      </DatePicker>
+  <div class="custom-datepicker" :class="flexRow ? 'flex-row items-center' : 'flex-col'">
+    <span class="text-primary"
+      >{{ label }}
+      <span v-if="isRequired" class="required-icon">*</span>
+    </span>
+    <DatePicker
+      ref="dp"
+      v-model="date"
+      showIcon
+      placeholder="Chọn ngày"
+      locale="vi"
+      dateFormat="dd/mm/yy"
+      :tabindex="tabindex"
+      fluid
+      iconDisplay="input"
+      @update:modelValue="emit('update:modelValue', $event)"
+      :class="[!!size && size]"
+    >
+      <template #inputicon>
+        <span class="icon calendar-icon"></span>
+      </template>
+    </DatePicker>
 
-      <small v-if="isRequired || error_message" :class="['error-text', error_message && 'show']">{{
-        error_message
-      }}</small>
-    </div>
-  </template>
+    <small v-if="isRequired || error_message" :class="['error-text', error_message && 'show']">{{
+      error_message
+    }}</small>
+  </div>
+</template>
   
   <script setup>
-  import { ref } from 'vue'
-  import DatePicker from 'primevue/datepicker'
-  import { onMounted } from 'vue'
-  
-  const dp = ref(null)
-
+import { ref } from 'vue'
+import DatePicker from 'primevue/datepicker'
+import { onMounted } from 'vue'
 //#region Props
 const props = defineProps({
   tabindex: Number,
@@ -47,39 +45,44 @@ const props = defineProps({
   flexRow: Boolean,
   modelValue: {
     type: Date,
-    default: () => new Date()
-  }
+    default: () => new Date(),
+  },
 })
 //#endregion Props
+//#region State
+const dp = ref(null)
+const date = ref(props.modelValue || new Date())
+
+//#endregion State
 
 //#region Emits
 const emit = defineEmits(['update:modelValue'])
+//#endregion Emits
 
-const date = ref(props.modelValue || new Date())
+// Xử lý truyền modelValue ra ngoài
 onMounted(() => {
   emit('update:modelValue', date.value)
 })
-  //#endregion Emits
-  </script>
+</script>
   
   <style>
-  .custom-datepicker {
-    display: flex;
-    gap: 8px;
-  }
-  .p-datepicker-header {
-    padding: 0 !important;
-    border: none !important;
-    padding-left: 12px !important;
-  }
-  .p-datepicker:has(.p-datepicker-input-icon-container) .p-datepicker-input{
-    padding: 0 14px 0 14px;
-    width: 100%;
-    outline: none;
-    border: 1px solid var(--input-border-color) !important;
-    border-radius: 2.5px;
-    font-size: 13px;
-    color: var(--text-color);
-  }
-  </style>
+.custom-datepicker {
+  display: flex;
+  gap: 8px;
+}
+.p-datepicker-header {
+  padding: 0 !important;
+  border: none !important;
+  padding-left: 12px !important;
+}
+.p-datepicker:has(.p-datepicker-input-icon-container) .p-datepicker-input {
+  padding: 0 14px 0 14px;
+  width: 100%;
+  outline: none;
+  border: 1px solid var(--input-border-color) !important;
+  border-radius: 2.5px;
+  font-size: 13px;
+  color: var(--text-color);
+}
+</style>
   
