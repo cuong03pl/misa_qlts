@@ -67,6 +67,10 @@ defineProps({
     type: Array,
     required: true,
   },
+  dataKey: {
+    type: String,
+    required: true,
+  },
 })
 const emit = defineEmits(['update:modelValue'])
 // Hàm xử lý khi click vào dòng

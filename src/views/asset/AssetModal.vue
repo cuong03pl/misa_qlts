@@ -207,20 +207,17 @@
 </template>
   
 <script setup>
-import AssetAPI from '@/apis/components/AssetAPI'
 import AssetTypeAPI from '@/apis/components/AssetTypeAPI'
 import DepartmentAPI from '@/apis/components/DepartmentAPI'
 import MsModal from '@/components/ms-modal/MsModal.vue'
-import MsToast from '@/components/ms-toast/MsToast.vue'
 import MsConfirmModal from '@/components/ms-modal/MsConfirmModal.vue'
 import { assetSchema } from '@/schemas/asset.schema'
 import { useForm } from 'vee-validate'
 import { onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useToast } from 'vue-toastification'
 const { t } = useI18n()
 //#region Props
-defineProps({
+const props = defineProps({
   isOpen: Boolean,
   mode: String,
 })
@@ -275,31 +272,7 @@ const handleConfirmConfirmModal = () => {
  */
 
 const onSubmit = handleSubmit((values) => {
-  AssetAPI.create({
-    assetCode: values.assetCode,
-    assetName: values.assetName,
-    departmentId: values.departmentName.departmentId,
-    assetTypeId: values.assetTypeName.assetTypeId,
-    quantity: values.quantity,
-    purchaseDate: values.purchaseDate,
-    price: values.price,
-    annualDepreciation: values.annualDepreciation,
-    depreciationRate: values.depreciationRate,
-    useYear: values.useYears,
-    startDate: values.startDate,
-  })
-    .then((response) => {
-      // Hiển thị toast
-      toast.success({
-        component: MsToast,
-        props: { type: 'success', message: 'Lưu dữ liệu thành công' },
-      })
-      // clear form
-      handleCloseModal()
-    })
-    .catch((error) => {
-      console.error('Lỗi tạo tài sản:', error)
-    })
+  emit('submit', values)
 })
 
 //#endregion handle Form
@@ -314,7 +287,6 @@ const isOpenConfirmModal = ref(false)
 const departments = ref([])
 const assetTypes = ref([])
 const currentYear = ref(new Date().getFullYear())
-const toast = useToast()
 //#endregion State
 
 //#region API
@@ -344,6 +316,11 @@ watch([price, depreciationRate], () => {
 watch(assetTypeName, () => {
   depreciationRate.value = assetTypeName.value?.depreciationRate ?? 0
   useYears.value = assetTypeName.value?.lifeTime ?? 0
+})
+watch(props.isOpen, () => {
+  if (!props.isOpen) {
+    resetForm()
+  }
 })
 //#endregion Watch
 </script>

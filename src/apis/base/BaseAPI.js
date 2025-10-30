@@ -41,4 +41,12 @@ export default class BaseAPI {
   delete(id) {
     return api.delete(`${this.controller}/delete/${id}`)
   }
+
+   /**
+   * Hàm xóa nhiều bản ghi
+   * @param {*} id
+   */
+   deleteMultiple(body) {
+    return api.post(`${this.controller}/delete-multiple`, body)
+  }
 }
