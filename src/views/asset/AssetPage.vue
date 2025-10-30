@@ -2,9 +2,23 @@
   <!-- filter -->
   <div class="filter-controls flex justify-between items-center">
     <div class="flex items-center gap-11">
-      <ms-search placeholder="Tìm kiếm tài sản" />
-      <ms-select isFilter hasLeftIcon placeholder="Loại tài sản" />
-      <ms-select isFilter hasLeftIcon placeholder="Bộ phận sử dụng" />
+      <ms-search v-model="q" placeholder="Tìm kiếm tài sản" />
+      <ms-select
+        v-model="assetType"
+        :dataOptions="assetTypes"
+        optionLabel="assetTypeName"
+        isFilter
+        hasLeftIcon
+        placeholder="Loại tài sản"
+      />
+      <ms-select
+        v-model="department"
+        :dataOptions="departments"
+        optionLabel="departmentName"
+        isFilter
+        hasLeftIcon
+        placeholder="Bộ phận sử dụng"
+      />
     </div>
     <div class="flex items-center gap-10">
       <ms-button @click="handleOpenModal" type="one-icon" size="large">
@@ -58,15 +72,53 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import AssetModal from './AssetModal.vue'
 import MsTableV2 from '@/components/ms-table/MsTableV2.vue'
 import AssetAPI from '@/apis/components/AssetAPI'
 import MsConfirmModal from '@/components/ms-modal/MsConfirmModal.vue'
 import MsToast from '@/components/ms-toast/MsToast.vue'
 import { useToast } from 'vue-toastification'
+import { useRoute, useRouter } from 'vue-router'
+import _ from 'lodash'
+import DepartmentAPI from '@/apis/components/DepartmentAPI'
+import AssetTypeAPI from '@/apis/components/AssetTypeAPI'
 
+const debouncedFetch = _.debounce(async () => {
+  const params = {
+    q: q.value || undefined,
+    assetTypeCode: assetType.value?.assetTypeCode || undefined,
+    departmentCode: department.value?.departmentCode || undefined,
+    pageNumber: pageNumber.value || undefined,
+    pageSize: pageSize.value || undefined,
+  }
+
+  // Loại bỏ các tham số undefined khỏi URL
+  const cleanParams = Object.fromEntries(
+    Object.entries(params).filter(([, value]) => value !== undefined)
+  )
+
+  router.push({
+    query: cleanParams,
+  })
+  await fetchData(params)
+}, 500)
 //#region Methods
+/**
+ * Lấy dữ liệu theo trang
+ * @param {Object} params - Tham số phân trang
+ */
+const fetchData = async (params = { pageNumber: 1, pageSize: 10, q: '' }) => {
+  try {
+    const response = await AssetAPI.paging(params)
+    assets.value = response.data?.data
+    return response
+  } catch (error) {
+    console.log(error)
+    return null
+  }
+}
+
 /**
  * Xử lý bật tắt modal
  */
@@ -112,11 +164,7 @@ const handleDelete = async () => {
       props: { type: 'success', message: `${assetIds.length} tài sản đã được xóa thành công` },
     })
     selectedAssets.value = []
-    const response = await AssetAPI.paging({
-      page: 1,
-      pageSize: 10,
-    })
-    assets.value = response.data.data
+    await fetchData()
   } catch (error) {
     console.log(error)
   }
@@ -159,11 +207,7 @@ const handleSubmit = async (values) => {
       // Nếu API trả về ID của tài sản mới, thêm vào danh sách
     }
 
-    const getAllResponse = await AssetAPI.paging({
-      page: 1,
-      pageSize: 10,
-    })
-    assets.value = getAllResponse.data.data
+    await fetchData()
     // Đóng modal
     isOpen.value = false
   } catch (error) {
@@ -180,6 +224,15 @@ const selectedAssets = ref([])
 const modalMode = ref('add')
 const currentAsset = ref(null) // Tài sản đang được chỉnh sửa
 const toast = useToast()
+const route = useRoute()
+const router = useRouter()
+const q = ref('')
+const assetType = ref('')
+const department = ref('')
+const departments = ref([])
+const assetTypes = ref([])
+const pageNumber = ref(1)
+const pageSize = ref(10)
 //#endregion State
 
 //#region API
@@ -189,17 +242,58 @@ const toast = useToast()
  */
 onMounted(async () => {
   try {
-    const response = await AssetAPI.paging({
-      pageNumber: 1,
-      pageSize: 10,
-    })
-    console.log(response)
-    assets.value = response.data?.data
+    // Tải dữ liệu departments và assetTypes
+    const [departmentRes, assetTypeRes] = await Promise.all([
+      DepartmentAPI.getAll(),
+      AssetTypeAPI.getAll(),
+    ])
+    departments.value = departmentRes.data
+    assetTypes.value = assetTypeRes.data
+
+    // Đọc query param từ URL khi tải trang
+    if (route.query) {
+      // Gán giá trị tìm kiếm từ URL
+      q.value = route.query.q || ''
+      pageNumber.value = Number(route.query.pageNumber) || 1
+      pageSize.value = Number(route.query.pageSize) || 10
+
+      // Lấy department từ departmentCode trong URL để binding vào select department
+      if (route.query.departmentCode) {
+        department.value =
+          departments.value.find((dept) => dept.departmentCode === route.query.departmentCode) || ''
+      }
+
+      // Lấy assetType từ assetTypeCode trong URL để binding vào select assetType
+      if (route.query.assetTypeCode) {
+        assetType.value =
+          assetTypes.value.find((type) => type.assetTypeCode === route.query.assetTypeCode) || ''
+      }
+
+      // Fetch dữ liệu với các tham số từ URL
+      await fetchData({
+        pageNumber: pageNumber.value,
+        pageSize: pageSize.value,
+        q: q.value,
+        assetTypeCode: assetType.value?.assetTypeCode,
+        departmentCode: department.value?.departmentCode,
+      })
+    } else {
+      await fetchData()
+    }
   } catch (error) {
-    console.log(error)
+    console.error('Lỗi khi tải dữ liệu:', error)
+    await fetchData()
   }
 })
 //#endregion API
+
+watch(
+  [q, assetType, department, pageNumber, pageSize],
+  () => {
+    debouncedFetch()
+  },
+  { deep: true }
+)
 </script>
 
 <style scoped>
