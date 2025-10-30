@@ -92,9 +92,9 @@
         </div>
         <div class="grid grid-cols-3 gap-16">
           <div class="col-span-1">
-            <ms-input
+            <ms-input-number
               tabindex="7"
-              type="number"
+              hasButton
               isRequired
               size="large"
               v-model="quantity"
@@ -105,7 +105,7 @@
             />
           </div>
           <div class="col-span-1">
-            <ms-input
+            <ms-input-number
               tabindex="8"
               size="large"
               isRequired
@@ -163,7 +163,8 @@
         </div>
         <div class="grid grid-cols-3 gap-16">
           <div class="col-span-1">
-            <ms-input
+            <ms-input-number
+              hasButton
               size="large"
               tabindex="12"
               isRequired
@@ -175,11 +176,11 @@
             />
           </div>
           <div class="col-span-1">
-            <ms-input
+            <ms-input-number
               size="large"
               tabindex="13"
               isRequired
-              :modelValue="annualDepreciation"
+              v-model="annualDepreciation"
               v-bind="annualDepreciationAttrs"
               :error_message="errors.annualDepreciation"
               label="Giá trị hao mòn năm"

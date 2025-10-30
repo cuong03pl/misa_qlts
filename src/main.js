@@ -16,6 +16,7 @@ import MsModal from './components/ms-modal/MsModal.vue'
 import MsInput from './components/ms-form-field/MsInput.vue'
 import MsDatePicker from './components/ms-form-field/MsDatePicker.vue'
 import MsToast from './components/ms-toast/MsToast.vue'
+import MsInputNumber from './components/ms-form-field/MsInputNumber.vue'
 import { i18n } from './plugin/i18n'
 import Toast from 'vue-toastification'
 const app = createApp(App)
@@ -44,4 +45,5 @@ app.component('MsModal', MsModal)
 app.component('MsInput', MsInput)
 app.component('MsDatePicker', MsDatePicker)
 app.component('MsToast', MsToast)
+app.component('MsInputNumber', MsInputNumber)
 app.mount('#app')
