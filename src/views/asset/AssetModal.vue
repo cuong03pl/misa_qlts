@@ -29,6 +29,7 @@
           </div>
           <div class="col-span-2">
             <ms-input
+              ref="firstInputRef"
               tabindex="2"
               size="large"
               isRequired
@@ -242,7 +243,7 @@ import MsModal from '@/components/ms-modal/MsModal.vue'
 import MsConfirmModal from '@/components/ms-modal/MsConfirmModal.vue'
 import { assetSchema } from '@/schemas/asset.schema'
 import { useForm } from 'vee-validate'
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref, watch, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { isEqual } from 'lodash'
 const { t } = useI18n()
@@ -289,8 +290,6 @@ const [useYears, useYearsAttrs] = defineField('useYears')
 
 // nut huy - mở confirm modal
 const showCancelConfirm = () => {
-  console.log(props.mode)
-
   // Nếu mode là edit, so sánh dữ liệu hiện tại với dữ liệu đã clone
   if (props.mode === 'edit' && clonedAssetData.value) {
     const currentData = getCurrentFormData()
@@ -370,6 +369,7 @@ const departments = ref([])
 const assetTypes = ref([])
 const currentYear = ref(new Date().getFullYear())
 const clonedAssetData = ref(null)
+const firstInputRef = ref(null)
 //#endregion State
 
 //#region API
@@ -408,9 +408,13 @@ watch(
       clonedAssetData.value = null
     } else if (props.mode === 'add') {
       await generateAssetCode()
+      await nextTick()
+      firstInputRef.value?.focus()
     } else if (props.mode === 'duplicate' && props.assetData) {
       setFormData(props.assetData)
       await generateAssetCode()
+      await nextTick()
+      firstInputRef.value?.focus()
     } else if (props.mode === 'edit' && props.assetData) {
       setFormData(props.assetData)
 
@@ -431,6 +435,8 @@ watch(
           : null,
         startDate: props.assetData.startDate ? new Date(props.assetData.startDate).getTime() : null,
       }
+      await nextTick()
+      firstInputRef.value?.focus()
     }
   }
 )

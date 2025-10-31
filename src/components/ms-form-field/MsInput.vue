@@ -5,6 +5,7 @@
       <span v-if="isRequired" class="required-icon">*</span>
     </span>
     <input
+      ref="inputRef"
       :tabindex="tabindex"
       :class="[!!size && size, error_message && 'input-error']"
       :name="name"
@@ -21,6 +22,8 @@
 </template>
   
   <script setup>
+import { ref } from 'vue'
+
 //#region Props
 defineProps({
   label: String,
@@ -43,6 +46,19 @@ defineProps({
 //#region Emits
 const emit = defineEmits(['update:modelValue'])
 //#endregion Emits
+
+//#region Expose
+const inputRef = ref(null)
+
+const focus = () => {
+  inputRef.value?.focus()
+}
+
+defineExpose({
+  focus,
+  inputRef,
+})
+//#endregion Expose
 </script>
   
   <style scoped>
