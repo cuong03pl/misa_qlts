@@ -213,6 +213,7 @@
 <script setup>
 import AssetTypeAPI from '@/apis/components/AssetTypeAPI'
 import DepartmentAPI from '@/apis/components/DepartmentAPI'
+import AssetAPI from '@/apis/components/AssetAPI'
 import MsModal from '@/components/ms-modal/MsModal.vue'
 import MsConfirmModal from '@/components/ms-modal/MsConfirmModal.vue'
 import { assetSchema } from '@/schemas/asset.schema'
@@ -293,6 +294,21 @@ const handleCloseModal = () => {
   emit('update:isOpen', false)
   resetForm()
 }
+
+/**
+ * Hàm tự động generate mã tài sản mới khi add, duplicate
+ * createdby: hkc
+ */
+const generateAssetCode = async () => {
+  try {
+    const response = await AssetAPI.generateNewAssetCode()
+    if (response.data) {
+      assetCode.value = response.data
+    }
+  } catch (error) {
+    console.error('Lỗi khi generate mã tài sản:', error)
+  }
+}
 //#endregion methods
 //#region State
 const isOpenConfirmModal = ref(false)
@@ -331,17 +347,22 @@ watch(assetTypeName, () => {
 })
 watch(
   () => props.isOpen,
-  () => {
+  async () => {
     if (!props.isOpen) {
       resetForm()
-    } else if (props.mode === 'edit' || (props.mode === 'duplicate' && props.assetData)) {
+    } else if (props.mode === 'add') {
+      await generateAssetCode()
+    } else if (props.mode === 'duplicate' && props.assetData) {
+      setFormData(props.assetData)
+      await generateAssetCode()
+    } else if (props.mode === 'edit' && props.assetData) {
       setFormData(props.assetData)
     }
   }
 )
 
 /**
- * Hàm fill dữ liệu vào form khi ở chế độ sửa
+ * Hàm fill dữ liệu vào form khi ở chế độ sửa, duplicate
  * @param {Object} data - Dữ liệu tài sản của dòng được click
  */
 const setFormData = async (data) => {

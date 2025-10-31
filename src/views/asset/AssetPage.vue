@@ -106,7 +106,11 @@
 
   <ms-confirm-modal v-model:isOpenConfirmModal="isOpenConfirmModal">
     <template #content>
-      <span v-html="deleteMessage"></span>
+      <span v-if="selectedAssets.length <= 1"> Bạn có muốn xóa tài sản này khỏi danh sách? </span>
+      <span v-else>
+        <span style="font-weight: 700">{{ selectedAssets.length }}</span>
+        tài sản đã được chọn. Bạn có muốn xóa các tài sản này khỏi danh sách?
+      </span>
     </template>
     <template #footer>
       <ms-button type="outline" size="medium" @click="handleDeleteModal">Không</ms-button>
@@ -236,16 +240,6 @@ const handleDelete = async () => {
   }
   isOpenConfirmModal.value = !isOpenConfirmModal.value
 }
-
-// Xử lý message xóa tài sản
-const deleteMessage = computed(() => {
-  const count = selectedAssets.value.length
-  if (count <= 1) {
-    return 'Bạn có muốn xóa tài sản này khỏi danh sách?'
-  }
-  return `<span style="font-weight:700">${count}</span> tài sản đã được chọn. Bạn có muốn xóa các tài sản này khỏi danh sách?`
-})
-
 /**
  * Xử lý khi thay đổi trang
  * @param {Object} pageInfo - Thông tin trang mới
