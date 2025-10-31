@@ -19,6 +19,8 @@
       :rowsPerPageOptions="[20, 50, 100]"
       v-model:selection="selectedData"
       @rowClick="onRowClick"
+      selectionMode="multiple"
+      :metaKeySelection="true"
     >
       <Column colspan="1" selectionMode="multiple" class="checkbox-cell"></Column>
       <Column
@@ -99,6 +101,7 @@ const menuModel = ref([
     command: () => onDeleteClick(selectedData.value),
   },
 ])
+
 const onRowContextMenu = (event) => {
   selectedData.value = [event.data]
   cm.value.show(event.originalEvent)
@@ -286,5 +289,15 @@ span.p-datatable-column-title {
 
 .p-datatable .p-datatable-tbody > tr:hover .function-icons {
   display: flex !important;
+}
+/*  custom background của dòng được chọn */
+.p-datatable-tbody > tr:focus-visible,
+.p-datatable-tbody > tr.p-datatable-contextmenu-row-selected {
+  background-color: rgba(26, 164, 200, 0.2) !important;
+}
+
+.p-datatable-tbody tr[aria-selected='true'] {
+  background-color: rgba(26, 164, 200, 0.2) !important;
+  color: #fff !important;
 }
 </style>

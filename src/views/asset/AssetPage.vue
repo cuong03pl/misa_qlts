@@ -237,6 +237,7 @@ const handleDelete = async () => {
   isOpenConfirmModal.value = !isOpenConfirmModal.value
 }
 
+// Xử lý message xóa tài sản
 const deleteMessage = computed(() => {
   const count = selectedAssets.value.length
   if (count <= 1) {
