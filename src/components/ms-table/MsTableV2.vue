@@ -2,6 +2,7 @@
   <div class="table-container">
     <ContextMenu ref="cm" :model="menuModel" />
     <DataTable
+      v-if="rows?.length > 0"
       v-model:contextMenuSelection="selectedData"
       @rowContextmenu="onRowContextMenu"
       contextMenu
@@ -55,6 +56,7 @@
       </Column>
       <slot name="footer"> </slot>
     </DataTable>
+    <ms-empty v-if="rows?.length === 0" message="Không có dữ liệu" />
   </div>
 </template>
 

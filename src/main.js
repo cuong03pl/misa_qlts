@@ -19,6 +19,7 @@ import MsToast from './components/ms-toast/MsToast.vue'
 import MsInputNumber from './components/ms-form-field/MsInputNumber.vue'
 import { i18n } from './plugin/i18n'
 import Toast from 'vue-toastification'
+import MsEmpty from './components/ms-table/MsEmpty.vue'
 const app = createApp(App)
 // config toast
 const options = {
@@ -46,4 +47,5 @@ app.component('MsInput', MsInput)
 app.component('MsDatePicker', MsDatePicker)
 app.component('MsToast', MsToast)
 app.component('MsInputNumber', MsInputNumber)
+app.component('MsEmpty', MsEmpty)
 app.mount('#app')

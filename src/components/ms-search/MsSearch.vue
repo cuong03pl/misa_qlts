@@ -36,7 +36,7 @@ const emit = defineEmits(['update:modelValue'])
 //#endregion Emits
 </script>
 
-<style>
+<style scoped>
 /* filter */
 .filter-search {
   width: var(--search-width);
@@ -55,6 +55,15 @@ const emit = defineEmits(['update:modelValue'])
 }
 
 .filter-search .search_input {
+  background: none;
+  border: none !important;
+  outline: none !important;
+  width: 100%;
+  font-size: 13px;
+  font-style: italic;
+}
+
+.filter-search .search_input:hover {
   background: none;
   border: none;
   outline: none;
