@@ -8,7 +8,7 @@
             props.mode === 'edit' ? 'Sửa tài sản' : 'Thêm tài sản'
           }}</span>
           <span class="btn-close">
-            <span @click="handleCloseModal" class="icon close-icon"></span>
+            <span @click="showCancelConfirm" class="icon close-icon"></span>
           </span>
         </slot>
       </div>
@@ -192,22 +192,43 @@
       <!-- footer -->
       <div class="modal-footer flex justify-end items-center">
         <slot name="footer">
-          <ms-button tabindex="12" type="secondary" size="large" @click="handleConfirmModal"
+          <ms-button
+            tabindex="12"
+            type="secondary"
+            size="large"
+            htmlType="button"
+            @click="showCancelConfirm"
             >Hủy</ms-button
           >
-          <ms-button tabindex="13" type="primary" size="large">Lưu</ms-button>
+          <ms-button tabindex="13" type="primary" size="large" htmlType="submit">Lưu</ms-button>
         </slot>
       </div>
     </form>
   </ms-modal>
-  <ms-confirm-modal v-model:isOpenConfirmModal="isOpenConfirmModal">
-    <template #content> Bạn có muốn hủy bỏ khai báo tài sản này? </template>
 
-    <template #footer>
-      <ms-button type="outline" size="medium" @click="handleCloseConfirmModal">Không</ms-button>
-      <ms-button type="primary" size="medium" @click="handleConfirmConfirmModal">Hủy bỏ</ms-button>
-    </template>
-  </ms-confirm-modal>
+  <!-- Modal xác nhận dùng cho add, duplicate -->
+  <ms-confirm-modal
+    v-if="mode != 'edit'"
+    v-model:isOpenConfirmModal="isOpenConfirmModal"
+    content="Bạn có muốn hủy bỏ khai báo tài sản này?"
+    confirmText="Hủy bỏ"
+    cancelText="Không"
+    confirmType="primary"
+    @confirm="handleConfirmCancel"
+  />
+
+  <!-- Modal xác nhận dùng cho update -->
+  <ms-confirm-modal
+    v-if="mode == 'edit'"
+    v-model:isOpenConfirmModal="isOpenConfirmModal"
+    content="Thông tin thay đổi sẽ không được cập nhật nếu bạn không lưu. Bạn có muốn lưu các thay đổi này?"
+    confirmText="Lưu"
+    cancelText="Hủy"
+    cancelSaveText="Không lưu"
+    confirmType="primary"
+    @confirm="onSubmit"
+    @cancel="handleConfirmCancel"
+  />
 </template>
   
 <script setup>
@@ -220,6 +241,7 @@ import { assetSchema } from '@/schemas/asset.schema'
 import { useForm } from 'vee-validate'
 import { onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { isEqual } from 'lodash'
 const { t } = useI18n()
 //#region Props
 const props = defineProps({
@@ -262,22 +284,27 @@ const [depreciationRate, depreciationRateAttrs] = defineField('depreciationRate'
 const [startDate, startDateAttrs] = defineField('startDate')
 const [useYears, useYearsAttrs] = defineField('useYears')
 
-// nut huy
-const handleConfirmModal = () => {
-  emit('update:isOpen', false)
-  isOpenConfirmModal.value = !isOpenConfirmModal.value
+// nut huy - mở confirm modal
+const showCancelConfirm = () => {
+  console.log(props.mode)
+
+  // Nếu mode là edit, so sánh dữ liệu hiện tại với dữ liệu đã clone
+  if (props.mode === 'edit' && clonedAssetData.value) {
+    const currentData = getCurrentFormData()
+
+    if (isEqual(clonedAssetData.value, currentData)) {
+      handleConfirmCancel()
+    } else {
+      isOpenConfirmModal.value = true
+    }
+  } else {
+    isOpenConfirmModal.value = true
+  }
 }
 
-// nut khong
-const handleCloseConfirmModal = () => {
-  emit('update:isOpen', true)
-  isOpenConfirmModal.value = !isOpenConfirmModal.value
-}
-
-// nut huy bo
-const handleConfirmConfirmModal = () => {
+// nut huy bo - xác nhận hủy bỏ
+const handleConfirmCancel = () => {
   handleCloseModal()
-  isOpenConfirmModal.value = !isOpenConfirmModal.value
 }
 /**
  * Hàm xử lý submit form
@@ -309,12 +336,37 @@ const generateAssetCode = async () => {
     console.error('Lỗi khi generate mã tài sản:', error)
   }
 }
+
+/**
+ * Hàm lấy dữ liệu hiện tại từ form
+ * @returns {Object} - Dữ liệu hiện tại trong form
+ */
+const getCurrentFormData = () => {
+  return {
+    assetCode: assetCode.value,
+    assetName: assetName.value,
+    departmentId: departmentName.value?.departmentId,
+    departmentName: departmentName.value?.departmentName,
+    assetTypeId: assetTypeName.value?.assetTypeId,
+    assetTypeName: assetTypeName.value?.assetTypeName,
+    quantity: quantity.value,
+    price: price.value,
+    depreciationRate: depreciationRate.value,
+    annualDepreciation: annualDepreciation.value,
+    useYear: useYears.value,
+    // Chuyển ngày về timestamp
+    purchaseDate: purchaseDate.value ? new Date(purchaseDate.value).getTime() : null,
+    startDate: startDate.value ? new Date(startDate.value).getTime() : null,
+  }
+}
+
 //#endregion methods
 //#region State
 const isOpenConfirmModal = ref(false)
 const departments = ref([])
 const assetTypes = ref([])
 const currentYear = ref(new Date().getFullYear())
+const clonedAssetData = ref(null)
 //#endregion State
 
 //#region API
@@ -350,6 +402,7 @@ watch(
   async () => {
     if (!props.isOpen) {
       resetForm()
+      clonedAssetData.value = null
     } else if (props.mode === 'add') {
       await generateAssetCode()
     } else if (props.mode === 'duplicate' && props.assetData) {
@@ -357,6 +410,24 @@ watch(
       await generateAssetCode()
     } else if (props.mode === 'edit' && props.assetData) {
       setFormData(props.assetData)
+
+      clonedAssetData.value = {
+        assetCode: props.assetData.assetCode,
+        assetName: props.assetData.assetName,
+        departmentId: props.assetData.departmentId,
+        departmentName: props.assetData.departmentName,
+        assetTypeId: props.assetData.assetTypeId,
+        assetTypeName: props.assetData.assetTypeName,
+        quantity: props.assetData.quantity,
+        price: props.assetData.price,
+        depreciationRate: props.assetData.depreciationRate,
+        annualDepreciation: props.assetData.annualDepreciation,
+        useYear: props.assetData.useYear,
+        purchaseDate: props.assetData.purchaseDate
+          ? new Date(props.assetData.purchaseDate).getTime()
+          : null,
+        startDate: props.assetData.startDate ? new Date(props.assetData.startDate).getTime() : null,
+      }
     }
   }
 )
@@ -365,7 +436,7 @@ watch(
  * Hàm fill dữ liệu vào form khi ở chế độ sửa, duplicate
  * @param {Object} data - Dữ liệu tài sản của dòng được click
  */
-const setFormData = async (data) => {
+const setFormData = (data) => {
   if (!data) return
 
   // Set các giá trị cơ bản

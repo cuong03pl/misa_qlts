@@ -6,13 +6,27 @@
           <span class="icon warning-icon"></span>
         </div>
         <div style="line-height: 1.8" class="text-sm text-gray-500">
-          <slot name="content"> </slot>
+          <slot name="content">
+            <span v-html="content"></span>
+          </slot>
         </div>
       </div>
       <div class="modal-confirm-footer flex justify-end">
         <slot name="footer">
-          <ms-button type="outline" size="medium">Không</ms-button>
-          <ms-button type="primary" size="medium">Hủy bỏ</ms-button>
+          <ms-button v-if="cancelText" type="outline" size="medium" @click="handleCancel">
+            {{ cancelText }}
+          </ms-button>
+          <ms-button
+            v-if="cancelSaveText"
+            :type="cancelSaveType"
+            size="medium"
+            @click="handleCancelSave"
+          >
+            {{ cancelSaveText }}
+          </ms-button>
+          <ms-button v-if="confirmText" :type="confirmType" size="medium" @click="handleConfirm">
+            {{ confirmText }}
+          </ms-button>
         </slot>
       </div>
     </div>
@@ -21,16 +35,61 @@
   
   <script setup>
 import MsModal from './MsModal.vue'
+import MsButton from '@/components/ms-button/MsButton.vue'
 
 //#region Props
 defineProps({
   isOpenConfirmModal: Boolean,
+  content: {
+    type: String,
+  },
+  // Text của các nút
+  confirmText: {
+    type: String,
+  },
+  cancelText: {
+    type: String,
+  },
+  cancelSaveText: {
+    type: String,
+  },
+  // Loại của các nút
+  confirmType: {
+    type: String,
+    default: 'primary',
+  },
+  cancelType: {
+    type: String,
+    default: 'outline',
+  },
+  cancelSaveType: {
+    type: String,
+    default: 'sub',
+  },
 })
 //#endregion Props
 
 //#region Emits
-const emit = defineEmits(['update:isOpenConfirmModal'])
+const emit = defineEmits(['update:isOpenConfirmModal', 'confirm', 'cancel', 'cancelSave'])
 //#endregion Emits
+
+//#region Methods
+const handleConfirm = () => {
+  emit('confirm')
+  emit('update:isOpenConfirmModal', false)
+}
+
+const handleCancel = () => {
+  emit('cancel')
+  emit('update:isOpenConfirmModal', false)
+}
+
+// Nút không lưu hiện tại chỉ đóng confirm modal chứ không xử lý gì thêm
+const handleCancelSave = () => {
+  emit('cancelSave')
+  emit('update:isOpenConfirmModal', false)
+}
+//#endregion Methods
 </script>
   
   <style >

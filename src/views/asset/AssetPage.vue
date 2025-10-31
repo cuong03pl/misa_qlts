@@ -104,19 +104,15 @@
     :assetData="currentAsset"
   />
 
-  <ms-confirm-modal v-model:isOpenConfirmModal="isOpenConfirmModal">
-    <template #content>
-      <span v-if="selectedAssets.length <= 1"> Bạn có muốn xóa tài sản này khỏi danh sách? </span>
-      <span v-else>
-        <span style="font-weight: 700">{{ selectedAssets.length }}</span>
-        tài sản đã được chọn. Bạn có muốn xóa các tài sản này khỏi danh sách?
-      </span>
-    </template>
-    <template #footer>
-      <ms-button type="outline" size="medium" @click="handleDeleteModal">Không</ms-button>
-      <ms-button type="primary" size="medium" @click="handleDelete">Xóa</ms-button>
-    </template>
-  </ms-confirm-modal>
+  <!-- Modal xác nhận xóa -->
+  <ms-confirm-modal
+    v-model:isOpenConfirmModal="isOpenConfirmModal"
+    :content="deleteConfirmContent"
+    confirmText="Xóa"
+    cancelText="Không"
+    confirmType="primary"
+    @confirm="handleDelete"
+  />
 </template>
 
 <script setup>
@@ -135,6 +131,24 @@ import { Column, ColumnGroup, Row } from 'primevue'
 import TableFooter from '@/components/ms-table/TableFooter.vue'
 import { formatter } from '@/utils/formatter'
 
+//#region Computed
+/**
+ * Nội dung hiển thị trong modal xác nhận xóa
+ */
+const deleteConfirmContent = computed(() => {
+  if (selectedAssets.value.length <= 1) {
+    return 'Bạn có muốn xóa tài sản này khỏi danh sách?'
+  } else {
+    return `<span style="font-weight: 700">${selectedAssets.value.length}</span> tài sản đã được chọn. Bạn có muốn xóa các tài sản này khỏi danh sách?`
+  }
+})
+//#endregion Computed
+
+//#region Methods
+
+/**
+ * Debounce dữ liệu filter
+ */
 const debouncedFetch = _.debounce(async () => {
   const params = {
     q: q.value || undefined,
@@ -154,7 +168,7 @@ const debouncedFetch = _.debounce(async () => {
   })
   await fetchData(params)
 }, 500)
-//#region Methods
+
 /**
  * Lấy dữ liệu theo trang
  * @param {Object} params - Tham số phân trang
@@ -238,7 +252,6 @@ const handleDelete = async () => {
   } catch (error) {
     console.log(error)
   }
-  isOpenConfirmModal.value = !isOpenConfirmModal.value
 }
 /**
  * Xử lý khi thay đổi trang
@@ -319,50 +332,71 @@ const totalRecords = ref(0)
 
 //#region API
 /**
- * Lấy tất cả dữ liệu tài sản khi mount
+ * Lấy dữ liệu departments và assetTypes
+ */
+const getFiltersData = async () => {
+  const [departmentRes, assetTypeRes] = await Promise.all([
+    DepartmentAPI.getAll(),
+    AssetTypeAPI.getAll(),
+  ])
+  departments.value = departmentRes.data
+  assetTypes.value = assetTypeRes.data
+}
+
+/**
+ * Binding giá trị từ query params trong URL vào filters
+ */
+const bindFiltersFromQuery = () => {
+  if (!route.query) return
+
+  // Gán giá trị tìm kiếm từ URL
+  q.value = route.query.q || ''
+  pageNumber.value = Number(route.query.pageNumber) || 1
+  pageSize.value = Number(route.query.ps) || 10
+
+  // Lấy department từ departmentCode trong URL để binding vào select department
+  if (route.query.departmentCode) {
+    department.value =
+      departments.value.find((dept) => dept.departmentCode === route.query.departmentCode) || ''
+  }
+
+  // Lấy assetType từ assetTypeCode trong URL để binding vào select assetType
+  if (route.query.assetTypeCode) {
+    assetType.value =
+      assetTypes.value.find((type) => type.assetTypeCode === route.query.assetTypeCode) || ''
+  }
+}
+
+/**
+ * Lấy dữ liệu tài sản
+ */
+const fetchAssets = async () => {
+  await fetchData({
+    pageNumber: pageNumber.value,
+    pageSize: pageSize.value,
+    q: q.value,
+    assetTypeCode: assetType.value?.assetTypeCode,
+    departmentCode: department.value?.departmentCode,
+  })
+}
+
+/**
+ * Khởi tạo trang khi mounted
  * createdby: hkc
  */
 onMounted(async () => {
   try {
-    // Tải dữ liệu departments và assetTypes
-    const [departmentRes, assetTypeRes] = await Promise.all([
-      DepartmentAPI.getAll(),
-      AssetTypeAPI.getAll(),
-    ])
-    departments.value = departmentRes.data
-    assetTypes.value = assetTypeRes.data
+    // Lấy dữ liệu departments và assetTypes
+    await getFiltersData()
 
-    // Đọc query param từ URL khi tải trang
-    if (route.query) {
-      // Gán giá trị tìm kiếm từ URL
-      q.value = route.query.q || ''
-      pageNumber.value = Number(route.query.pageNumber) || 1
-      pageSize.value = Number(route.query.ps) || 10
+    // Đọc query param từ URL và load filters
+    bindFiltersFromQuery()
 
-      // Lấy department từ departmentCode trong URL để binding vào select department
-      if (route.query.departmentCode) {
-        department.value =
-          departments.value.find((dept) => dept.departmentCode === route.query.departmentCode) || ''
-      }
-
-      // Lấy assetType từ assetTypeCode trong URL để binding vào select assetType
-      if (route.query.assetTypeCode) {
-        assetType.value =
-          assetTypes.value.find((type) => type.assetTypeCode === route.query.assetTypeCode) || ''
-      }
-
-      // Fetch dữ liệu với các tham số từ URL
-      await fetchData({
-        pageNumber: pageNumber.value,
-        pageSize: pageSize.value,
-        q: q.value,
-        assetTypeCode: assetType.value?.assetTypeCode,
-        departmentCode: department.value?.departmentCode,
-      })
-    }
+    // Lấy dữ liệu tài sản
+    await fetchAssets()
   } catch (error) {
     console.error('Lỗi khi tải dữ liệu:', error)
-    await fetchData()
+    await fetchAssets()
   }
 })
 //#endregion API

@@ -10,7 +10,6 @@
       showIcon
       placeholder="Chọn ngày"
       locale="vi"
-      dateFormat="dd/mm/yy"
       :tabindex="tabindex"
       fluid
       iconDisplay="input"

@@ -1,5 +1,6 @@
 <template>
   <button
+    :type="htmlType"
     @click="!disabled && emit('click')"
     :class="[
       'ms-btn',
@@ -22,6 +23,10 @@ defineProps({
   size: String,
   disabled: Boolean,
   type: String,
+  htmlType: {
+    type: String,
+    default: 'button',
+  },
 })
 //#endregion Props
 
