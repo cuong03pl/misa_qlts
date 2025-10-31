@@ -44,7 +44,7 @@ const formatNumber = (number) => {
 const formatCurrency = (currency) => {
   if (currency === null || currency === undefined) return ''
   return new Intl.NumberFormat('vi-VN', {
-    maximumFractionDigits: 3, // hiển thị tối đa 3 số 0 sau dấu phẩy
+    maximumFractionDigits: 22, // hiển thị tối đa 22 số 0 sau dấu phẩy
   }).format(currency)
 }
 

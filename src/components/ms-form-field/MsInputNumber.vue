@@ -6,6 +6,9 @@
       <span v-if="isRequired" class="required-icon">*</span>
     </span>
     <InputNumber
+      min="0"
+      :mode="mode"
+      locale="vi-VN"
       :showButtons="hasButton"
       :tabindex="tabindex"
       :class="[!!size && size, error_message && 'input-number-error']"
@@ -14,6 +17,8 @@
       :placeholder="placeholder"
       :modelValue="modelValue"
       :disabled="disabled"
+      :minFractionDigits="0"
+      :maxFractionDigits="numType === 'decimal' ? 22 : 0"
       @input="(val) => emit('update:modelValue', val.value)"
     >
       <template #incrementicon>
@@ -48,6 +53,9 @@ defineProps({
   disabled: Boolean,
   tabindex: Number,
   hasButton: Boolean,
+  numType: {
+    type: String,
+  },
 })
 //#endregion Props
 

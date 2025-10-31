@@ -113,6 +113,7 @@
               v-bind="priceAttrs"
               :error_message="errors.price"
               label="Nguyên giá"
+              numType="decimal"
             />
           </div>
           <div class="col-span-1">
@@ -124,6 +125,7 @@
               v-bind="depreciationRateAttrs"
               :error_message="errors.depreciationRate"
               label="Tỷ lệ hao mòn (%)"
+              numType="decimal"
             />
           </div>
         </div>
@@ -184,6 +186,7 @@
               :error_message="errors.annualDepreciation"
               label="Giá trị hao mòn năm"
               placeholder=""
+              numType="decimal"
             />
           </div>
         </div>
