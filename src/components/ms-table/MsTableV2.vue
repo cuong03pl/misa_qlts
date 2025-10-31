@@ -1,6 +1,10 @@
 <template>
   <div class="table-container">
+    <ContextMenu ref="cm" :model="menuModel" />
     <DataTable
+      v-model:contextMenuSelection="selectedData"
+      @rowContextmenu="onRowContextMenu"
+      contextMenu
       columnResizeMode="expand"
       :value="rows"
       :rows="20"
@@ -41,7 +45,7 @@
       </Column>
       <Column field="func" header="Chức năng">
         <template #body="{ index }">
-          <div v-if="selectedRowIndex === index" class="flex justify-center gap-12">
+          <div class="flex justify-center gap-12 function-icons">
             <span class="icon edit-icon" @click="onEditClick(rows[index])"></span>
             <span class="icon duplicate-icon" @click="onDuplicateClick(rows[index])"></span>
           </div>
@@ -58,6 +62,7 @@ import { assetHeader } from '@/constants/assetHeader'
 import { formatter } from '@/utils/formatter'
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
+import { ContextMenu } from 'primevue'
 
 //#region Props
 const props = defineProps({
@@ -77,14 +82,27 @@ const props = defineProps({
 //#endregion Props
 
 //#region Emits
-const emit = defineEmits(['update:modelValue', 'edit'])
+const emit = defineEmits(['update:modelValue', 'edit', 'delete', 'duplicate'])
 //#endregion Emits
 
 //#region State
 // Hàm xử lý khi click vào dòng
+const cm = ref()
+
 const selectedRowIndex = ref(null)
 const selectedData = ref([])
-
+const menuModel = ref([
+  { label: 'Sửa', command: () => onEditClick(selectedData.value[0]) },
+  { label: 'Nhân bản', command: () => onDuplicateClick(selectedData.value[0]) },
+  {
+    label: 'Xóa',
+    command: () => onDeleteClick(selectedData.value),
+  },
+])
+const onRowContextMenu = (event) => {
+  selectedData.value = [event.data]
+  cm.value.show(event.originalEvent)
+}
 // Xử lý đồng bộ selected
 watch(
   () => props.modelValue,
@@ -98,6 +116,9 @@ const onRowClick = (event) => {
   selectedRowIndex.value = event.index
 }
 
+const onDeleteClick = (rowData) => {
+  emit('delete', rowData)
+}
 /**
  * Hàm xử lý khi click vào icon edit truyền data về page chính
  * @param {Object} rowData - Dữ liệu của dòng được click
@@ -257,5 +278,13 @@ span.p-datatable-column-title {
 .p-datatable-tfoot {
   height: 39px !important;
   padding: 0 16px !important;
+}
+
+.function-icons {
+  display: none !important;
+}
+
+.p-datatable .p-datatable-tbody > tr:hover .function-icons {
+  display: flex !important;
 }
 </style>

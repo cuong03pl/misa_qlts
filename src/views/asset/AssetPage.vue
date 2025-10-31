@@ -33,7 +33,7 @@
         </template>
       </ms-button>
       <ms-button
-        :disabled="selectedAssets.length === 0"
+        :disabled="selectedAssets?.length === 0"
         @click="handleDeleteModal"
         type="only-icon"
         size="large"
@@ -52,6 +52,7 @@
     :rows="assets?.data"
     @edit="handleEditAsset"
     @duplicate="handleDuplicateAsset"
+    @delete="handleDeleteModal"
   >
     <template v-if="assets?.data?.length > 0" #footer>
       <ColumnGroup type="footer">
@@ -105,8 +106,7 @@
 
   <ms-confirm-modal v-model:isOpenConfirmModal="isOpenConfirmModal">
     <template #content>
-      {{ selectedAssets.length }} tài sản đã được chọn. Bạn có muốn xóa các tài sản này khỏi danh
-      sách?
+      <span v-html="deleteMessage"></span>
     </template>
     <template #footer>
       <ms-button type="outline" size="medium" @click="handleDeleteModal">Không</ms-button>
@@ -116,7 +116,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import AssetModal from './AssetModal.vue'
 import MsTableV2 from '@/components/ms-table/MsTableV2.vue'
 import AssetAPI from '@/apis/components/AssetAPI'
@@ -221,6 +221,7 @@ const handleDeleteModal = () => {
  * Xử lý xóa tài sản
  */
 const handleDelete = async () => {
+  console.log(selectedAssets.value)
   const assetIds = selectedAssets.value.map((asset) => asset.assetId)
   try {
     await AssetAPI.deleteMultiple(assetIds)
@@ -235,6 +236,14 @@ const handleDelete = async () => {
   }
   isOpenConfirmModal.value = !isOpenConfirmModal.value
 }
+
+const deleteMessage = computed(() => {
+  const count = selectedAssets.value.length
+  if (count <= 1) {
+    return 'Bạn có muốn xóa tài sản này khỏi danh sách?'
+  }
+  return `<span style="font-weight:700">${count}</span> tài sản đã được chọn. Bạn có muốn xóa các tài sản này khỏi danh sách?`
+})
 
 /**
  * Xử lý khi thay đổi trang
