@@ -47,4 +47,3 @@ const formatCurrency = (currency) => {
     maximumFractionDigits: 22, // hiển thị tối đa 22 số 0 sau dấu phẩy
   }).format(currency)
 }
-

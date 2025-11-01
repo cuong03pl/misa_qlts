@@ -130,6 +130,27 @@ import AssetTypeAPI from '@/apis/components/AssetTypeAPI'
 import { Column, ColumnGroup, Row } from 'primevue'
 import TableFooter from '@/components/ms-table/TableFooter.vue'
 import { formatter } from '@/utils/formatter'
+import { formatDateOnly } from '@/utils/formatDate'
+
+//#region State
+const isOpen = ref(false)
+const assets = ref([])
+const isOpenConfirmModal = ref(false)
+const selectedAssets = ref([])
+const modalMode = ref('add')
+const currentAsset = ref(null) // Tài sản đang được chỉnh sửa
+const toast = useToast()
+const route = useRoute()
+const router = useRouter()
+const q = ref('')
+const assetType = ref('')
+const department = ref('')
+const departments = ref([])
+const assetTypes = ref([])
+const pageNumber = ref(1)
+const pageSize = ref()
+const totalRecords = ref(0)
+//#endregion State
 
 //#region Computed
 /**
@@ -273,11 +294,11 @@ const handleSubmit = async (values) => {
       departmentId: values.departmentName.departmentId,
       assetTypeId: values.assetTypeName.assetTypeId,
       quantity: values.quantity,
-      purchaseDate: values.purchaseDate,
+      purchaseDate: formatDateOnly(values.purchaseDate),
       price: values.price,
       annualDepreciation: values.annualDepreciation,
       useYear: values.useYears,
-      startDate: values.startDate,
+      startDate: formatDateOnly(values.startDate),
     }
 
     if (modalMode.value === 'edit' && currentAsset.value) {
@@ -308,26 +329,6 @@ const handleSubmit = async (values) => {
   }
 }
 //#endregion Methods
-
-//#region State
-const isOpen = ref(false)
-const assets = ref([])
-const isOpenConfirmModal = ref(false)
-const selectedAssets = ref([])
-const modalMode = ref('add')
-const currentAsset = ref(null) // Tài sản đang được chỉnh sửa
-const toast = useToast()
-const route = useRoute()
-const router = useRouter()
-const q = ref('')
-const assetType = ref('')
-const department = ref('')
-const departments = ref([])
-const assetTypes = ref([])
-const pageNumber = ref(1)
-const pageSize = ref()
-const totalRecords = ref(0)
-//#endregion State
 
 //#region API
 /**

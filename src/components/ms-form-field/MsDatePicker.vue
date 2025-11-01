@@ -9,7 +9,6 @@
       v-model="date"
       showIcon
       placeholder="Chọn ngày"
-      locale="vi"
       :tabindex="tabindex"
       fluid
       iconDisplay="input"
