@@ -44,6 +44,13 @@
     "addAsset": "Thêm tài sản",
     "editAsset": "Sửa tài sản",
     "duplicateAsset": "Nhân bản tài sản",
+    "deleteError": "Xóa tài sản thất bại",
+    "notFound": "Không tìm thấy tài sản",
+    "submitError": "Lỗi khi gửi dữ liệu",
+    "fetchError": "Lỗi khi tải dữ liệu tài sản",
+    "fetchFiltersError": "Lỗi khi tải dữ liệu bộ lọc",
+    "initError": "Lỗi khi khởi tạo trang",
+    "generateCodeError": "Lỗi khi tạo mã tài sản",
     "errors": {
         "assetCode_required": "Mã tài sản là bắt buộc",
         "assetCode_max": "Mã tài sản không được vượt quá 20 ký tự",

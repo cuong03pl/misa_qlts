@@ -204,7 +204,13 @@ const fetchData = async (params = { pageNumber: 1, pageSize: 10, q: '' }) => {
     assets.value = response.data
     return response
   } catch (error) {
-    console.log(error)
+    toast.error({
+      component: MsToast,
+      props: {
+        type: 'error',
+        message: error.response?.data?.message || error.message || t('asset.fetchError'),
+      },
+    })
     return null
   }
 }
@@ -231,7 +237,13 @@ const handleEditAsset = async (asset) => {
     currentAsset.value = response.data
     isOpen.value = true
   } catch (error) {
-    console.error('Lỗi khi lấy thông tin tài sản:', error)
+    toast.error({
+      component: MsToast,
+      props: {
+        type: 'error',
+        message: error.response?.data?.message || error.message || t('asset.notFound'),
+      },
+    })
   }
 }
 /**
@@ -247,7 +259,13 @@ const handleDuplicateAsset = async (asset) => {
     currentAsset.value = response.data
     isOpen.value = true
   } catch (error) {
-    console.error('Lỗi khi duplicate tài sản:', error)
+    toast.error({
+      component: MsToast,
+      props: {
+        type: 'error',
+        message: error.response?.data?.message || error.message || t('asset.notFound'),
+      },
+    })
   }
 }
 /**
@@ -261,7 +279,6 @@ const handleDeleteModal = () => {
  * Xử lý xóa tài sản
  */
 const handleDelete = async () => {
-  console.log(selectedAssets.value)
   const assetIds = selectedAssets.value.map((asset) => asset.assetId)
   try {
     await AssetAPI.deleteMultiple(assetIds)
@@ -272,7 +289,13 @@ const handleDelete = async () => {
     selectedAssets.value = []
     await fetchData()
   } catch (error) {
-    console.log(error)
+    toast.error({
+      component: MsToast,
+      props: {
+        type: 'error',
+        message: error.response?.data?.message || error.message || t('asset.deleteError'),
+      },
+    })
   }
 }
 /**
@@ -326,7 +349,14 @@ const handleSubmit = async (values) => {
     // Đóng modal
     isOpen.value = false
   } catch (error) {
-    console.error('Lỗi xử lý tài sản:', error)
+    toast.error({
+      component: MsToast,
+      props: {
+        type: 'error',
+        message: error.response?.data?.message || error.message || t('asset.submitError'),
+      },
+    })
+    await fetchData()
   }
 }
 //#endregion Methods
@@ -336,12 +366,22 @@ const handleSubmit = async (values) => {
  * Lấy dữ liệu departments và assetTypes
  */
 const getFiltersData = async () => {
-  const [departmentRes, assetTypeRes] = await Promise.all([
-    DepartmentAPI.getAll(),
-    AssetTypeAPI.getAll(),
-  ])
-  departments.value = departmentRes.data
-  assetTypes.value = assetTypeRes.data
+  try {
+    const [departmentRes, assetTypeRes] = await Promise.all([
+      DepartmentAPI.getAll(),
+      AssetTypeAPI.getAll(),
+    ])
+    departments.value = departmentRes.data
+    assetTypes.value = assetTypeRes.data
+  } catch (error) {
+    toast.error({
+      component: MsToast,
+      props: {
+        type: 'error',
+        message: error.response?.data?.message || error.message || t('asset.fetchFiltersError'),
+      },
+    })
+  }
 }
 
 /**
@@ -396,8 +436,13 @@ onMounted(async () => {
     // Lấy dữ liệu tài sản
     await fetchAssets()
   } catch (error) {
-    console.error('Lỗi khi tải dữ liệu:', error)
-    await fetchAssets()
+    toast.error({
+      component: MsToast,
+      props: {
+        type: 'error',
+        message: error.response?.data?.message || error.message || t('asset.initError'),
+      },
+    })
   }
 })
 //#endregion API

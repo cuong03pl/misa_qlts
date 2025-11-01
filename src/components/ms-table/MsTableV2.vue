@@ -20,7 +20,9 @@
       selectionMode="multiple"
       :metaKeySelection="true"
     >
+      <!-- removableSort -->
       <Column colspan="1" selectionMode="multiple" class="checkbox-cell"></Column>
+      <!-- sortable -->
       <Column
         colspan="1"
         v-for="item in assetHeader"

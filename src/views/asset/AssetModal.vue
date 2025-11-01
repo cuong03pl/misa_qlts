@@ -249,12 +249,15 @@ import DepartmentAPI from '@/apis/components/DepartmentAPI'
 import AssetAPI from '@/apis/components/AssetAPI'
 import MsModal from '@/components/ms-modal/MsModal.vue'
 import MsConfirmModal from '@/components/ms-modal/MsConfirmModal.vue'
+import MsToast from '@/components/ms-toast/MsToast.vue'
 import { assetSchema } from '@/schemas/asset.schema'
 import { useForm } from 'vee-validate'
 import { onMounted, ref, watch, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useToast } from 'vue-toastification'
 import { isEqual } from 'lodash'
 const { t } = useI18n()
+const toast = useToast()
 //#region Props
 const props = defineProps({
   isOpen: Boolean,
@@ -344,7 +347,13 @@ const generateAssetCode = async () => {
       assetCode.value = response.data
     }
   } catch (error) {
-    console.error('Lỗi khi generate mã tài sản:', error)
+    toast.error({
+      component: MsToast,
+      props: {
+        type: 'error',
+        message: error.response?.data?.message || error.message || t('asset.generateCodeError'),
+      },
+    })
   }
 }
 
@@ -395,7 +404,13 @@ onMounted(async () => {
     departments.value = departmentRes.data
     assetTypes.value = assetTypeRes.data
   } catch (error) {
-    console.error('Lỗi tải dữ liệu:', error)
+    toast.error({
+      component: MsToast,
+      props: {
+        type: 'error',
+        message: error.response?.data?.message || error.message || t('asset.fetchFiltersError'),
+      },
+    })
   }
 })
 //#endregion API
