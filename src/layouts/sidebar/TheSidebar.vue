@@ -1,7 +1,7 @@
 <template>
   <div :class="['side-bar flex flex-col justify-between', !isShow && 'collapsed']">
     <div class="">
-      <div class="logo flex items-center gap-12 px-6 py-3 " >
+      <div class="logo flex items-center gap-12 px-6 py-3">
         <span class="icon logo-icon"></span>
         <span class="logo-text">{{ t('sidebar.title') }}</span>
       </div>
@@ -11,24 +11,24 @@
           :key="item.id"
           class="flex items-center justify-between px-4 py-2 cursor-pointer rounded-sm transition sidebar-item"
         >
-        <div class="flex gap-12 items-center">
-          <span :class="`icon ${item.icon}`"></span>
-          <span :class="`icon active-icon ${item.active_icon}`"></span>
-          <span class="label text-white">{{ item.title }}</span>
-        </div>
+          <div class="flex gap-12 items-center">
+            <span :class="`icon ${item.icon}`"></span>
+            <span :class="`icon active-icon ${item.active_icon}`"></span>
+            <span class="label text-white">{{ item.title }}</span>
+          </div>
           <span v-if="item.hasDropdown" class="arrow-icon arrow-down-icon"></span>
         </li>
       </ul>
     </div>
     <ms-button size="large" type="toggle" @click="handleToggle">
-        <span v-if="isShow" class="icon toggle-icon-close"></span>
-        <span v-else class="icon toggle-icon-open"></span>
+      <span v-if="isShow" class="icon toggle-icon-close"></span>
+      <span v-else class="icon toggle-icon-open"></span>
     </ms-button>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { getSidebarData } from '@/constants/sidebarData'
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
@@ -36,6 +36,7 @@ const { t } = useI18n()
 //#region State
 const isShow = ref(true)
 const sidebar_data = computed(() => getSidebarData(t))
+const MOBILE_BREAKPOINT = 1024
 //#endregion State
 
 //#region Methods
@@ -46,7 +47,30 @@ const sidebar_data = computed(() => getSidebarData(t))
 const handleToggle = () => {
   isShow.value = !isShow.value
 }
+
+/**
+ * Hàm kiểm tra kích thước màn hình và tự động thu gọn sidebar
+ * createdby: hkc
+ */
+const checkScreenSize = () => {
+  if (window.innerWidth < MOBILE_BREAKPOINT) {
+    isShow.value = false
+  } else {
+    isShow.value = true
+  }
+}
 //#endregion Methods
+
+//#region Lifecycle
+onMounted(() => {
+  checkScreenSize()
+  window.addEventListener('resize', checkScreenSize)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', checkScreenSize)
+})
+//#endregion Lifecycle
 </script>
 
 <style scoped>
@@ -54,7 +78,6 @@ const handleToggle = () => {
   background: var(--sidebar-bg);
   width: 250px;
   transition: all 0.3s ease;
-  
 }
 .logo {
   height: 50px;
@@ -85,10 +108,10 @@ const handleToggle = () => {
   color: var(--sidebar-text-hover);
 }
 
-.side-bar ul li:hover .icon{
+.side-bar ul li:hover .icon {
   background: var(--sidebar-text-hover);
 }
-.side-bar ul li:hover .arrow-icon{
+.side-bar ul li:hover .arrow-icon {
   background: var(--sidebar-text-hover);
 }
 
@@ -103,9 +126,10 @@ const handleToggle = () => {
   justify-content: center;
   padding: 11px 0 4px 0 !important;
   width: 100%;
-  
 }
-.side-bar.collapsed .label, .side-bar.collapsed .logo-text, .side-bar.collapsed .arrow-icon {
+.side-bar.collapsed .label,
+.side-bar.collapsed .logo-text,
+.side-bar.collapsed .arrow-icon {
   display: none;
   transition: all 0.3s ease;
 }
