@@ -176,7 +176,6 @@ const debouncedFetch = _.debounce(async () => {
 const fetchData = async (params = { pageNumber: 1, pageSize: 10, q: '' }) => {
   try {
     const response = await AssetAPI.paging(params)
-    console.log(response.data)
     totalRecords.value = response.data?.totalRecords
     assets.value = response.data
     return response
@@ -326,7 +325,7 @@ const department = ref('')
 const departments = ref([])
 const assetTypes = ref([])
 const pageNumber = ref(1)
-const pageSize = ref(10)
+const pageSize = ref()
 const totalRecords = ref(0)
 //#endregion State
 
@@ -352,7 +351,7 @@ const bindFiltersFromQuery = () => {
   // Gán giá trị tìm kiếm từ URL
   q.value = route.query.q || ''
   pageNumber.value = Number(route.query.pageNumber) || 1
-  pageSize.value = Number(route.query.ps) || 10
+  pageSize.value = Number(route.query.pageSize) || 10
 
   // Lấy department từ departmentCode trong URL để binding vào select department
   if (route.query.departmentCode) {

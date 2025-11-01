@@ -8,7 +8,6 @@
       contextMenu
       columnResizeMode="expand"
       :value="rows"
-      :rows="20"
       scrollable
       scrollHeight="flex"
       showGridlines
@@ -16,8 +15,6 @@
       size="small"
       tableStyle="min-width: 50rem"
       :dataKey="dataKey"
-      totalRecords="23"
-      :rowsPerPageOptions="[20, 50, 100]"
       v-model:selection="selectedData"
       @rowClick="onRowClick"
       selectionMode="multiple"

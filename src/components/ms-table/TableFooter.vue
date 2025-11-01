@@ -34,7 +34,6 @@ import Paginator from 'primevue/paginator'
 defineProps({
   pageSize: {
     type: Number,
-    default: 10,
   },
   currentPage: {
     type: Number,

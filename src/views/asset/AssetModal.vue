@@ -118,7 +118,7 @@
             />
           </div>
           <div class="col-span-1">
-            <ms-input
+            <ms-input-number
               tabindex="7"
               size="large"
               isRequired
