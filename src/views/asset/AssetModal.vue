@@ -392,8 +392,11 @@ onMounted(async () => {
 //#endregion API
 
 //#region Watch
+const isLoadingData = ref(false)
 watch([price, depreciationRate], () => {
-  annualDepreciation.value = (price.value * depreciationRate.value) / 100
+  if (!isLoadingData.value) {
+    annualDepreciation.value = (price.value * depreciationRate.value) / 100
+  }
 })
 
 watch(assetTypeName, () => {
@@ -411,12 +414,12 @@ watch(
       await nextTick()
       firstInputRef.value?.focus()
     } else if (props.mode === 'duplicate' && props.assetData) {
-      setFormData(props.assetData)
-      await generateAssetCode()
+      await setFormData(props.assetData)
+      // await generateAssetCode()
       await nextTick()
       firstInputRef.value?.focus()
     } else if (props.mode === 'edit' && props.assetData) {
-      setFormData(props.assetData)
+      await setFormData(props.assetData)
 
       clonedAssetData.value = {
         assetCode: props.assetData.assetCode,
@@ -445,8 +448,10 @@ watch(
  * Hàm fill dữ liệu vào form khi ở chế độ sửa, duplicate
  * @param {Object} data - Dữ liệu tài sản của dòng được click
  */
-const setFormData = (data) => {
+const setFormData = async (data) => {
   if (!data) return
+
+  isLoadingData.value = true
 
   // Set các giá trị cơ bản
   assetCode.value = data.assetCode
@@ -454,7 +459,6 @@ const setFormData = (data) => {
   quantity.value = data.quantity
   price.value = data.price
   useYears.value = data.useYear
-  annualDepreciation.value = data.annualDepreciation
   depreciationRate.value = data.depreciationRate
 
   // Xử lý ngày tháng
@@ -480,6 +484,13 @@ const setFormData = (data) => {
       assetTypeName.value = assetType
     }
   }
+
+  // Đợi tất cả watcher chạy xong
+  await nextTick()
+
+  annualDepreciation.value = data.annualDepreciation
+
+  isLoadingData.value = false
 }
 //#endregion Watch
 </script>

@@ -239,8 +239,7 @@ const handleDuplicateAsset = async (asset) => {
   try {
     modalMode.value = 'duplicate'
     // Lấy thông tin chi tiết của tài sản từ API
-    const response = await AssetAPI.getById(asset.assetId)
-    console.log(response.data)
+    const response = await AssetAPI.getById(asset.assetId, { mode: 'duplicate' })
 
     currentAsset.value = response.data
     isOpen.value = true

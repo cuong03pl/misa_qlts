@@ -11,6 +11,14 @@ export default class BaseAPI {
     return api.get(`${this.controller}`)
   }
   /**
+   * Hàm lấy thông tin tài sản theo ID
+   * @param {string} id - ID của tài sản
+   * @param {Object} payload - Payload của request
+   */
+  getById(id, payload = null) {
+    return api.get(`${this.controller}/${id}`, {params: payload})
+  }
+  /**
    * Hàm lấy dữ liệu phân trang
    * @param {*} payload
    */
