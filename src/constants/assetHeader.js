@@ -1,32 +1,32 @@
-export const assetHeader = [
+export const getAssetHeader = (t) => [
     {
       field: 'rowIndex',
-      title: 'STT',
+      title: t('table.rowIndex'),
       type: 'number',
     },
     {
       field: 'assetCode',
-      title: 'Mã tài sản',
+      title: t('table.assetCode'),
       type: 'text',
     },
     {
       field: 'assetName',
-      title: 'Tên tài sản',
+      title: t('table.assetName'),
       type: 'text',
     },
     {
         field: 'assetTypeName',
-        title: 'Loại tài sản',
+        title: t('table.assetTypeName'),
         type: 'text',
       },
       {
         field: 'departmentName',
-        title: 'Bộ phận sử dụng',
+        title: t('table.departmentName'),
         type: 'text',
       },
       {
         field: 'quantity',
-        title: 'Số lượng',
+        title: t('table.quantity'),
         type: 'number',
       },
     // {
@@ -37,17 +37,17 @@ export const assetHeader = [
     
     {
       field: 'price',
-      title: 'Nguyên giá',
+      title: t('table.price'),
       type: 'currency',
     },
     {
       field: 'annualDepreciation',
-      title: 'Khấu hao năm',
+      title: t('table.annualDepreciation'),
       type: 'currency',
     },
     {
       field: 'residualValue',
-      title: 'Giá trị còn lại',
+      title: t('table.residualValue'),
       type: 'currency',
     }
     

@@ -8,7 +8,7 @@
       ref="dp"
       v-model="date"
       showIcon
-      placeholder="Chọn ngày"
+      :placeholder="t('common.selectDate')"
       :tabindex="tabindex"
       fluid
       iconDisplay="input"
@@ -30,6 +30,7 @@
 import { ref } from 'vue'
 import DatePicker from 'primevue/datepicker'
 import { onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 //#region Props
 const props = defineProps({
   tabindex: Number,
@@ -48,6 +49,7 @@ const props = defineProps({
 })
 //#endregion Props
 //#region State
+const { t } = useI18n()
 const dp = ref(null)
 const date = ref(props.modelValue || new Date())
 

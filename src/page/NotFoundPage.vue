@@ -2,18 +2,21 @@
   <div class="not-found-container">
     <div class="not-found-content">
       <div class="error-code">404</div>
-      <h1 class="error-title">Trang không tồn tại</h1>
+      <h1 class="error-title">{{ t('common.notFound.title') }}</h1>
       <p class="error-description">
-        Xin lỗi, trang bạn đang tìm kiếm không tồn tại hoặc đã bị xóa.
+        {{ t('common.notFound.description') }}
       </p>
-      <MsButton type="primary" @click="goHome" class="back-button"> Quay lại trang chủ </MsButton>
+      <MsButton type="primary" @click="goHome" class="back-button">
+        {{ t('common.notFound.button') }}
+      </MsButton>
     </div>
   </div>
 </template>
 
 <script setup>
 import { useRouter } from 'vue-router'
-
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 const router = useRouter()
 
 const goHome = () => {

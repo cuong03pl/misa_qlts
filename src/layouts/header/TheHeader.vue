@@ -10,7 +10,7 @@
     <div class="flex header-right items-center">
       <span class="text-primary">{{ t('header.link') }}</span>
       <div class="year-selector">
-        <span class="year-selector-text">Năm</span>
+        <span class="year-selector-text">{{ t('header.year') }}</span>
         <span class="year-selector-number">2021</span>
         <div class="flex flex-col gap-2">
           <span class="icon up-icon"></span>

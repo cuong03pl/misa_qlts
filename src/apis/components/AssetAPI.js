@@ -28,13 +28,7 @@ class AssetAPI extends BaseAPI {
     return api.put(`${this.controller}/${id}`, payload)
   }
 
-  /**
-   * Tạo mã tài sản mới
-   * @returns {Promise} - Promise trả về mã tài sản mới
-   */
-  generateNewAssetCode() {
-    return api.get(`${this.controller}/new-asset-code`)
-  }
+  
 }
 
 export default new AssetAPI()

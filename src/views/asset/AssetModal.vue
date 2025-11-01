@@ -5,7 +5,11 @@
       <div class="modal-head flex justify-between items-center">
         <slot name="head">
           <span class="text-2xl font-bold">{{
-            props.mode === 'edit' ? 'Sửa tài sản' : 'Thêm tài sản'
+            props.mode === 'edit'
+              ? t('asset.editAsset')
+              : props.mode === 'duplicate'
+              ? t('asset.duplicateAsset')
+              : t('asset.addAsset')
           }}</span>
           <span class="btn-close">
             <span @click="showCancelConfirm" class="icon close-icon"></span>
@@ -24,7 +28,7 @@
               v-model="assetCode"
               v-bind="assetCodeAttrs"
               :error_message="errors.assetCode"
-              label="Mã tài sản"
+              :label="t('asset.assetCode')"
             />
           </div>
           <div class="col-span-2">
@@ -36,8 +40,8 @@
               v-model="assetName"
               v-bind="assetNameAttrs"
               :error_message="errors.assetName"
-              label="Tên tài sản"
-              placeholder="Nhập tên tài sản"
+              :label="t('asset.assetName')"
+              :placeholder="t('asset.assetNamePlaceholder')"
             />
           </div>
         </div>
@@ -50,8 +54,8 @@
               v-model="departmentName"
               v-bind="departmentNameAttrs"
               :error_message="errors.departmentName"
-              label="Mã bộ phận sử dụng"
-              placeholder="Chọn mã bộ phận sử dụng"
+              :label="t('asset.departmentCode')"
+              :placeholder="t('asset.departmentNamePlaceholder')"
               :dataOptions="departments"
               optionLabel="departmentCode"
             />
@@ -61,7 +65,7 @@
               size="large"
               disabled
               :modelValue="departmentName?.departmentName"
-              label="Tên bộ phận sử dụng"
+              :label="t('asset.departmentName')"
               placeholder=""
             />
           </div>
@@ -75,8 +79,8 @@
               v-model="assetTypeName"
               v-bind="assetTypeNameAttrs"
               :error_message="errors.assetTypeName"
-              label="Mã loại tài sản"
-              placeholder="Chọn mã loại tài sản"
+              :label="t('asset.assetTypeCode')"
+              :placeholder="t('asset.assetTypeNamePlaceholder')"
               :dataOptions="assetTypes"
               optionLabel="assetTypeCode"
             />
@@ -86,7 +90,7 @@
               size="large"
               disabled
               :modelValue="assetTypeName?.assetTypeName"
-              label="Tên loại tài sản"
+              :label="t('asset.assetTypeName')"
               placeholder=""
             />
           </div>
@@ -101,8 +105,8 @@
               v-model="quantity"
               v-bind="quantityAttrs"
               :error_message="errors.quantity"
-              label="Số lượng"
-              placeholder=""
+              :label="t('asset.quantity')"
+              :placeholder="t('asset.quantityPlaceholder')"
             />
           </div>
           <div class="col-span-1">
@@ -113,8 +117,9 @@
               v-model="price"
               v-bind="priceAttrs"
               :error_message="errors.price"
-              label="Nguyên giá"
+              :label="t('asset.price')"
               numType="decimal"
+              :placeholder="t('asset.pricePlaceholder')"
             />
           </div>
           <div class="col-span-1">
@@ -125,8 +130,9 @@
               v-model="depreciationRate"
               v-bind="depreciationRateAttrs"
               :error_message="errors.depreciationRate"
-              label="Tỷ lệ hao mòn (%)"
+              :label="t('asset.depreciationRate')"
               numType="decimal"
+              :placeholder="t('asset.depreciationRatePlaceholder')"
             />
           </div>
         </div>
@@ -139,7 +145,7 @@
               v-model="purchaseDate"
               v-bind="purchaseDateAttrs"
               :error_message="errors.purchaseDate"
-              label="Ngày mua"
+              :label="t('asset.purchaseDate')"
             />
           </div>
           <div class="col-span-1">
@@ -150,7 +156,7 @@
               v-model="startDate"
               v-bind="startDateAttrs"
               :error_message="errors.startDate"
-              label="Ngày bắt đầu sử dụng"
+              :label="t('asset.startDate')"
             />
           </div>
           <div class="col-span-1">
@@ -158,8 +164,8 @@
               size="large"
               :modelValue="currentYear"
               disabled
-              label="Năm theo dõi"
-              placeholder=""
+              :label="t('asset.currentYear')"
+              :placeholder="t('asset.currentYearPlaceholder')"
             />
           </div>
         </div>
@@ -173,8 +179,8 @@
               v-model="useYears"
               v-bind="useYearsAttrs"
               :error_message="errors.useYears"
-              label="Số năm sử dụng"
-              placeholder=""
+              :label="t('asset.useYears')"
+              :placeholder="t('asset.useYearsPlaceholder')"
             />
           </div>
           <div class="col-span-1">
@@ -185,8 +191,8 @@
               v-model="annualDepreciation"
               v-bind="annualDepreciationAttrs"
               :error_message="errors.annualDepreciation"
-              label="Giá trị hao mòn năm"
-              placeholder=""
+              :label="t('asset.annualDepreciation')"
+              :placeholder="t('asset.annualDepreciationPlaceholder')"
               numType="decimal"
             />
           </div>
@@ -202,9 +208,11 @@
             size="large"
             htmlType="button"
             @click="showCancelConfirm"
-            >Hủy</ms-button
+            >{{ t('common.cancel') }}</ms-button
           >
-          <ms-button tabindex="13" type="primary" size="large" htmlType="submit">Lưu</ms-button>
+          <ms-button tabindex="13" type="primary" size="large" htmlType="submit">{{
+            t('common.save')
+          }}</ms-button>
         </slot>
       </div>
     </form>
@@ -214,7 +222,7 @@
   <ms-confirm-modal
     v-if="mode != 'edit'"
     v-model:isOpenConfirmModal="isOpenConfirmModal"
-    content="Bạn có muốn hủy bỏ khai báo tài sản này?"
+    :content="t('asset.confirmContent')"
     confirmText="Hủy bỏ"
     cancelText="Không"
     confirmType="primary"
@@ -225,7 +233,7 @@
   <ms-confirm-modal
     v-if="mode == 'edit'"
     v-model:isOpenConfirmModal="isOpenConfirmModal"
-    content="Thông tin thay đổi sẽ không được cập nhật nếu bạn không lưu. Bạn có muốn lưu các thay đổi này?"
+    :content="t('asset.updateConfirmContent')"
     confirmText="Lưu"
     cancelText="Hủy"
     cancelSaveText="Không lưu"
@@ -273,6 +281,7 @@ const { errors, handleSubmit, defineField, resetForm } = useForm({
     price: 0,
     annualDepreciation: 0,
     depreciationRate: 0,
+    useYears: 0,
   },
 })
 
@@ -325,12 +334,12 @@ const handleCloseModal = () => {
 }
 
 /**
- * Hàm tự động generate mã tài sản mới khi add, duplicate
+ * Hàm tự động generate mã tài sản mới khi add
  * createdby: hkc
  */
 const generateAssetCode = async () => {
   try {
-    const response = await AssetAPI.generateNewAssetCode()
+    const response = await AssetAPI.generateNewCode()
     if (response.data) {
       assetCode.value = response.data
     }

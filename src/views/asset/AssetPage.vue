@@ -2,14 +2,14 @@
   <!-- filter -->
   <div class="filter-controls flex justify-between items-center">
     <div class="flex items-center gap-11">
-      <ms-search v-model="q" placeholder="Tìm kiếm tài sản" />
+      <ms-search v-model="q" :placeholder="t('asset.filterSearchPlaceholder')" />
       <ms-select
         v-model="assetType"
         :dataOptions="assetTypes"
         optionLabel="assetTypeName"
         isFilter
         hasLeftIcon
-        placeholder="Loại tài sản"
+        :placeholder="t('asset.filterAssetTypePlaceholder')"
       />
       <ms-select
         v-model="department"
@@ -17,7 +17,7 @@
         optionLabel="departmentName"
         isFilter
         hasLeftIcon
-        placeholder="Bộ phận sử dụng"
+        :placeholder="t('asset.filterDepartmentPlaceholder')"
       />
     </div>
     <div class="flex items-center gap-10">
@@ -25,7 +25,7 @@
         <template #left-icon>
           <span class="icon plus-icon"></span>
         </template>
-        <span class="text-white">Thêm tài sản</span>
+        <span class="text-white">{{ t('asset.addAsset') }}</span>
       </ms-button>
       <ms-button type="only-icon" size="large">
         <template #left-icon>
@@ -131,7 +131,7 @@ import { Column, ColumnGroup, Row } from 'primevue'
 import TableFooter from '@/components/ms-table/TableFooter.vue'
 import { formatter } from '@/utils/formatter'
 import { formatDateOnly } from '@/utils/formatDate'
-
+import { useI18n } from 'vue-i18n'
 //#region State
 const isOpen = ref(false)
 const assets = ref([])
@@ -150,6 +150,7 @@ const assetTypes = ref([])
 const pageNumber = ref(1)
 const pageSize = ref()
 const totalRecords = ref(0)
+const { t } = useI18n()
 //#endregion State
 
 //#region Computed
@@ -158,9 +159,11 @@ const totalRecords = ref(0)
  */
 const deleteConfirmContent = computed(() => {
   if (selectedAssets.value.length <= 1) {
-    return 'Bạn có muốn xóa tài sản này khỏi danh sách?'
+    return t('asset.deleteConfirmContent')
   } else {
-    return `<span style="font-weight: 700">${selectedAssets.value.length}</span> tài sản đã được chọn. Bạn có muốn xóa các tài sản này khỏi danh sách?`
+    return `<span style="font-weight: 700">${selectedAssets.value.length}</span> ${t(
+      'asset.deleteConfirmContentMultiple'
+    )}`
   }
 })
 //#endregion Computed
@@ -264,7 +267,7 @@ const handleDelete = async () => {
     await AssetAPI.deleteMultiple(assetIds)
     toast.success({
       component: MsToast,
-      props: { type: 'success', message: `${assetIds.length} tài sản đã được xóa thành công` },
+      props: { type: 'success', message: `${assetIds.length} ${t('asset.deleteSuccess')}` },
     })
     selectedAssets.value = []
     await fetchData()
@@ -305,7 +308,7 @@ const handleSubmit = async (values) => {
       await AssetAPI.update(currentAsset.value.assetId, assetData)
       toast.success({
         component: MsToast,
-        props: { type: 'success', message: 'Cập nhật tài sản thành công' },
+        props: { type: 'success', message: t('asset.updateSuccess') },
       })
     } else {
       // Nếu đang ở chế độ add hoặc duplicate, thực hiện tạo mới
@@ -314,8 +317,7 @@ const handleSubmit = async (values) => {
         component: MsToast,
         props: {
           type: 'success',
-          message:
-            modalMode.value === 'add' ? 'Thêm tài sản thành công' : 'Nhân bản tài sản thành công',
+          message: modalMode.value === 'add' ? t('asset.addSuccess') : t('asset.duplicateSuccess'),
         },
       })
     }

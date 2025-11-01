@@ -43,7 +43,7 @@
           </slot>
         </template>
       </Column>
-      <Column field="func" header="Chức năng">
+      <Column field="func" :header="t('table.function')">
         <template #body="{ index }">
           <div class="flex justify-center gap-12 function-icons">
             <span class="icon edit-icon" @click="onEditClick(rows[index])"></span>
@@ -58,13 +58,13 @@
 </template>
 
 <script  setup>
-import { ref, watch } from 'vue'
-import { assetHeader } from '@/constants/assetHeader'
+import { computed, ref, watch } from 'vue'
+import { getAssetHeader } from '@/constants/assetHeader'
 import { formatter } from '@/utils/formatter'
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
 import { ContextMenu } from 'primevue'
-
+import { useI18n } from 'vue-i18n'
 //#region Props
 const props = defineProps({
   rows: {
@@ -89,14 +89,15 @@ const emit = defineEmits(['update:modelValue', 'edit', 'delete', 'duplicate'])
 //#region State
 // Hàm xử lý khi click vào dòng
 const cm = ref()
-
+const { t } = useI18n()
+const assetHeader = computed(() => getAssetHeader(t))
 const selectedRowIndex = ref(null)
 const selectedData = ref([])
 const menuModel = ref([
-  { label: 'Sửa', command: () => onEditClick(selectedData.value[0]) },
-  { label: 'Nhân bản', command: () => onDuplicateClick(selectedData.value[0]) },
+  { label: t('table.edit'), command: () => onEditClick(selectedData.value[0]) },
+  { label: t('table.duplicate'), command: () => onDuplicateClick(selectedData.value[0]) },
   {
-    label: 'Xóa',
+    label: t('table.delete'),
     command: () => onDeleteClick(selectedData.value),
   },
 ])

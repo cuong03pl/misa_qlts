@@ -2,7 +2,9 @@
   <div class="footer">
     <div class="total-records">
       <span
-        >Tổng số: <span class="total-records-count">{{ totalRecords }}</span> bản ghi</span
+        >{{ t('common.tableFooter.total') }}:
+        <span class="total-records-count">{{ totalRecords }}</span>
+        {{ t('common.tableFooter.record') }}</span
       >
     </div>
     <Paginator
@@ -30,6 +32,8 @@
 
 <script setup>
 import Paginator from 'primevue/paginator'
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 //#region Props
 defineProps({
   pageSize: {

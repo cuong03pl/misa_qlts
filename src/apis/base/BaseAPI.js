@@ -16,7 +16,7 @@ export default class BaseAPI {
    * @param {Object} payload - Payload của request
    */
   getById(id, payload = null) {
-    return api.get(`${this.controller}/${id}`, {params: payload})
+    return api.get(`${this.controller}/${id}`, { params: payload })
   }
   /**
    * Hàm lấy dữ liệu phân trang
@@ -36,7 +36,7 @@ export default class BaseAPI {
 
   /**
    * Hàm tạo dữ liệu
-  * @param {*} body
+   * @param {*} body
    */
   create(body) {
     return api.post(`${this.controller}`, body)
@@ -50,11 +50,19 @@ export default class BaseAPI {
     return api.delete(`${this.controller}/delete/${id}`)
   }
 
-   /**
+  /**
    * Hàm xóa nhiều bản ghi
    * @param {*} id
    */
-   deleteMultiple(body) {
+  deleteMultiple(body) {
     return api.post(`${this.controller}/delete-multiple`, body)
+  }
+
+  /**
+   * Tạo mã mới
+   * @returns {Promise} - Promise trả về mã mới
+   */
+  generateNewCode() {
+    return api.get(`${this.controller}/new-code`)
   }
 }
