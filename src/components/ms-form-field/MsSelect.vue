@@ -17,11 +17,11 @@
       <template #value="slotProps">
         <div v-if="slotProps.value" class="flex items-center gap-9">
           <span v-if="hasLeftIcon" class="icon filter-icon"></span>
-          <span class="text-primary">{{ slotProps.value[optionLabel] }}</span>
+          <span class="text-primary select-text">{{ slotProps.value[optionLabel] }}</span>
         </div>
         <div v-else class="flex items-center gap-9 placeholder-text">
           <span v-if="hasLeftIcon" class="icon filter-icon"></span>
-          <span class="text-primary">{{ placeholder }}</span>
+          <span class="text-primary select-text">{{ placeholder }}</span>
         </div>
       </template>
       <template #dropdownicon>
@@ -70,7 +70,9 @@ const emit = defineEmits(['update:modelValue'])
   border-radius: 2.5px !important;
   font-size: 13px !important;
 }
-
+span.p-select-label {
+  font-size: 14px !important;
+}
 .p-select-label {
   display: flex !important;
   align-items: center !important;
@@ -96,9 +98,13 @@ const emit = defineEmits(['update:modelValue'])
 }
 .p-select-option {
   gap: 8px !important;
+  font-size: 14px !important;
+  color: var(--text-color) !important;
 }
 .p-select-option.p-select-option-selected {
   background-color: #c7e0f5 !important;
+  color: var(--text-color) !important;
+  font-size: 14px !important;
 }
 .filter {
   width: 219px;
@@ -128,5 +134,8 @@ const emit = defineEmits(['update:modelValue'])
 }
 .select-error {
   border: 1px solid red !important;
+}
+.select-text {
+  font-size: 14px !important;
 }
 </style>

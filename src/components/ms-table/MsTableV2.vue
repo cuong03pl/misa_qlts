@@ -75,6 +75,7 @@ import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
 import { ContextMenu } from 'primevue'
 import { useI18n } from 'vue-i18n'
+import { tableMenuConfig } from './tableMenuConfig'
 //#region Props
 const props = defineProps({
   rows: {
@@ -103,29 +104,27 @@ const { t } = useI18n()
 const assetHeader = computed(() => getAssetHeader(t))
 const selectedRowIndex = ref(null)
 const selectedData = ref([])
-const menuModel = ref([
-  {
-    label: t('table.edit'),
-    icon: '<span class="icon edit-icon"></span>',
-    command: () => onEditClick(selectedData.value[0]),
-  },
-  {
-    separator: true,
-  },
-  {
-    label: t('table.duplicate'),
-    icon: '<span class="icon duplicate-icon"></span>',
-    command: () => onDuplicateClick(selectedData.value[0]),
-  },
-  {
-    separator: true,
-  },
-  {
-    label: t('table.delete'),
-    icon: '<span class="icon delete-icon-black"></span>',
-    command: () => onDeleteClick(selectedData.value),
-  },
-])
+
+// Các hàm xử lý menu
+const onDeleteClick = (rowData) => {
+  emit('delete', rowData)
+}
+const onEditClick = (rowData) => {
+  emit('edit', rowData)
+}
+const onDuplicateClick = (rowData) => {
+  emit('duplicate', rowData)
+}
+
+// Tạo menu model từ composable
+const menuModel = ref(
+  tableMenuConfig(t, {
+    onAdd: () => emit('add'),
+    onEdit: () => onEditClick(selectedData.value[0]),
+    onDuplicate: () => onDuplicateClick(selectedData.value[0]),
+    onDelete: () => onDeleteClick(selectedData.value),
+  })
+)
 
 const onRowContextMenu = (event) => {
   selectedData.value = [event.data]
@@ -142,21 +141,6 @@ watch(
 
 const onRowClick = (event) => {
   selectedRowIndex.value = event.index
-}
-
-const onDeleteClick = (rowData) => {
-  emit('delete', rowData)
-}
-/**
- * Hàm xử lý khi click vào icon edit truyền data về page chính
- * @param {Object} rowData - Dữ liệu của dòng được click
- */
-const onEditClick = (rowData) => {
-  emit('edit', rowData)
-}
-
-const onDuplicateClick = (rowData) => {
-  emit('duplicate', rowData)
 }
 
 // Truyền select data ra ngoài
@@ -243,7 +227,7 @@ th.p-datatable-header-cell {
 }
 
 .p-datatable-tbody > tr {
-  height: 39px !important;
+  height: 40px !important;
   vertical-align: middle;
 }
 
@@ -304,7 +288,7 @@ span.p-datatable-column-title {
 }
 
 .p-datatable-tfoot {
-  height: 39px !important;
+  height: 40px !important;
   padding: 0 16px !important;
 }
 

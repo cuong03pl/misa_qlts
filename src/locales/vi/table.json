@@ -6,10 +6,11 @@
     "departmentName": "Bộ phận sử dụng",
     "quantity": "Số lượng",
     "price": "Nguyên giá",
-    "annualDepreciation": "Khấu hao năm",
+    "annualDepreciation": "HM/KH lũy kế",
     "residualValue": "Giá trị còn lại",
     "function": "Chức năng",
     "edit": "Sửa",
     "duplicate": "Nhân bản",
-    "delete": "Xóa"
+    "delete": "Xóa",
+    "add": "Thêm"
 }

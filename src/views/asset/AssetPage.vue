@@ -53,6 +53,7 @@
     @edit="handleEditAsset"
     @duplicate="handleDuplicateAsset"
     @delete="handleDeleteModal"
+    @add="handleOpenModal"
   >
     <template v-if="assets?.data?.length > 0" #footer>
       <ColumnGroup type="footer">
@@ -121,17 +122,15 @@ import AssetModal from './AssetModal.vue'
 import MsTableV2 from '@/components/ms-table/MsTableV2.vue'
 import AssetAPI from '@/apis/components/AssetAPI'
 import MsConfirmModal from '@/components/ms-modal/MsConfirmModal.vue'
-import MsToast from '@/components/ms-toast/MsToast.vue'
-import { useToast } from 'vue-toastification'
 import { useRoute, useRouter } from 'vue-router'
 import _ from 'lodash'
-import DepartmentAPI from '@/apis/components/DepartmentAPI'
-import AssetTypeAPI from '@/apis/components/AssetTypeAPI'
 import { Column, ColumnGroup, Row } from 'primevue'
 import TableFooter from '@/components/ms-table/TableFooter.vue'
 import { formatter } from '@/utils/formatter'
 import { formatDateOnly } from '@/utils/formatDate'
 import { useI18n } from 'vue-i18n'
+import { useToastNotification } from '@/composables/useToastNotification'
+import { useFilterData } from '@/composables/useFilterData'
 //#region State
 const isOpen = ref(false)
 const assets = ref([])
@@ -139,18 +138,17 @@ const isOpenConfirmModal = ref(false)
 const selectedAssets = ref([])
 const modalMode = ref('add')
 const currentAsset = ref(null) // Tài sản đang được chỉnh sửa
-const toast = useToast()
 const route = useRoute()
 const router = useRouter()
 const q = ref('')
 const assetType = ref('')
 const department = ref('')
-const departments = ref([])
-const assetTypes = ref([])
 const pageNumber = ref(1)
 const pageSize = ref()
 const totalRecords = ref(0)
 const { t } = useI18n()
+const { showSuccess, showError } = useToastNotification()
+const { departments, assetTypes, fetchFiltersData } = useFilterData()
 //#endregion State
 
 //#region Computed
@@ -204,14 +202,7 @@ const fetchData = async (params = { pageNumber: 1, pageSize: 20, q: '' }) => {
     assets.value = response.data
     return response
   } catch (error) {
-    toast.error({
-      component: MsToast,
-      props: {
-        type: 'error',
-        message: error.response?.data?.message || error.message || t('asset.fetchError'),
-        icon: 'icon error-noti-icon',
-      },
-    })
+    showError(error, t('asset.fetchError'))
     return null
   }
 }
@@ -238,14 +229,7 @@ const handleEditAsset = async (asset) => {
     currentAsset.value = response.data
     isOpen.value = true
   } catch (error) {
-    toast.error({
-      component: MsToast,
-      props: {
-        type: 'error',
-        message: error.response?.data?.message || error.message || t('asset.notFound'),
-        icon: 'icon error-noti-icon',
-      },
-    })
+    showError(error, t('asset.notFound'))
   }
 }
 /**
@@ -261,14 +245,7 @@ const handleDuplicateAsset = async (asset) => {
     currentAsset.value = response.data
     isOpen.value = true
   } catch (error) {
-    toast.error({
-      component: MsToast,
-      props: {
-        type: 'error',
-        message: error.response?.data?.message || error.message || t('asset.notFound'),
-        icon: 'icon error-noti-icon',
-      },
-    })
+    showError(error, t('asset.notFound'))
   }
 }
 /**
@@ -285,25 +262,11 @@ const handleDelete = async () => {
   const assetIds = selectedAssets.value.map((asset) => asset.assetId)
   try {
     await AssetAPI.deleteMultiple(assetIds)
-    toast.success({
-      component: MsToast,
-      props: {
-        type: 'success',
-        message: `${assetIds.length} ${t('asset.deleteSuccess')}`,
-        icon: 'icon success-noti-icon',
-      },
-    })
+    showSuccess(`${assetIds.length} ${t('asset.deleteSuccess')}`)
     selectedAssets.value = []
     await fetchData()
   } catch (error) {
-    toast.error({
-      component: MsToast,
-      props: {
-        type: 'error',
-        message: error.response?.data?.message || error.message || t('asset.deleteError'),
-        icon: 'icon error-noti-icon',
-      },
-    })
+    showError(error, t('asset.deleteError'))
   }
 }
 /**
@@ -321,6 +284,10 @@ const handlePageChange = (pageInfo) => {
  */
 const handleSubmit = async (values) => {
   try {
+    if (values.annualDepreciation > values.price) {
+      showError(null, 'Hao mòn năm phải nhỏ hơn hoặc bằng nguyên giá')
+      return
+    }
     const assetData = {
       assetCode: values.assetCode,
       assetName: values.assetName,
@@ -330,75 +297,31 @@ const handleSubmit = async (values) => {
       purchaseDate: formatDateOnly(values.purchaseDate),
       price: values.price,
       annualDepreciation: values.annualDepreciation,
-      useYear: values.useYears,
+      useYear: values.purchaseDate.getFullYear(),
       startDate: formatDateOnly(values.startDate),
     }
 
     if (modalMode.value === 'edit' && currentAsset.value) {
       // Nếu đang ở chế độ edit, thực hiện cập nhật
       await AssetAPI.update(currentAsset.value.assetId, assetData)
-      toast.success({
-        component: MsToast,
-        props: {
-          type: 'success',
-          message: t('asset.updateSuccess'),
-          icon: 'icon success-noti-icon',
-        },
-      })
+      showSuccess(t('asset.updateSuccess'))
     } else {
       // Nếu đang ở chế độ add hoặc duplicate, thực hiện tạo mới
       await AssetAPI.create(assetData)
-      toast.success({
-        component: MsToast,
-        props: {
-          type: 'success',
-          message: modalMode.value === 'add' ? t('asset.addSuccess') : t('asset.duplicateSuccess'),
-          icon: 'icon success-noti-icon',
-        },
-      })
+      showSuccess(modalMode.value === 'add' ? t('asset.addSuccess') : t('asset.duplicateSuccess'))
     }
 
     await fetchData()
     // Đóng modal
     isOpen.value = false
   } catch (error) {
-    toast.error({
-      component: MsToast,
-      props: {
-        type: 'error',
-        message: error.response?.data?.message || error.message || t('asset.submitError'),
-        icon: 'icon error-noti-icon',
-      },
-    })
+    showError(error, t('asset.submitError'))
     await fetchData()
   }
 }
 //#endregion Methods
 
 //#region API
-/**
- * Lấy dữ liệu departments và assetTypes
- */
-const getFiltersData = async () => {
-  try {
-    const [departmentRes, assetTypeRes] = await Promise.all([
-      DepartmentAPI.getAll(),
-      AssetTypeAPI.getAll(),
-    ])
-    departments.value = departmentRes.data
-    assetTypes.value = assetTypeRes.data
-  } catch (error) {
-    toast.error({
-      component: MsToast,
-      props: {
-        type: 'error',
-        message: error.response?.data?.message || error.message || t('asset.fetchFiltersError'),
-        icon: 'icon error-noti-icon',
-      },
-    })
-  }
-}
-
 /**
  * Binding giá trị từ query params trong URL vào filters
  */
@@ -441,7 +364,7 @@ const fetchAssets = async () => {
 onMounted(async () => {
   try {
     // Lấy dữ liệu departments và assetTypes
-    await getFiltersData()
+    await fetchFiltersData()
 
     // Đọc query param từ URL và load filters
     bindFiltersFromQuery()
@@ -449,14 +372,7 @@ onMounted(async () => {
     // Lấy dữ liệu tài sản
     await fetchAssets()
   } catch (error) {
-    toast.error({
-      component: MsToast,
-      props: {
-        type: 'error',
-        message: error.response?.data?.message || error.message || t('asset.initError'),
-        icon: 'icon error-noti-icon',
-      },
-    })
+    showError(error, t('asset.initError'))
   }
 })
 //#endregion API

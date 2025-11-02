@@ -58,7 +58,7 @@
               :label="t('asset.departmentCode')"
               :placeholder="t('asset.departmentNamePlaceholder')"
               :dataOptions="departments"
-              optionLabel="departmentCode"
+              optionLabel="departmentAbbreviation"
             />
           </div>
           <div class="col-span-2">
@@ -83,7 +83,7 @@
               :label="t('asset.assetTypeCode')"
               :placeholder="t('asset.assetTypeNamePlaceholder')"
               :dataOptions="assetTypes"
-              optionLabel="assetTypeCode"
+              optionLabel="assetTypeAbbreviation"
             />
           </div>
           <div class="col-span-2">
@@ -163,11 +163,11 @@
           <div class="col-span-1">
             <ms-input
               size="large"
-              :modelValue="currentYear"
+              :modelValue="trackingYear"
               disabled
               class="text-right-input"
-              :label="t('asset.currentYear')"
-              :placeholder="t('asset.currentYearPlaceholder')"
+              :label="t('asset.trackingYear')"
+              :placeholder="t('asset.trackingYearPlaceholder')"
             />
           </div>
         </div>
@@ -246,20 +246,21 @@
 </template>
   
 <script setup>
-import AssetTypeAPI from '@/apis/components/AssetTypeAPI'
-import DepartmentAPI from '@/apis/components/DepartmentAPI'
-import AssetAPI from '@/apis/components/AssetAPI'
 import MsModal from '@/components/ms-modal/MsModal.vue'
 import MsConfirmModal from '@/components/ms-modal/MsConfirmModal.vue'
-import MsToast from '@/components/ms-toast/MsToast.vue'
 import { assetSchema } from '@/schemas/asset.schema'
 import { useForm } from 'vee-validate'
 import { onMounted, ref, watch, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useToast } from 'vue-toastification'
 import { isEqual } from 'lodash'
+import { useGenerateCode } from '@/composables/useGenerateCode'
+import { useFilterData } from '@/composables/useFilterData'
+import { useToastNotification } from '@/composables/useToastNotification'
+
 const { t } = useI18n()
-const toast = useToast()
+const { generateCode } = useGenerateCode()
+const { departments, assetTypes, fetchFiltersData } = useFilterData()
+const { showError } = useToastNotification()
 //#region Props
 const props = defineProps({
   isOpen: Boolean,
@@ -301,6 +302,19 @@ const [annualDepreciation, annualDepreciationAttrs] = defineField('annualDepreci
 const [depreciationRate, depreciationRateAttrs] = defineField('depreciationRate')
 const [startDate, startDateAttrs] = defineField('startDate')
 const [useYears, useYearsAttrs] = defineField('useYears')
+
+// Watch errors để hiển thị toast khi có lỗi validation
+watch(errors, (newVal) => {
+  // Hiểu thị lỗi đầu tiên
+  const errorKeys = Object.keys(newVal)
+  if (errorKeys.length > 0) {
+    const firstErrorKey = errorKeys[0]
+    const errorMessage = newVal[firstErrorKey]
+    if (errorMessage) {
+      showError(null, errorMessage)
+    }
+  }
+})
 
 // nut huy - mở confirm modal
 const showCancelConfirm = () => {
@@ -344,19 +358,11 @@ const handleCloseModal = () => {
  */
 const generateAssetCode = async () => {
   try {
-    const response = await AssetAPI.generateNewCode()
-    if (response.data) {
-      assetCode.value = response.data
-    }
+    const code = await generateCode()
+    assetCode.value = code
   } catch (error) {
-    toast.error({
-      component: MsToast,
-      props: {
-        type: 'error',
-        message: error.response?.data?.message || error.message || t('asset.generateCodeError'),
-        icon: 'icon error-noti-icon',
-      },
-    })
+    // Error đã được xử lý trong composable
+    console.error('Error generating asset code:', error)
   }
 }
 
@@ -376,7 +382,7 @@ const getCurrentFormData = () => {
     price: price.value,
     depreciationRate: depreciationRate.value,
     annualDepreciation: annualDepreciation.value,
-    useYear: useYears.value,
+    useYear: trackingYear.value,
     // Chuyển ngày về timestamp
     purchaseDate: purchaseDate.value ? new Date(purchaseDate.value).getTime() : null,
     startDate: startDate.value ? new Date(startDate.value).getTime() : null,
@@ -386,9 +392,7 @@ const getCurrentFormData = () => {
 //#endregion methods
 //#region State
 const isOpenConfirmModal = ref(false)
-const departments = ref([])
-const assetTypes = ref([])
-const currentYear = ref(new Date().getFullYear())
+const trackingYear = ref(new Date().getFullYear())
 const clonedAssetData = ref(null)
 const firstInputRef = ref(null)
 //#endregion State
@@ -399,23 +403,7 @@ const firstInputRef = ref(null)
  * createdby: hkc
  */
 onMounted(async () => {
-  try {
-    const [departmentRes, assetTypeRes] = await Promise.all([
-      DepartmentAPI.getAll(),
-      AssetTypeAPI.getAll(),
-    ])
-    departments.value = departmentRes.data
-    assetTypes.value = assetTypeRes.data
-  } catch (error) {
-    toast.error({
-      component: MsToast,
-      props: {
-        type: 'error',
-        message: error.response?.data?.message || error.message || t('asset.fetchFiltersError'),
-        icon: 'icon error-noti-icon',
-      },
-    })
-  }
+  await fetchFiltersData()
 })
 //#endregion API
 
@@ -430,6 +418,9 @@ watch([price, depreciationRate], () => {
 watch(assetTypeName, () => {
   depreciationRate.value = assetTypeName.value?.depreciationRate ?? 0
   useYears.value = assetTypeName.value?.lifeTime ?? 0
+})
+watch(purchaseDate, () => {
+  trackingYear.value = purchaseDate.value?.getFullYear()
 })
 watch(
   () => props.isOpen,

@@ -75,7 +75,7 @@ defineExpose({
   outline: none;
   border: 1px solid var(--input-border-color);
   border-radius: 2.5px;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-color);
 }
 

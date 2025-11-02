@@ -59,7 +59,7 @@ const emit = defineEmits(['update:modelValue'])
   border: none !important;
   outline: none !important;
   width: 100%;
-  font-size: 13px;
+  font-size: 14px;
   font-style: italic;
 }
 
@@ -68,7 +68,7 @@ const emit = defineEmits(['update:modelValue'])
   border: none;
   outline: none;
   width: 100%;
-  font-size: 13px;
+  font-size: 14px;
   font-style: italic;
 }
 

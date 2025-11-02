@@ -81,7 +81,7 @@ const onPageChange = (event) => {
 .total-records {
   font-size: 11px;
   color: var(--text-color);
-  width: 133px;
+  width: 134px;
 }
 .total-records-count {
   font-weight: 700;
