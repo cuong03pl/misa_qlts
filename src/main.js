@@ -7,6 +7,7 @@ import '@/assets/style/control.css'
 import '@/assets/style/style.css'
 import '@/assets/icon/icon.css'
 import './assets/style/font.css'
+import './assets/style/responsive.css'
 import PrimeVue from 'primevue/config'
 import Aura from '@primeuix/themes/aura';
 import MsButton from './components/ms-button/MsButton.vue'

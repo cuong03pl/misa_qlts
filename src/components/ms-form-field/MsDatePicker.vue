@@ -5,6 +5,7 @@
       <span v-if="isRequired" class="required-icon">*</span>
     </span>
     <DatePicker
+      dateFormat="dd/mm/yy"
       ref="dp"
       v-model="date"
       showIcon

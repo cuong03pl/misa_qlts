@@ -12,7 +12,7 @@
       :rows="pageSize"
       :totalRecords="totalRecords"
       :first="first"
-      :rowsPerPageOptions="[10, 20, 30]"
+      :rowsPerPageOptions="[20, 50, 100]"
       :currentPage="currentPage"
       @page="onPageChange"
     >

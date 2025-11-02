@@ -79,6 +79,12 @@ defineExpose({
   color: var(--text-color);
 }
 
+.form-input input::placeholder {
+  font-style: italic;
+  color: var(--text-color);
+  opacity: 0.5;
+}
+
 /* focus */
 input:focus:not(:disabled),
 input:hover:not(:disabled) {

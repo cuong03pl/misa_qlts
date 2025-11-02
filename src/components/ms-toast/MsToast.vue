@@ -2,6 +2,7 @@
   <div class="toast" :class="toastClass">
     <div class="flex items-center gap-8">
       <div class="flex gap-6">
+        <span class="icon" :class="icon"></span>
         <p class="title font-semibold">{{ title }}</p>
         <p class="message text-sm flex items-center">{{ message }}</p>
       </div>
@@ -16,6 +17,7 @@ const props = defineProps({
   type: { type: String },
   title: { type: String, required: true },
   message: { type: String, required: true },
+  icon: { type: String, required: true },
 })
 //#endregion Props
 

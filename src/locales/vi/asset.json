@@ -14,6 +14,7 @@
     "annualDepreciation": "Giá trị hao mòn năm",
     "startDate": "Ngày bắt đầu sử dụng",
 
+    "assetCodePlaceholder": "Nhập mã tài sản",
     "assetNamePlaceholder": "Nhập tên tài sản",
     "departmentNamePlaceholder": "Chọn mã bộ phận sử dụng",
     "assetTypeNamePlaceholder": "Chọn mã loại tài sản",
@@ -30,7 +31,7 @@
     "updateConfirmContent": "Thông tin thay đổi sẽ không được cập nhật nếu bạn không lưu. Bạn có muốn lưu các thay đổi này?",
     "deleteConfirmContent": "Bạn có muốn xóa tài sản này?",
     "deleteConfirmContentMultiple": "tài sản đã được chọn. Bạn có muốn xóa các tài sản này khỏi danh sách?",
-    "deleteSuccess": "đã được xóa thành công",
+    "deleteSuccess": "tài sản đã được xóa thành công",
         
     "updateSuccess": "Cập nhật tài sản thành công",
     "duplicateSuccess": "Nhân bản tài sản thành công",

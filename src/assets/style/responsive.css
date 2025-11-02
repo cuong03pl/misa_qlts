@@ -1,0 +1,16 @@
+@media (max-width: 768px) {
+    .filter-controls {
+        flex-direction: column;
+        gap: 10px;
+        justify-content: flex-start;
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+    .filter-controls-left {
+        flex-wrap: wrap;
+    }
+
+    .header-left {
+        display: none;
+    }
+  }

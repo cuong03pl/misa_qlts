@@ -94,7 +94,7 @@ const handleCancelSave = () => {
   
   <style >
 .modal-confirm-content {
-  width: 400px;
+  width: 430px;
   background: white;
   z-index: 1000;
   display: flex;

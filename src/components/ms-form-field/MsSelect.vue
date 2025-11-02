@@ -19,7 +19,7 @@
           <span v-if="hasLeftIcon" class="icon filter-icon"></span>
           <span class="text-primary">{{ slotProps.value[optionLabel] }}</span>
         </div>
-        <div v-else class="flex items-center gap-9">
+        <div v-else class="flex items-center gap-9 placeholder-text">
           <span v-if="hasLeftIcon" class="icon filter-icon"></span>
           <span class="text-primary">{{ placeholder }}</span>
         </div>
@@ -104,11 +104,15 @@ const emit = defineEmits(['update:modelValue'])
   width: 219px;
 }
 .p-select:not(.filter) {
-  font-style: italic;
   padding-left: 14px;
 }
 .p-select:not(.filter) .p-select-label {
   padding: 0 !important;
+}
+.p-select:not(.filter) .placeholder-text {
+  font-style: italic;
+  opacity: 0.5;
+  color: var(--text-color);
 }
 .error-text {
   color: red;

@@ -6,15 +6,14 @@
       <span v-if="isRequired" class="required-icon">*</span>
     </span>
     <InputNumber
+      style="text-align: end"
       min="0"
       :mode="mode"
-      locale="vi-VN"
       :showButtons="hasButton"
       :tabindex="tabindex"
       :class="[!!size && size, error_message && 'input-number-error']"
       :name="name"
       :type="type"
-      :placeholder="placeholder"
       :modelValue="modelValue"
       :disabled="disabled"
       :minFractionDigits="0"
@@ -50,11 +49,14 @@ defineProps({
   modelValue: [String, Number],
   error_message: String,
   flexRow: Boolean,
-  disabled: Boolean,
   tabindex: Number,
   hasButton: Boolean,
   numType: {
     type: String,
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
   },
 })
 //#endregion Props
@@ -65,6 +67,9 @@ const emit = defineEmits(['update:modelValue'])
 </script>
 
 <style>
+.p-inputnumber-input {
+  text-align: end;
+}
 .form-input {
   gap: 8px;
 }
@@ -88,6 +93,9 @@ input:focus:not(:disabled),
 input:hover:not(:disabled) {
   border: 1px solid var(--btn-primary) !important;
   outline: none;
+}
+.p-inputnumber-stacked .p-inputnumber-input {
+  padding-inline-end: 36px !important;
 }
 input.readonly {
 }

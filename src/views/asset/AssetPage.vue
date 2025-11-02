@@ -1,7 +1,7 @@
 <template>
   <!-- filter -->
-  <div class="filter-controls flex justify-between items-center">
-    <div class="flex items-center gap-11">
+  <div class="filter-controls flex flex-wrap justify-between items-center gap-10">
+    <div class="filter-controls-left flex items-center gap-11">
       <ms-search v-model="q" :placeholder="t('asset.filterSearchPlaceholder')" />
       <ms-select
         v-model="assetType"
@@ -197,7 +197,7 @@ const debouncedFetch = _.debounce(async () => {
  * Lấy dữ liệu theo trang
  * @param {Object} params - Tham số phân trang
  */
-const fetchData = async (params = { pageNumber: 1, pageSize: 10, q: '' }) => {
+const fetchData = async (params = { pageNumber: 1, pageSize: 20, q: '' }) => {
   try {
     const response = await AssetAPI.paging(params)
     totalRecords.value = response.data?.totalRecords
@@ -209,6 +209,7 @@ const fetchData = async (params = { pageNumber: 1, pageSize: 10, q: '' }) => {
       props: {
         type: 'error',
         message: error.response?.data?.message || error.message || t('asset.fetchError'),
+        icon: 'icon error-noti-icon',
       },
     })
     return null
@@ -242,6 +243,7 @@ const handleEditAsset = async (asset) => {
       props: {
         type: 'error',
         message: error.response?.data?.message || error.message || t('asset.notFound'),
+        icon: 'icon error-noti-icon',
       },
     })
   }
@@ -264,6 +266,7 @@ const handleDuplicateAsset = async (asset) => {
       props: {
         type: 'error',
         message: error.response?.data?.message || error.message || t('asset.notFound'),
+        icon: 'icon error-noti-icon',
       },
     })
   }
@@ -284,7 +287,11 @@ const handleDelete = async () => {
     await AssetAPI.deleteMultiple(assetIds)
     toast.success({
       component: MsToast,
-      props: { type: 'success', message: `${assetIds.length} ${t('asset.deleteSuccess')}` },
+      props: {
+        type: 'success',
+        message: `${assetIds.length} ${t('asset.deleteSuccess')}`,
+        icon: 'icon success-noti-icon',
+      },
     })
     selectedAssets.value = []
     await fetchData()
@@ -294,6 +301,7 @@ const handleDelete = async () => {
       props: {
         type: 'error',
         message: error.response?.data?.message || error.message || t('asset.deleteError'),
+        icon: 'icon error-noti-icon',
       },
     })
   }
@@ -331,7 +339,11 @@ const handleSubmit = async (values) => {
       await AssetAPI.update(currentAsset.value.assetId, assetData)
       toast.success({
         component: MsToast,
-        props: { type: 'success', message: t('asset.updateSuccess') },
+        props: {
+          type: 'success',
+          message: t('asset.updateSuccess'),
+          icon: 'icon success-noti-icon',
+        },
       })
     } else {
       // Nếu đang ở chế độ add hoặc duplicate, thực hiện tạo mới
@@ -341,6 +353,7 @@ const handleSubmit = async (values) => {
         props: {
           type: 'success',
           message: modalMode.value === 'add' ? t('asset.addSuccess') : t('asset.duplicateSuccess'),
+          icon: 'icon success-noti-icon',
         },
       })
     }
@@ -354,6 +367,7 @@ const handleSubmit = async (values) => {
       props: {
         type: 'error',
         message: error.response?.data?.message || error.message || t('asset.submitError'),
+        icon: 'icon error-noti-icon',
       },
     })
     await fetchData()
@@ -379,6 +393,7 @@ const getFiltersData = async () => {
       props: {
         type: 'error',
         message: error.response?.data?.message || error.message || t('asset.fetchFiltersError'),
+        icon: 'icon error-noti-icon',
       },
     })
   }
@@ -388,12 +403,10 @@ const getFiltersData = async () => {
  * Binding giá trị từ query params trong URL vào filters
  */
 const bindFiltersFromQuery = () => {
-  if (!route.query) return
-
   // Gán giá trị tìm kiếm từ URL
   q.value = route.query.q || ''
   pageNumber.value = Number(route.query.pageNumber) || 1
-  pageSize.value = Number(route.query.pageSize) || 10
+  pageSize.value = Number(route.query.pageSize) || 20
 
   // Lấy department từ departmentCode trong URL để binding vào select department
   if (route.query.departmentCode) {
@@ -441,6 +454,7 @@ onMounted(async () => {
       props: {
         type: 'error',
         message: error.response?.data?.message || error.message || t('asset.initError'),
+        icon: 'icon error-noti-icon',
       },
     })
   }

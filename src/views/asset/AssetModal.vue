@@ -29,6 +29,7 @@
               v-bind="assetCodeAttrs"
               :error_message="errors.assetCode"
               :label="t('asset.assetCode')"
+              :placeholder="t('asset.assetCodePlaceholder')"
             />
           </div>
           <div class="col-span-2">
@@ -164,6 +165,7 @@
               size="large"
               :modelValue="currentYear"
               disabled
+              class="text-right-input"
               :label="t('asset.currentYear')"
               :placeholder="t('asset.currentYearPlaceholder')"
             />
@@ -352,6 +354,7 @@ const generateAssetCode = async () => {
       props: {
         type: 'error',
         message: error.response?.data?.message || error.message || t('asset.generateCodeError'),
+        icon: 'icon error-noti-icon',
       },
     })
   }
@@ -409,6 +412,7 @@ onMounted(async () => {
       props: {
         type: 'error',
         message: error.response?.data?.message || error.message || t('asset.fetchFiltersError'),
+        icon: 'icon error-noti-icon',
       },
     })
   }
@@ -530,6 +534,10 @@ const setFormData = async (data) => {
   overflow-y: auto;
   flex: 1;
   min-height: 0;
+}
+
+.text-right-input input {
+  text-align: right !important;
 }
 </style>
   

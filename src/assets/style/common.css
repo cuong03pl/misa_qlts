@@ -2,8 +2,8 @@
   --text-color: #001031;
   --white-color: #fff;
   --btn-primary: #1aa4c8;
-  --btn-primary-hover: #0582A2;
-  --search-width: 179px ;
+  --btn-primary-hover: #0582a2;
+  --search-width: 179px;
   --border-secondary: #d1d5db;
   --icon-color: #666666;
   --table-item-hover: #ffece5;
@@ -18,11 +18,11 @@
 
   /* header right */
   --header-right-color: #000;
-  --year-selector-bg: rgba(26, 164, 200, .2);
+  --year-selector-bg: rgba(26, 164, 200, 0.2);
 
   /* side bar */
   --sidebar-bg: #25344a;
-  --sidebar-bg-hover: #45A3C7;
+  --sidebar-bg-hover: #45a3c7;
   --sidebar-text-primary: #7b8798;
   --sidebar-text-hover: #fff;
   --sidebar-width-collapsed: 66px;
@@ -39,7 +39,9 @@
   /* input */
   --input-border-color: #afafaf;
 }
-
+.cursor-pointer {
+  cursor: pointer;
+}
 .icon i {
   display: block;
   font-size: 20px;
@@ -54,7 +56,9 @@
 .flex {
   display: flex;
 }
-
+.flex-wrap {
+  flex-wrap: wrap;
+}
 .flex-1 {
   flex: 1;
 }
@@ -867,7 +871,6 @@
 .grid-cols-12 {
   grid-template-columns: repeat(12, minmax(0, 1fr));
 }
-
 
 .col-span-1 {
   grid-column: span 1 / span 1;

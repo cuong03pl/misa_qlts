@@ -1,6 +1,14 @@
 <template>
   <div class="table-container">
-    <ContextMenu ref="cm" :model="menuModel" />
+    <ContextMenu ref="cm" :model="menuModel">
+      <template #item="{ item }">
+        <div class="flex items-center gap-8 p-2 w-full cursor-pointer">
+          <span v-if="item.icon" v-html="item.icon"></span>
+          <i v-else :class="item.icon"></i>
+          <span>{{ item.label }}</span>
+        </div>
+      </template>
+    </ContextMenu>
     <DataTable
       v-if="rows?.length > 0"
       v-model:contextMenuSelection="selectedData"
@@ -96,10 +104,25 @@ const assetHeader = computed(() => getAssetHeader(t))
 const selectedRowIndex = ref(null)
 const selectedData = ref([])
 const menuModel = ref([
-  { label: t('table.edit'), command: () => onEditClick(selectedData.value[0]) },
-  { label: t('table.duplicate'), command: () => onDuplicateClick(selectedData.value[0]) },
+  {
+    label: t('table.edit'),
+    icon: '<span class="icon edit-icon"></span>',
+    command: () => onEditClick(selectedData.value[0]),
+  },
+  {
+    separator: true,
+  },
+  {
+    label: t('table.duplicate'),
+    icon: '<span class="icon duplicate-icon"></span>',
+    command: () => onDuplicateClick(selectedData.value[0]),
+  },
+  {
+    separator: true,
+  },
   {
     label: t('table.delete'),
+    icon: '<span class="icon delete-icon-black"></span>',
     command: () => onDeleteClick(selectedData.value),
   },
 ])

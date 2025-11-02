@@ -1,7 +1,7 @@
 <template>
   <div class="header flex justify-between items-center">
     <!-- Header left -->
-    <div class="flex items-center h-full gap-24">
+    <div class="header-left flex items-center h-full gap-24">
       <div class="logo flex items-center gap-24">
         <span class="text text-primary">{{ t('header.title') }}</span>
       </div>
