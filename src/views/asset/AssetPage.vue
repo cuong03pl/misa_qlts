@@ -21,6 +21,7 @@
       />
     </div>
     <div class="flex items-center gap-10">
+      <!-- thêm tài sản -->
       <ms-button @click="handleOpenModal" type="one-icon" size="large">
         <template #left-icon>
           <span class="icon plus-icon"></span>
@@ -377,18 +378,24 @@ onMounted(async () => {
 })
 //#endregion API
 
+// Khi filter thì reset cái pageNumber = 1
 watch(
-  [q, assetType, department, pageNumber, pageSize],
+  [q, assetType, department],
   () => {
+    pageNumber.value = 1
     debouncedFetch()
   },
   { deep: true }
 )
+
+watch([pageNumber, pageSize], () => {
+  debouncedFetch()
+})
 </script>
 
 <style scoped>
 .filter-controls {
-  padding: 14px 20px;
+  padding: 13px 20px;
 }
 .table-controls {
   padding: 0 20px 17px 20px;

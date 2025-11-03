@@ -14,6 +14,7 @@
       :first="first"
       :rowsPerPageOptions="[20, 50, 100]"
       :currentPage="currentPage"
+      :pageLinkSize="5"
       @page="onPageChange"
     >
       <template #previcon>

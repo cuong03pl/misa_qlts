@@ -70,6 +70,10 @@ const emit = defineEmits(['click'])
   border: 1px solid var(--btn-primary);
 }
 
+.ms-button-sub:hover {
+  background: #d1edf4;
+}
+
 .ms-button-outline {
   color: var(--text-color);
   min-width: 110px;
@@ -77,7 +81,11 @@ const emit = defineEmits(['click'])
   box-shadow: none;
   border: 1px solid var(--text-color);
 }
-
+.ms-button-outline:hover {
+  color: var(--white-color);
+  border: none;
+  background: var(--btn-primary);
+}
 .ms-button-secondary {
   color: #333;
   background-color: var(--white-color);

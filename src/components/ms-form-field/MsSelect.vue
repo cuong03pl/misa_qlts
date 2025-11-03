@@ -5,6 +5,7 @@
       <span v-if="isRequired" class="required-icon">*</span>
     </div>
     <Select
+      showClear
       filter
       checkmark
       :tabindex="tabindex"
@@ -15,10 +16,12 @@
       @update:modelValue="emit('update:modelValue', $event)"
     >
       <template #value="slotProps">
+        <!-- nếu đã chọn -->
         <div v-if="slotProps.value" class="flex items-center gap-9">
           <span v-if="hasLeftIcon" class="icon filter-icon"></span>
           <span class="text-primary select-text">{{ slotProps.value[optionLabel] }}</span>
         </div>
+        <!-- nếu chưa chọn -->
         <div v-else class="flex items-center gap-9 placeholder-text">
           <span v-if="hasLeftIcon" class="icon filter-icon"></span>
           <span class="text-primary select-text">{{ placeholder }}</span>

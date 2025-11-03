@@ -8,7 +8,7 @@
     </div>
     <!-- Header right -->
     <div class="flex header-right items-center">
-      <span class="text-primary">{{ t('header.link') }}</span>
+      <span style="font-weight: 500" class="text-primary">{{ t('header.link') }}</span>
       <div class="year-selector">
         <span class="year-selector-text">{{ t('header.year') }}</span>
         <span class="year-selector-number">2021</span>

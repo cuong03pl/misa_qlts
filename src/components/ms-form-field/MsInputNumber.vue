@@ -10,7 +10,6 @@
       min="0"
       :mode="mode"
       :showButtons="hasButton"
-      :tabindex="tabindex"
       :class="[!!size && size, error_message && 'input-number-error']"
       :name="name"
       :type="type"
@@ -18,13 +17,16 @@
       :disabled="disabled"
       :minFractionDigits="0"
       :maxFractionDigits="numType === 'decimal' ? 22 : 0"
-      @input="(val) => emit('update:modelValue', val.value)"
+      @update:modelValue="(val) => emit('update:modelValue', val)"
+      :pt="{
+        pcInputText: { root: { tabindex: tabindex } },
+      }"
     >
       <template #incrementicon>
-        <span class="icon up-icon"></span>
+        <span class="icon up-icon" tabindex="-1"></span>
       </template>
       <template #decrementicon>
-        <span class="icon dropdown-icon"></span>
+        <span class="icon dropdown-icon" tabindex="-1"></span>
       </template>
     </InputNumber>
     <small v-if="isRequired" :class="['error-text', error_message && 'show']">{{

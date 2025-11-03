@@ -145,6 +145,9 @@ onUnmounted(() => {
 .active-icon {
   display: none;
 }
+.collapsed .sidebar-item:hover {
+  border-radius: 6px;
+}
 .sidebar-item:hover .icon {
   display: none;
 }

@@ -60,16 +60,15 @@ const emit = defineEmits(['update:modelValue'])
   outline: none !important;
   width: 100%;
   font-size: 14px;
+}
+.filter-search .search_input::placeholder {
   font-style: italic;
 }
-
 .filter-search .search_input:hover {
   background: none;
   border: none;
   outline: none;
   width: 100%;
-  font-size: 14px;
-  font-style: italic;
 }
 
 /* Hover, Focus, Active states */

@@ -10,11 +10,13 @@
       v-model="date"
       showIcon
       :placeholder="t('common.selectDate')"
-      :tabindex="tabindex"
       fluid
       iconDisplay="input"
       @update:modelValue="emit('update:modelValue', $event)"
       :class="[!!size && size, error_message && 'date-error']"
+      :pt="{
+        pcInputText: { root: { tabindex: tabindex } },
+      }"
     >
       <template #inputicon>
         <span class="icon calendar-icon"></span>

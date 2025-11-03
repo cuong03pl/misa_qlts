@@ -10,7 +10,7 @@
 
 .dashboard-icon {
   mask-image: url('./qlts-icon.svg');
-  mask-position: -21px -153px;
+  mask-position: -20px -152px;
   mask-repeat: no-repeat;
   background-color: var(--sidebar-text-primary);
   width: 24px;
@@ -19,7 +19,7 @@
 
 .dashboard-active-icon {
   mask-image: url('./qlts-icon.svg');
-  mask-position: -21px -197px;
+  mask-position: -20px -196px;
   mask-repeat: no-repeat;
   background-color: var(--sidebar-text-hover);
   width: 24px;
@@ -28,7 +28,7 @@
 
 .asset-icon {
   mask-image: url('./qlts-icon.svg');
-  mask-position: -65px -197px;
+  mask-position: -64px -196px;
   mask-repeat: no-repeat;
   background-color: var(--sidebar-text-primary);
   width: 24px;
@@ -36,7 +36,7 @@
 }
 .asset-active-icon {
   mask-image: url('./qlts-icon.svg');
-  mask-position: -65px -197px;
+  mask-position: -64px -196px;
   mask-repeat: no-repeat;
   background-color: var(--sidebar-text-hover);
   width: 24px;
@@ -45,7 +45,7 @@
 
 .lane-icon {
   mask-image: url('./qlts-icon.svg');
-  mask-position: -110px -153px;
+  mask-position: -108px -153px;
   mask-repeat: no-repeat;
   background-color: var(--sidebar-text-primary);
   width: 24px;
@@ -53,7 +53,7 @@
 }
 .lane-active-icon {
   mask-image: url('./qlts-icon.svg');
-  mask-position: -110px -197px;
+  mask-position: -108px -196px;
   mask-repeat: no-repeat;
   background-color: var(--sidebar-text-hover);
   width: 24px;
@@ -62,7 +62,7 @@
 
 .tool-icon {
   mask-image: url('./qlts-icon.svg');
-  mask-position: -153px -153px;
+  mask-position: -152px -152px;
   mask-repeat: no-repeat;
   background-color: var(--sidebar-text-primary);
   width: 24px;
@@ -70,7 +70,7 @@
 }
 .tool-active-icon {
   mask-image: url('./qlts-icon.svg');
-  mask-position: -153px -197px;
+  mask-position: -152px -196px;
   mask-repeat: no-repeat;
   background-color: var(--sidebar-text-hover);
   width: 24px;
@@ -79,7 +79,7 @@
 
 .category-icon {
   mask-image: url('./qlts-icon.svg');
-  mask-position: -197px -152px;
+  mask-position: -196px -152px;
   mask-repeat: no-repeat;
   background-color: var(--sidebar-text-primary);
   width: 24px;
@@ -87,7 +87,7 @@
 }
 .category-active-icon {
   mask-image: url('./qlts-icon.svg');
-  mask-position: -197px -196px;
+  mask-position: -196px -196px;
   mask-repeat: no-repeat;
   background-color: var(--sidebar-text-hover);
   width: 24px;
@@ -96,7 +96,7 @@
 
 .lookup-icon {
   mask-image: url('./qlts-icon.svg');
-  mask-position: -241px -153px;
+  mask-position: -240px -152px;
   mask-repeat: no-repeat;
   background-color: var(--sidebar-text-primary);
   width: 24px;
@@ -104,7 +104,7 @@
 }
 .lookup-active-icon {
   mask-image: url('./qlts-icon.svg');
-  mask-position: -240px -196px;
+  mask-position: -239px -195px;
   mask-repeat: no-repeat;
   background-color: var(--sidebar-text-hover);
   width: 24px;
@@ -113,7 +113,7 @@
 
 .report-icon {
   mask-image: url('./qlts-icon.svg');
-  mask-position: -329px -153px;
+  mask-position: -328px -152px;
   mask-repeat: no-repeat;
   background-color: var(--sidebar-text-primary);
   width: 24px;
@@ -121,7 +121,7 @@
 }
 .report-active-icon {
   mask-image: url('./qlts-icon.svg');
-  mask-position: -329px -197px;
+  mask-position: -328px -196px;
   mask-repeat: no-repeat;
   background-color: var(--sidebar-text-hover);
   width: 24px;
@@ -247,7 +247,6 @@
   height: 16px;
 }
 
-
 /* excel icon */
 .excel-icon {
   mask-image: url('./qlts-icon.svg');
@@ -351,7 +350,7 @@
   mask-image: url('./qlts-icon.svg');
   mask-position: -288px -376px;
   mask-repeat: no-repeat;
-  background-color: #4CC56E;
+  background-color: #4cc56e;
   width: 16px;
   height: 16px;
 }

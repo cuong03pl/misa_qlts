@@ -241,7 +241,7 @@
     cancelSaveText="Không lưu"
     confirmType="primary"
     @confirm="onSubmit"
-    @cancel="handleConfirmCancel"
+    @cancelSave="handleConfirmCancel"
   />
 </template>
   
