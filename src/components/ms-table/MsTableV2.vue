@@ -33,7 +33,7 @@
       <!-- sortable -->
       <Column
         colspan="1"
-        v-for="item in assetHeader"
+        v-for="item in header"
         :key="item.field"
         :field="item.field"
         :header="item.title"
@@ -68,8 +68,7 @@
 </template>
 
 <script  setup>
-import { computed, ref, watch } from 'vue'
-import { getAssetHeader } from '@/constants/assetHeader'
+import { ref, watch } from 'vue'
 import { formatter } from '@/utils/formatter'
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
@@ -90,6 +89,10 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
+  header: {
+    type: Array,
+    default: () => [],
+  },
 })
 //#endregion Props
 
@@ -101,22 +104,40 @@ const emit = defineEmits(['update:modelValue', 'edit', 'delete', 'duplicate'])
 // Hàm xử lý khi click vào dòng
 const cm = ref()
 const { t } = useI18n()
-const assetHeader = computed(() => getAssetHeader(t))
 const selectedRowIndex = ref(null)
 const selectedData = ref([])
 
-// Các hàm xử lý menu
+/**
+ * Xử lý khi click xóa
+ * @param {Object} rowData - Dữ liệu dòng được chọn
+ * createdby: HK Cường
+ */
 const onDeleteClick = (rowData) => {
   emit('delete', rowData)
 }
+
+/**
+ * Xử lý khi click chỉnh sửa
+ * @param {Object} rowData - Dữ liệu dòng được chọn
+ * createdby: HK Cường
+ */
 const onEditClick = (rowData) => {
   emit('edit', rowData)
 }
+
+/**
+ * Xử lý khi click nhân bản
+ * @param {Object} rowData - Dữ liệu dòng được chọn
+ * createdby: HK Cường
+ */
 const onDuplicateClick = (rowData) => {
   emit('duplicate', rowData)
 }
 
-// Tạo menu model từ composable
+/**
+ * Tạo menu model từ composable
+ * createdby: HK Cường
+ */
 const menuModel = ref(
   tableMenuConfig(t, {
     onAdd: () => emit('add'),
@@ -126,11 +147,20 @@ const menuModel = ref(
   })
 )
 
+/**
+ * Xử lý khi click chuột phải vào dòng
+ * @param {Object} event - Event object
+ * createdby: HK Cường
+ */
 const onRowContextMenu = (event) => {
   selectedData.value = [event.data]
   cm.value.show(event.originalEvent)
 }
-// Xử lý đồng bộ selected
+
+/**
+ * Xử lý đồng bộ selected data
+ * createdby: HK Cường
+ */
 watch(
   () => props.modelValue,
   (newVal) => {
@@ -139,11 +169,19 @@ watch(
   { immediate: true }
 )
 
+/**
+ * Xử lý khi click vào dòng
+ * @param {Object} event - Event object
+ * createdby: HK Cường
+ */
 const onRowClick = (event) => {
   selectedRowIndex.value = event.index
 }
 
-// Truyền select data ra ngoài
+/**
+ * Truyền select data ra ngoài
+ * createdby: HK Cường
+ */
 watch(selectedData, (newVal) => {
   emit('update:modelValue', newVal)
 })

@@ -255,12 +255,10 @@ import { useI18n } from 'vue-i18n'
 import { isEqual } from 'lodash'
 import { useGenerateCode } from '@/composables/useGenerateCode'
 import { useFilterData } from '@/composables/useFilterData'
-import { useToastNotification } from '@/composables/useToastNotification'
 
 const { t } = useI18n()
 const { generateCode } = useGenerateCode()
 const { departments, assetTypes, fetchFiltersData } = useFilterData()
-const { showError } = useToastNotification()
 //#region Props
 const props = defineProps({
   isOpen: Boolean,
@@ -302,19 +300,6 @@ const [annualDepreciation, annualDepreciationAttrs] = defineField('annualDepreci
 const [depreciationRate, depreciationRateAttrs] = defineField('depreciationRate')
 const [startDate, startDateAttrs] = defineField('startDate')
 const [useYears, useYearsAttrs] = defineField('useYears')
-
-// Watch errors để hiển thị toast khi có lỗi validation
-watch(errors, (newVal) => {
-  // Hiểu thị lỗi đầu tiên
-  const errorKeys = Object.keys(newVal)
-  if (errorKeys.length > 0) {
-    const firstErrorKey = errorKeys[0]
-    const errorMessage = newVal[firstErrorKey]
-    if (errorMessage) {
-      showError(null, errorMessage)
-    }
-  }
-})
 
 // nut huy - mở confirm modal
 const showCancelConfirm = () => {
@@ -369,6 +354,7 @@ const generateAssetCode = async () => {
 /**
  * Hàm lấy dữ liệu hiện tại từ form
  * @returns {Object} - Dữ liệu hiện tại trong form
+ * createdby: HK Cường
  */
 const getCurrentFormData = () => {
   return {
@@ -466,6 +452,7 @@ watch(
 /**
  * Hàm fill dữ liệu vào form khi ở chế độ sửa, duplicate
  * @param {Object} data - Dữ liệu tài sản của dòng được click
+ * createdby: HK Cường
  */
 const setFormData = async (data) => {
   if (!data) return

@@ -18,6 +18,7 @@ export const useFilterData = () => {
   /**
    * Lấy tất cả dữ liệu departments và assetTypes
    * @returns {Promise<Object>} - Object chứa departments và assetTypes
+   * createdby: HK Cường
    */
   const fetchFiltersData = async () => {
     try {

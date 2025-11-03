@@ -6,6 +6,7 @@ export default class BaseAPI {
   }
   /**
    * Phương thức lấy tất cả dữ liệu
+   * createdby: HK Cường
    */
   getAll() {
     return api.get(`${this.controller}`)
@@ -14,6 +15,7 @@ export default class BaseAPI {
    * Hàm lấy thông tin tài sản theo ID
    * @param {string} id - ID của tài sản
    * @param {Object} payload - Payload của request
+   * createdby: HK Cường
    */
   getById(id, payload = null) {
     return api.get(`${this.controller}/${id}`, { params: payload })
@@ -21,6 +23,7 @@ export default class BaseAPI {
   /**
    * Hàm lấy dữ liệu phân trang
    * @param {*} payload
+   * createdby: HK Cường
    */
   paging(payload) {
     return api.get(`${this.controller}/paging`, { params: payload })
@@ -29,6 +32,7 @@ export default class BaseAPI {
    * Hàm cập nhật dữ liệu
    * @param {*} id
    * @param {*} body
+   * createdby: HK Cường
    */
   update(id, body) {
     return api.put(`${this.controller}/${id}`, body)
@@ -37,6 +41,7 @@ export default class BaseAPI {
   /**
    * Hàm tạo dữ liệu
    * @param {*} body
+   * createdby: HK Cường
    */
   create(body) {
     return api.post(`${this.controller}`, body)
@@ -45,6 +50,7 @@ export default class BaseAPI {
   /**
    * Hàm xóa bản ghi
    * @param {*} id
+   * createdby: HK Cường
    */
   delete(id) {
     return api.delete(`${this.controller}/delete/${id}`)
@@ -53,6 +59,7 @@ export default class BaseAPI {
   /**
    * Hàm xóa nhiều bản ghi
    * @param {*} id
+   * createdby: HK Cường
    */
   deleteMultiple(body) {
     return api.post(`${this.controller}/delete-multiple`, body)
@@ -61,6 +68,7 @@ export default class BaseAPI {
   /**
    * Tạo mã mới
    * @returns {Promise} - Promise trả về mã mới
+   * createdby: HK Cường
    */
   generateNewCode() {
     return api.get(`${this.controller}/new-code`)

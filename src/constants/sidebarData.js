@@ -1,3 +1,8 @@
+/**
+ * Data cho sidebar
+ * @param {*} t - i18n
+ * @returns {Array} - Data cho sidebar
+ */
 export const getSidebarData = (t) => [
   {
     id: 0,

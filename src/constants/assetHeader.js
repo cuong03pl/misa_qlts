@@ -1,3 +1,8 @@
+/**
+ * Header cho bảng tài sản
+ * @param {*} t - i18n
+ * @returns {Array} - Header cho bảng tài sản
+ */
 export const getAssetHeader = (t) => [
     {
       field: 'rowIndex',

@@ -13,6 +13,7 @@ export const useGenerateCode = () => {
   /**
    * Hàm generate mã tài sản mới từ API
    * @returns {Promise<string>} - Mã tài sản mới
+   * createdby: HK Cường
    */
   const generateCode = async () => {
     try {

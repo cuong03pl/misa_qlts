@@ -46,59 +46,19 @@
     </div>
   </div>
   <!-- table -->
-  <MsTableV2
-    dataKey="assetCode"
-    v-model="selectedAssets"
-    scrollHeight="400px"
-    :rows="assets?.data"
+  <asset-table
+    :assets="assets"
+    v-model:selectedAssets="selectedAssets"
+    :totalRecords="totalRecords"
+    v-model:pageSize="pageSize"
+    v-model:pageNumber="pageNumber"
+    @pageChange="handlePageChange"
     @edit="handleEditAsset"
     @duplicate="handleDuplicateAsset"
     @delete="handleDeleteModal"
     @add="handleOpenModal"
-  >
-    <template v-if="assets?.data?.length > 0" #footer>
-      <ColumnGroup type="footer">
-        <Row>
-          <!-- pagination -->
-          <Column :colspan="6">
-            <template #footer>
-              <table-footer
-                :totalRecords="totalRecords"
-                :pageSize="pageSize"
-                v-model:pageSize="pageSize"
-                :currentPage="pageNumber"
-                v-model:currentPage="pageNumber"
-                @pageChange="handlePageChange"
-                :first="(pageNumber - 1) * pageSize"
-              />
-            </template>
-          </Column>
-          <!-- tổng số lượng-->
-          <Column
-            :footer="formatter.currency(assets.quantityTotal)"
-            footerStyle="text-align:end; vertical-align: middle; font-size: 13px; font-weight: 700;"
-          ></Column>
-
-          <!-- tổng nguyên giá -->
-          <Column
-            :footer="formatter.currency(assets.priceTotal)"
-            footerStyle="text-align:end; vertical-align: middle; font-size: 13px; font-weight: 700;"
-          />
-          <!-- tổng khấu hao năm -->
-          <Column
-            :footer="formatter.currency(assets.annualDepreciationTotal)"
-            footerStyle="text-align:end; vertical-align: middle; font-size: 13px; font-weight: 700;"
-          />
-          <!-- tổng giá trị còn lại -->
-          <Column
-            :footer="formatter.currency(assets.remainingValueTotal)"
-            footerStyle="text-align:end; vertical-align: middle; font-size: 13px; font-weight: 700;"
-          />
-          <Column colspan="1" />
-        </Row>
-      </ColumnGroup>
-    </template>
-  </MsTableV2>
+    :header="getAssetHeader(t)"
+  />
   <asset-modal
     @submit="handleSubmit"
     v-model:isOpen="isOpen"
@@ -120,18 +80,16 @@
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue'
 import AssetModal from './AssetModal.vue'
-import MsTableV2 from '@/components/ms-table/MsTableV2.vue'
+import AssetTable from './AssetTable.vue'
 import AssetAPI from '@/apis/components/AssetAPI'
 import MsConfirmModal from '@/components/ms-modal/MsConfirmModal.vue'
 import { useRoute, useRouter } from 'vue-router'
 import _ from 'lodash'
-import { Column, ColumnGroup, Row } from 'primevue'
-import TableFooter from '@/components/ms-table/TableFooter.vue'
-import { formatter } from '@/utils/formatter'
 import { formatDateOnly } from '@/utils/formatDate'
 import { useI18n } from 'vue-i18n'
 import { useToastNotification } from '@/composables/useToastNotification'
 import { useFilterData } from '@/composables/useFilterData'
+import { getAssetHeader } from '@/constants/assetHeader'
 //#region State
 const isOpen = ref(false)
 const assets = ref([])
@@ -155,6 +113,7 @@ const { departments, assetTypes, fetchFiltersData } = useFilterData()
 //#region Computed
 /**
  * Nội dung hiển thị trong modal xác nhận xóa
+ * createdby: HK Cường
  */
 const deleteConfirmContent = computed(() => {
   if (selectedAssets.value.length <= 1) {
@@ -171,6 +130,7 @@ const deleteConfirmContent = computed(() => {
 
 /**
  * Debounce dữ liệu filter
+ * createdby: HK Cường
  */
 const debouncedFetch = _.debounce(async () => {
   const params = {
@@ -195,6 +155,7 @@ const debouncedFetch = _.debounce(async () => {
 /**
  * Lấy dữ liệu theo trang
  * @param {Object} params - Tham số phân trang
+ * createdby: HK Cường
  */
 const fetchData = async (params = { pageNumber: 1, pageSize: 20, q: '' }) => {
   try {
@@ -210,6 +171,7 @@ const fetchData = async (params = { pageNumber: 1, pageSize: 20, q: '' }) => {
 
 /**
  * Xử lý bật tắt modal add
+ * createdby: HK Cường
  */
 const handleOpenModal = () => {
   modalMode.value = 'add'
@@ -220,6 +182,7 @@ const handleOpenModal = () => {
 /**
  * Xử lý khi click vào icon edit
  * @param {Object} asset - Dữ liệu tài sản được chọn
+ * createdby: HK Cường
  */
 const handleEditAsset = async (asset) => {
   try {
@@ -236,6 +199,7 @@ const handleEditAsset = async (asset) => {
 /**
  * Xử lý khi click vào icon duplicate
  * @param {Object} asset - Dữ liệu tài sản được chọn
+ * createdby: HK Cường
  */
 const handleDuplicateAsset = async (asset) => {
   try {
@@ -251,6 +215,7 @@ const handleDuplicateAsset = async (asset) => {
 }
 /**
  * Xử lý bật tắt modal xóa tài sản
+ * createdby: HK Cường
  */
 const handleDeleteModal = () => {
   isOpenConfirmModal.value = !isOpenConfirmModal.value
@@ -258,6 +223,7 @@ const handleDeleteModal = () => {
 
 /**
  * Xử lý xóa tài sản
+ * createdby: HK Cường
  */
 const handleDelete = async () => {
   const assetIds = selectedAssets.value.map((asset) => asset.assetId)
@@ -273,6 +239,7 @@ const handleDelete = async () => {
 /**
  * Xử lý khi thay đổi trang
  * @param {Object} pageInfo - Thông tin trang mới
+ * createdby: HK Cường
  */
 const handlePageChange = (pageInfo) => {
   pageNumber.value = pageInfo.pageNumber
@@ -282,6 +249,7 @@ const handlePageChange = (pageInfo) => {
 /**
  * Xử lý submit form
  * @param {Object} values - Dữ liệu form
+ * createdby: HK Cường
  */
 const handleSubmit = async (values) => {
   try {
@@ -317,7 +285,7 @@ const handleSubmit = async (values) => {
     isOpen.value = false
   } catch (error) {
     showError(error, t('asset.submitError'))
-    await fetchData()
+    // await fetchData()
   }
 }
 //#endregion Methods
@@ -325,6 +293,7 @@ const handleSubmit = async (values) => {
 //#region API
 /**
  * Binding giá trị từ query params trong URL vào filters
+ * createdby: HK Cường
  */
 const bindFiltersFromQuery = () => {
   // Gán giá trị tìm kiếm từ URL
@@ -347,6 +316,7 @@ const bindFiltersFromQuery = () => {
 
 /**
  * Lấy dữ liệu tài sản
+ * createdby: HK Cường
  */
 const fetchAssets = async () => {
   await fetchData({

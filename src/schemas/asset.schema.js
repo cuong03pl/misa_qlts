@@ -1,5 +1,10 @@
 import * as yup from 'yup'
 
+  /**
+   * Schema validation cho tài sản
+   * @param {*} t - i18n
+   * @returns {yup.ObjectSchema} - Schema validation cho tài sản
+   */
 export const assetSchema = (t) => {
   return yup.object({
     assetCode: yup.string().required(t('asset.errors.assetCode_required')).max(20, t('asset.errors.assetCode_max')),
