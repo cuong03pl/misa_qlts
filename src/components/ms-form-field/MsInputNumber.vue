@@ -81,7 +81,7 @@ const emit = defineEmits(['update:modelValue'])
   outline: none;
   border: 1px solid var(--input-border-color) !important;
   border-radius: 2.5px;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-color);
 }
 .p-inputtext {

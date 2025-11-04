@@ -103,7 +103,7 @@ const q = ref('')
 const assetType = ref('')
 const department = ref('')
 const pageNumber = ref(1)
-const pageSize = ref()
+const pageSize = ref(20)
 const totalRecords = ref(0)
 const { t } = useI18n()
 const { showSuccess, showError } = useToastNotification()
@@ -137,8 +137,8 @@ const debouncedFetch = _.debounce(async () => {
     q: q.value || undefined,
     assetTypeCode: assetType.value?.assetTypeCode || undefined,
     departmentCode: department.value?.departmentCode || undefined,
-    pageNumber: pageNumber.value || undefined,
-    pageSize: pageSize.value || undefined,
+    pageNumber: pageNumber.value > 1 ? pageNumber.value : undefined,
+    pageSize: pageSize.value > 20 ? pageSize.value : undefined,
   }
 
   // Loại bỏ các tham số undefined khỏi URL
@@ -149,8 +149,8 @@ const debouncedFetch = _.debounce(async () => {
   router.push({
     query: cleanParams,
   })
-  await fetchData(params)
-}, 500)
+  await fetchData(cleanParams)
+}, 300)
 
 /**
  * Lấy dữ liệu theo trang
@@ -357,6 +357,10 @@ watch(
   },
   { deep: true }
 )
+
+watch([pageSize], () => {
+  pageNumber.value = 1
+})
 
 watch([pageNumber, pageSize], () => {
   debouncedFetch()
