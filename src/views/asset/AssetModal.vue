@@ -202,7 +202,7 @@
       </div>
 
       <!-- footer -->
-      <div class="modal-footer flex justify-end items-center">
+      <div class="modal-footer flex justify-end items-center rounded-md">
         <slot name="footer">
           <ms-button
             tabindex="12"
@@ -242,6 +242,15 @@
     confirmType="primary"
     @confirm="onSubmit"
     @cancelSave="handleConfirmCancel"
+  />
+
+  <!-- Modal hiển thị lỗi validate -->
+  <ms-confirm-modal
+    v-model:isOpenConfirmModal="isOpenErrorModal"
+    :content="errorMessage"
+    confirmText="Đóng"
+    confirmType="primary"
+    @confirm="handleCloseErrorModal"
   />
 </template>
   
@@ -326,9 +335,52 @@ const handleConfirmCancel = () => {
  * createdby: hkc
  */
 
-const onSubmit = handleSubmit((values) => {
-  emit('submit', values)
-})
+const onSubmit = handleSubmit(
+  (values) => {
+    // Nếu validate thành công
+    if (values.annualDepreciation > values.price) {
+      errorMessage.value = t('asset.depreciationExceedsPriceError')
+      isOpenErrorModal.value = true
+      return
+    }
+    // Kiểm tra tỷ lệ hao mòn có bằng 1/số năm sử dụng không
+    const depreciationRateDecimal = (values.depreciationRate / 100).toFixed(4)
+    const expectedRate = (1 / values.useYears).toFixed(4)
+    if (depreciationRateDecimal !== expectedRate) {
+      errorMessage.value = 'Tỷ lệ hao mòn phải bằng 1/số năm sử dụng'
+      isOpenErrorModal.value = true
+      return
+    }
+
+    emit('submit', values)
+  },
+  ({ errors: validationErrors }) => {
+    // Định nghĩa thứ tự các trường theo layout form
+    const fieldOrder = [
+      'assetCode',
+      'assetName',
+      'departmentName',
+      'assetTypeName',
+      'quantity',
+      'price',
+      'depreciationRate',
+      'purchaseDate',
+      'startDate',
+      'useYears',
+      'annualDepreciation',
+    ]
+
+    // Tìm lỗi đầu tiên theo thứ tự form
+    const firstErrorKey = fieldOrder.find((field) => validationErrors[field])
+    const firstError = firstErrorKey
+      ? validationErrors[firstErrorKey]
+      : Object.values(validationErrors)[0]
+
+    // Hiển thị modal với lỗi đầu tiên
+    errorMessage.value = firstError
+    isOpenErrorModal.value = true
+  }
+)
 
 //#endregion handle Form
 //#region methods
@@ -344,7 +396,7 @@ const handleCloseModal = () => {
 const generateAssetCode = async () => {
   try {
     const code = await generateCode()
-    assetCode.value = code
+    assetCode.value = code.data
   } catch (error) {
     // Error đã được xử lý trong composable
     console.error('Error generating asset code:', error)
@@ -378,9 +430,20 @@ const getCurrentFormData = () => {
 //#endregion methods
 //#region State
 const isOpenConfirmModal = ref(false)
+const isOpenErrorModal = ref(false)
+const errorMessage = ref('')
 const trackingYear = ref(new Date().getFullYear())
 const clonedAssetData = ref(null)
 const firstInputRef = ref(null)
+
+/**
+ * Hàm đóng modal lỗi validation
+ * createdby: HK Cường
+ */
+const handleCloseErrorModal = () => {
+  isOpenErrorModal.value = false
+  errorMessage.value = ''
+}
 //#endregion State
 
 //#region API

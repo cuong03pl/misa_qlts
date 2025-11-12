@@ -26,16 +26,23 @@ export const useFilterData = () => {
         DepartmentAPI.getAll(),
         AssetTypeAPI.getAll(),
       ])
-      departments.value = departmentRes.data
-      assetTypes.value = assetTypeRes.data
+      
+      if (departmentRes.data?.success && assetTypeRes.data?.success) {
+        departments.value = departmentRes.data?.data
+        assetTypes.value = assetTypeRes.data?.data
 
-      return {
-        departments: departmentRes.data,
-        assetTypes: assetTypeRes.data,
+        return {
+          departments: departmentRes.data,
+          assetTypes: assetTypeRes.data,
+        }
+      } else {
+        const errorMessage = departmentRes.data?.message || assetTypeRes.data?.message
+        showError(errorMessage, t('asset.fetchFiltersError'))
+        return null
       }
     } catch (error) {
       showError(error, t('asset.fetchFiltersError'))
-      throw error
+      return null
     } 
   }
 

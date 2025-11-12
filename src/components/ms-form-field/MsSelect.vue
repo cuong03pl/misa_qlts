@@ -73,6 +73,11 @@ const emit = defineEmits(['update:modelValue'])
   border-radius: 2.5px !important;
   font-size: 13px !important;
 }
+.p-select:has(.p-select-label:focus-visible),
+.p-select:has(.p-select-label:focus) {
+  outline: none !important;
+  border-color: var(--btn-primary) !important;
+}
 span.p-select-label {
   font-size: 14px !important;
 }

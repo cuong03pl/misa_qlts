@@ -20,7 +20,7 @@
         :placeholder="t('asset.filterDepartmentPlaceholder')"
       />
     </div>
-    <div class="flex items-center gap-10">
+    <div class="flex items-center">
       <!-- thêm tài sản -->
       <ms-button @click="handleOpenModal" type="one-icon" size="large">
         <template #left-icon>
@@ -28,7 +28,7 @@
         </template>
         <span class="text-white">{{ t('asset.addAsset') }}</span>
       </ms-button>
-      <ms-button type="only-icon" size="large">
+      <ms-button class="excel-button" type="only-icon" size="large">
         <template #left-icon>
           <span class="icon excel-icon"></span>
         </template>
@@ -160,9 +160,15 @@ const debouncedFetch = _.debounce(async () => {
 const fetchData = async (params = { pageNumber: 1, pageSize: 20, q: '' }) => {
   try {
     const response = await AssetAPI.paging(params)
-    totalRecords.value = response.data?.totalRecords
-    assets.value = response.data
-    return response
+    if (response.data?.success) {
+      totalRecords.value = response.data?.data?.totalRecords
+      assets.value = response.data?.data
+
+      return response
+    } else {
+      showError(response.data?.message, t('asset.fetchError'))
+      return null
+    }
   } catch (error) {
     showError(error, t('asset.fetchError'))
     return null
@@ -189,9 +195,12 @@ const handleEditAsset = async (asset) => {
     modalMode.value = 'edit'
     // Lấy thông tin chi tiết của tài sản từ API
     const response = await AssetAPI.getById(asset.assetId)
-
-    currentAsset.value = response.data
-    isOpen.value = true
+    if (response.data?.success) {
+      currentAsset.value = response.data?.data
+      isOpen.value = true
+    } else {
+      showError(response.data?.message, t('asset.notFound'))
+    }
   } catch (error) {
     showError(error, t('asset.notFound'))
   }
@@ -207,8 +216,12 @@ const handleDuplicateAsset = async (asset) => {
     // Lấy thông tin chi tiết của tài sản từ API
     const response = await AssetAPI.getById(asset.assetId, { mode: 'duplicate' })
 
-    currentAsset.value = response.data
-    isOpen.value = true
+    if (response.data?.success) {
+      currentAsset.value = response.data?.data
+      isOpen.value = true
+    } else {
+      showError(response.data?.message, t('asset.notFound'))
+    }
   } catch (error) {
     showError(error, t('asset.notFound'))
   }
@@ -228,10 +241,15 @@ const handleDeleteModal = () => {
 const handleDelete = async () => {
   const assetIds = selectedAssets.value.map((asset) => asset.assetId)
   try {
-    await AssetAPI.deleteMultiple(assetIds)
-    showSuccess(`${assetIds.length} ${t('asset.deleteSuccess')}`)
-    selectedAssets.value = []
-    await fetchData()
+    const response = await AssetAPI.deleteMultiple(assetIds)
+
+    if (response.data?.success) {
+      showSuccess(`${assetIds.length} ${t('asset.deleteSuccess')}`)
+      selectedAssets.value = []
+      await fetchData()
+    } else {
+      showError(response.data?.message, t('asset.deleteError'))
+    }
   } catch (error) {
     showError(error, t('asset.deleteError'))
   }
@@ -253,10 +271,6 @@ const handlePageChange = (pageInfo) => {
  */
 const handleSubmit = async (values) => {
   try {
-    if (values.annualDepreciation > values.price) {
-      showError(null, 'Hao mòn năm phải nhỏ hơn hoặc bằng nguyên giá')
-      return
-    }
     const assetData = {
       assetCode: values.assetCode,
       assetName: values.assetName,
@@ -269,23 +283,31 @@ const handleSubmit = async (values) => {
       useYear: values.purchaseDate.getFullYear(),
       startDate: formatDateOnly(values.startDate),
     }
-
     if (modalMode.value === 'edit' && currentAsset.value) {
       // Nếu đang ở chế độ edit, thực hiện cập nhật
-      await AssetAPI.update(currentAsset.value.assetId, assetData)
-      showSuccess(t('asset.updateSuccess'))
+      const response = await AssetAPI.update(currentAsset.value.assetId, assetData)
+      if (response.data?.success) {
+        showSuccess(t('asset.updateSuccess'))
+        await fetchData()
+        isOpen.value = false
+      } else {
+        showError(response.data?.message, t('asset.submitError'))
+      }
     } else {
       // Nếu đang ở chế độ add hoặc duplicate, thực hiện tạo mới
-      await AssetAPI.create(assetData)
-      showSuccess(modalMode.value === 'add' ? t('asset.addSuccess') : t('asset.duplicateSuccess'))
-    }
+      const response = await AssetAPI.create(assetData)
 
-    await fetchData()
-    // Đóng modal
-    isOpen.value = false
+      if (response.data?.success) {
+        showSuccess(modalMode.value === 'add' ? t('asset.addSuccess') : t('asset.duplicateSuccess'))
+
+        await fetchData()
+        isOpen.value = false
+      } else {
+        showError(response.data?.message, t('asset.submitError'))
+      }
+    }
   } catch (error) {
     showError(error, t('asset.submitError'))
-    // await fetchData()
   }
 }
 //#endregion Methods
@@ -373,5 +395,9 @@ watch([pageNumber, pageSize], () => {
 }
 .table-controls {
   padding: 0 20px 17px 20px;
+}
+.excel-button {
+  margin-left: 11px;
+  margin-right: 10px;
 }
 </style>

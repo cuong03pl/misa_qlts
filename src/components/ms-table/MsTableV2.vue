@@ -154,7 +154,7 @@ const menuModel = ref(
  */
 const onRowContextMenu = (event) => {
   selectedData.value = [event.data]
-  cm.value.show(event.originalEvent)
+  cm.value.show(event.originalEvent) // chứa vị trí của chuột
 }
 
 /**
@@ -208,9 +208,9 @@ watch(selectedData, (newVal) => {
 .p-datatable-column-title {
   white-space: nowrap;
 }
-.p-datatable-gridlines .p-datatable-thead > tr > th {
+/* .p-datatable-gridlines .p-datatable-thead > tr > th {
   border: none;
-}
+} */
 .p-datatable-tbody > tr > td {
   font-size: 13px;
   color: var(--text-color);

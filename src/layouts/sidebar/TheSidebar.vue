@@ -76,7 +76,7 @@ onUnmounted(() => {
 <style scoped>
 .side-bar {
   background: var(--sidebar-bg);
-  width: 250px;
+  /* width: 200px; */
   transition: all 0.3s ease;
 }
 .logo {

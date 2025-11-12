@@ -18,10 +18,15 @@ export const useGenerateCode = () => {
   const generateCode = async () => {
     try {
       const response = await AssetAPI.generateNewCode()
-      return response.data
+      if (response.data?.success) {
+        return response.data
+      } else {
+        showError(response.data?.message, t('asset.generateCodeError'))
+        return null
+      }
     } catch (error) {
       showError(error, t('asset.generateCodeError'))
-      throw error
+      return null
     }
   }
 

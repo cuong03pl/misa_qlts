@@ -71,7 +71,7 @@ const { t } = useI18n()
   padding: 8px 8px 8px 12px;
   border-radius: 3px;
   margin-right: 27px;
-  margin-left: 22px;
+  margin-left: 20px;
   height: 30px;
   max-width: 112px;
 }

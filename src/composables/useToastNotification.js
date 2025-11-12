@@ -30,14 +30,14 @@ export const useToastNotification = () => {
    * @param {Error|Object} error - Error object hoặc custom error
    * @param {string} defaultMessage - Message mặc định nếu không có message từ error
    */
-  const showError = (error, defaultMessage = '') => {
-    const message = error?.response?.data?.message || error?.message || defaultMessage || t('common.error')
+  const showError = (message, defaultMessage = '') => {
+    const msg = message  || defaultMessage || t('common.error')
     
     toast.error({
       component: MsToast,
       props: {
         type: 'error',
-        message,
+        message: msg,
         icon: 'icon error-noti-icon',
       },
     })
